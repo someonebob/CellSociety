@@ -78,7 +78,7 @@ public class Menu {
 		
 		chooser = new FileChooser();
 		chooser.setTitle("CA Simulations");	
-		defaultDirectory = new File("C:/Users/Jesse/Resilio Sync/CS308/cellsociety_team02/data");
+		defaultDirectory = new File(System.getProperty("user.dir")+"/data");
 		chooser.setInitialDirectory(defaultDirectory);
 		
 		load.setOnMouseClicked(e -> {
