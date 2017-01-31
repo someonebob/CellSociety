@@ -10,7 +10,7 @@ public class Grid {
 	}
 	
 	public Group getGroup() {
-		// TODO Unimplemented method FOO
+		// TODO Unimplemented method
 		return null;
 	}
 	
