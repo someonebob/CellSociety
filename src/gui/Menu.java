@@ -83,11 +83,11 @@ public class Menu {
 		
 		load.setOnMouseClicked(e -> {
 			selectedFile = chooser.showOpenDialog(window);		
-			
-			//Animation animation = new Animation();
-			//window.setScene(animation.initialize());
-			//animation.runAnimation(selectedFile);
-			 
+			if(selectedFile != null){
+				Animation animation = new Animation();
+				window.setScene(animation.initialize());
+				//animation.runAnimation(selectedFile);
+			}	 
 		});
 		
 		quit = new Button("Quit");
