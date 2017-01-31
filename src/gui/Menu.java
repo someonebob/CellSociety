@@ -36,12 +36,12 @@ public class Menu {
 	private File defaultDirectory, selectedFile;
 	
 	public Menu(Stage window){
-		this.window = window;
-		setupBackground();
-		setupInterface();	
+		this.window = window;		
 	}
 	
-	public Scene getMenu(){
+	public Scene initialize(){
+		setupBackground();
+		setupInterface();
 		return titlescreen;
 	}
 	
@@ -84,7 +84,7 @@ public class Menu {
 		load.setOnMouseClicked(e -> {
 			selectedFile = chooser.showOpenDialog(window);		
 			if(selectedFile != null){
-				Animation animation = new Animation();
+				Animation animation = new Animation(window);
 				window.setScene(animation.initialize());
 				//animation.runAnimation(selectedFile);
 			}	 

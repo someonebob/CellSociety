@@ -16,7 +16,7 @@ public class Window extends Application {
 		
 		menu = new Menu(window);
 		
-		window.setScene(menu.getMenu());
+		window.setScene(menu.initialize());
 		window.setTitle("Cell Civilization");
 		window.show();
 	}
