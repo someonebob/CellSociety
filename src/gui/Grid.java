@@ -4,14 +4,20 @@ import javafx.scene.Group;
 import model.Rules;
 
 public class Grid {
+	
+	private Group myGroup;
 
 	public Grid() {
-		// TODO Auto-generated constructor stub
+		myGroup = new Group();
 	}
 	
+	/**
+	 * Accesses the Group displaying all the cells.
+	 * Group will be updated when simulation changes frame.
+	 * @return the Group
+	 */
 	public Group getGroup() {
-		// TODO Unimplemented method
-		return null;
+		return myGroup;
 	}
 	
 	public void nextFrame() {
