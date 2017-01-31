@@ -1,0 +1,25 @@
+<CA name = "Spreading of Fire">
+	<subclass>FireRules</subclass>
+
+	<title>Jesse's Fire Simulation</title>
+	<author>Jesse Yue</author>
+
+	<dimension>7</dimension>
+
+	<states>
+		<empty>0</empty>
+		<tree>1</tree>
+		<burning>2</burning>
+	</states>
+
+	<initialStates>
+		1 1 1 1 1 1 1
+		1 1 1 1 1 1 1
+		1 1 1 1 1 1 1
+		1 1 1 2 1 1 1
+		1 1 1 1 1 1 1
+		1 1 1 1 1 1 1
+		1 1 1 1 1 1 1
+	</initialStates>
+
+</CA>
