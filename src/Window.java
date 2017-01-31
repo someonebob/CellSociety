@@ -14,7 +14,7 @@ public class Window extends Application {
 	public void start(Stage arg0) throws Exception {
 		window = arg0;
 		
-		menu = new Menu();
+		menu = new Menu(window);
 		
 		window.setScene(menu.getMenu());
 		window.setTitle("Cell Civilization");

@@ -1,5 +1,8 @@
 package gui;
 
+
+import java.io.File;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,29 +14,39 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class Menu {
+	private Stage window;
 	private StackPane layout;
 	private Scene titlescreen;
 	private VBox vbox;
 	private Text title;
 	private HBox buttons;
 	private Button load, quit;
-	private int buttonwidth = 150;
-	private int buttonheight = 75;
+	private int buttonWidth = 150;
+	private int buttonHeight = 75;
 	private int width = 1280;
 	private int height = 720;
 	private Image image;
 	private ImageView background;
 	private String CELL_IMAGE = "background.jpg";
+	private FileChooser chooser;
+	private File defaultDirectory, selectedFile;
 	
-	public Menu(){
+	public Menu(Stage window){
+		this.window = window;
 		setupBackground();
 		setupInterface();	
 	}
 	
 	public Scene getMenu(){
 		return titlescreen;
+	}
+	
+	public File getFile(){	
+		return selectedFile;
 	}
 	
 	private void setupBackground(){
@@ -51,6 +64,7 @@ public class Menu {
 		title.setFill(Color.WHITE);
 		title.setFont(Font.font(100));
 		
+		//magic number for spacing
 		vbox = new VBox(200);
 		
 		vbox.getChildren().addAll(title, setupButtons());
@@ -60,12 +74,25 @@ public class Menu {
 	
 	private HBox setupButtons(){
 		load = new Button("Load File");	
-		//load.setOnMouseClicked(e -> );
-		load.setPrefSize(buttonwidth, buttonheight);
+		load.setPrefSize(buttonWidth, buttonHeight);
+		
+		chooser = new FileChooser();
+		chooser.setTitle("CA Simulations");	
+		defaultDirectory = new File("C:/Users/Jesse/Resilio Sync/CS308/cellsociety_team02/data");
+		chooser.setInitialDirectory(defaultDirectory);
+		
+		load.setOnMouseClicked(e -> {
+			selectedFile = chooser.showOpenDialog(window);		
+			/*
+			 * Animation animation = new Animation();
+			 * window.setScene(animation.initialize());
+			 * animation.runAnimation(selectedFile);
+			 */
+		});
 		
 		quit = new Button("Quit");
 		quit.setOnMouseClicked(e -> System.exit(0));
-		quit.setPrefSize(buttonwidth, buttonheight);
+		quit.setPrefSize(buttonWidth, buttonHeight);
 		
 		//magic number for spacing
 		buttons = new HBox(300);
