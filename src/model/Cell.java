@@ -3,7 +3,7 @@ package model;
 public class Cell {
 	
 	public Cell(Rules rules, State startingState){
-		
+		// merge test
 	}
 	
 	public void setNeighbors(Cell[][] neighbors){
