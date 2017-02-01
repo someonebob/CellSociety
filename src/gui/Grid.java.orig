@@ -2,8 +2,11 @@ package gui;
 
 import java.io.File;
 
+<<<<<<< HEAD
+=======
 import org.w3c.dom.NodeList;
 
+>>>>>>> 1711321fdf138c12a9f06ea096d05732e4e9b1b4
 import javafx.scene.Group;
 import javafx.scene.Node;
 import model.Cell;
@@ -15,17 +18,22 @@ public class Grid {
 	public static final int CELL_SIZE = 100;
 	
 	private Group myGroup;
+<<<<<<< HEAD
+	private Cell[][] myCells;
+=======
 	private XMLParser parser;
 	private Rules rules;
 	private int rows;
 	private int cols;
 	private NodeList stateList;
 	private File info;
-	private Cell[][] myCells;
+>>>>>>> 1711321fdf138c12a9f06ea096d05732e4e9b1b4
 
 	public Grid(File setupInfo) {
 		myGroup = new Group();
 		
+<<<<<<< HEAD
+=======
 		info = setupInfo;
 		parser = new XMLParser(info);	
 		rules = Rules.getRules(parser.getRuleName());
@@ -37,6 +45,7 @@ public class Grid {
 //		for(int i = 0; i < stateList.getLength(); i++){
 //			System.out.println(stateList.item(i).getTextContent());
 //		}
+>>>>>>> 1711321fdf138c12a9f06ea096d05732e4e9b1b4
 	}
 	
 	/**

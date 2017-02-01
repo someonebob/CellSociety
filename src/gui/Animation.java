@@ -22,6 +22,7 @@ public class Animation {
 	private int width = 1280;
 	private int height = 720;
 	private boolean isPlaying = true;
+	private Grid grid;
 
 	public Animation(Stage window) {
 		this.window = window;
@@ -36,7 +37,7 @@ public class Animation {
 	}
 	
 	public void runAnimation(File setupInfo) {
-		// TODO Unimplemented method
+		grid = new Grid(setupInfo);
 	}
 	
 	private void setupAnimation() {
