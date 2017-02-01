@@ -2,74 +2,107 @@ package gui;
 
 import java.io.File;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToolBar;
-import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Animation {
-	private Stage window;
-	private Group root;
+	
+	public static final int WIDTH = 1280;
+	public static final int HEIGHT = 720;
+	private static final double MIN_FPS = 1;
+	private static final double MAX_FPS = 120;
+	private static final double DEFAULT_FPS = 60;
+
 	private Scene simulation;
-	private ToolBar toolBar;
-	private Button menu, step, playPause, reset;
-	private Slider FPSslider;
-	private double minFPS = 1;
-	private double maxFPS = 120;
-	private double startFPS = 60;
-	private int width = 1280;
-	private int height = 720;
-	private boolean isPlaying = true;
+	private File setup;
+	private Timeline animation;
+	private Group root;
+	private boolean inAnimation;
+	private boolean isPlaying;
 	private Grid grid;
 
-	public Animation(Stage window) {
-		this.window = window;
-		// TODO Auto-generated constructor stub
+	public Animation() {
+		root = new Group();
+		simulation = new Scene(root, WIDTH, HEIGHT);
 	}
 	
 	public Scene initialize() {
-		root = new Group();
-		simulation = new Scene(root, width, height);
 		setupControls();
 		return simulation;
 	}
 	
 	public void runAnimation(File setupInfo) {
-		grid = new Grid(setupInfo);
+		setup = setupInfo;
+		setupAnimation();
+		inAnimation = true;
+		isPlaying = true;
+		while(inAnimation);
+		animation.stop();
 	}
 	
 	private void setupAnimation() {
-		// TODO Unimplemented method
+		grid = new Grid(setup);
+		root.getChildren().add(grid.getGroup());
+		KeyFrame frame = makeKeyFrame(DEFAULT_FPS);
+		animation = new Timeline();
+		animation.setCycleCount(Timeline.INDEFINITE);
+		animation.getKeyFrames().add(frame);
+		animation.play();
+	}
+
+	private KeyFrame makeKeyFrame(double framesPerSecond) {
+		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/framesPerSecond), e -> {
+			grid.nextFrame();
+		});
+		return frame;
 	}
 	
-	private void setupControls() {
-		toolBar = new ToolBar();
-		toolBar.setPrefWidth(width);
-		
-		menu = new Button("Return To Menu");
+	private void setupControls() {		
+		Button menu = new Button("Menu");
 		menu.setOnMouseClicked(e -> {
-			Menu menu = new Menu(window);
-			window.setScene(menu.initialize());
+			inAnimation = false;
 		});
 		
-		step = new Button("Step");
-		playPause = new Button("Pause");
+		Button step = new Button("Step");
+		step.setOnMouseClicked(e -> {
+			grid.nextFrame();
+		});
+		
+		Button playPause = new Button("Pause");
 		playPause.setOnMouseClicked(e -> {
-			if(isPlaying){
-				playPause.setText("Play");
+			if(isPlaying) {
+				animation.pause();
+				playPause.setText("Play ");
 				isPlaying = false;
-			}else{
+			}
+			else {
+				animation.play();
 				playPause.setText("Pause");
 				isPlaying = true;
 			}
 		});
 
-		reset = new Button("Reset");
-		FPSslider = new Slider(minFPS, maxFPS, startFPS);
-		toolBar.getItems().addAll(menu, step, playPause, reset, FPSslider);
+		Button reset = new Button("Reset");
+		reset.setOnMouseClicked(e -> {
+			setupAnimation();
+		});
 		
+		Slider sliderFPS = new Slider(MIN_FPS, MAX_FPS, DEFAULT_FPS);
+		sliderFPS.setOnMouseReleased(e -> {
+			double fps = sliderFPS.getValue();
+			animation.getKeyFrames().clear();
+			animation.getKeyFrames().add(makeKeyFrame(fps));
+		});
+		
+		ToolBar toolBar = new ToolBar();
+		toolBar.setPrefWidth(WIDTH);
+		toolBar.getItems().addAll(menu, step, playPause, reset, sliderFPS);
 		root.getChildren().add(toolBar);
 	}
 

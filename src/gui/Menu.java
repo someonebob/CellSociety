@@ -87,7 +87,7 @@ public class Menu {
 		load.setOnMouseClicked(e -> {
 			selectedFile = chooser.showOpenDialog(window);		
 			if(selectedFile != null){
-				Animation animation = new Animation(window);
+				Animation animation = new Animation();
 				window.setScene(animation.initialize());			
 				animation.runAnimation(selectedFile);
 			}	 
