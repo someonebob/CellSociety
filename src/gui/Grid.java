@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.shape.Rectangle;
 import model.Cell;
 import model.Rules;
 import model.State;
@@ -110,10 +111,11 @@ public class Grid {
 		myGroup.getChildren().clear();
 		for(int row = 0; row < myCells.length; row++) {
 			for(int col = 0; col < myCells[0].length; col++) {
-				Node n = myCells[row][col].getCurrentState().getStateNode();
-				n.setLayoutX(row*CELL_SIZE);
-				n.setLayoutY(col*CELL_SIZE);
-				myGroup.getChildren().add(n);
+				Rectangle r = (Rectangle)myCells[row][col].getCurrentState().getStateNode();
+				System.out.println("My Rectangle is " + r);
+				r.setX(row*CELL_SIZE);
+				r.setY(col*CELL_SIZE);
+				myGroup.getChildren().add(r);
 			}
 		}
 	}

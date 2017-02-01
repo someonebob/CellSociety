@@ -7,7 +7,7 @@
 	<dimension>7</dimension>
 	<dimension>7</dimension>
 
-	<probCatch>.15</probCatch>
+	<probCatch>15</probCatch>
 
 	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
 	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
