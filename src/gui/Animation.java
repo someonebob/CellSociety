@@ -14,7 +14,7 @@ import javafx.util.Duration;
 public class Animation {
 	
 	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 720;
+	public static final int HEIGHT = 690;
 	private static final double MIN_FPS = 1;
 	private static final double MAX_FPS = 120;
 	private static final double DEFAULT_FPS = 60;
@@ -64,16 +64,37 @@ public class Animation {
 	}
 	
 	private void setupControls() {		
-		Button menu = new Button("Menu");
-		menu.setOnMouseClicked(e -> {
-			inAnimation = false;
-		});
+		Button menu = makeMenuButton();
+		Button step = makeStepButton();		
+		Button playPause = makePlayPauseButton();
+		Button reset = makeResetButton();		
+		Slider slider = makeFPSSlider();
 		
-		Button step = new Button("Step");
-		step.setOnMouseClicked(e -> {
-			grid.nextFrame();
+		ToolBar toolBar = new ToolBar();
+		toolBar.setPrefWidth(WIDTH);
+		toolBar.getItems().addAll(menu, step, playPause, reset, slider);
+		root.getChildren().add(toolBar);
+	}
+
+	private Slider makeFPSSlider() {
+		Slider sliderFPS = new Slider(MIN_FPS, MAX_FPS, DEFAULT_FPS);
+		sliderFPS.setOnMouseReleased(e -> {
+			double fps = sliderFPS.getValue();
+			animation.getKeyFrames().clear();
+			animation.getKeyFrames().add(makeKeyFrame(fps));
 		});
-		
+		return sliderFPS;
+	}
+
+	private Button makeResetButton() {
+		Button reset = new Button("Reset");
+		reset.setOnMouseClicked(e -> {
+			setupAnimation();
+		});
+		return reset;
+	}
+
+	private Button makePlayPauseButton() {
 		Button playPause = new Button("Pause");
 		playPause.setOnMouseClicked(e -> {
 			if(isPlaying) {
@@ -87,23 +108,23 @@ public class Animation {
 				isPlaying = true;
 			}
 		});
+		return playPause;
+	}
 
-		Button reset = new Button("Reset");
-		reset.setOnMouseClicked(e -> {
-			setupAnimation();
+	private Button makeStepButton() {
+		Button step = new Button("Step");
+		step.setOnMouseClicked(e -> {
+			grid.nextFrame();
 		});
-		
-		Slider sliderFPS = new Slider(MIN_FPS, MAX_FPS, DEFAULT_FPS);
-		sliderFPS.setOnMouseReleased(e -> {
-			double fps = sliderFPS.getValue();
-			animation.getKeyFrames().clear();
-			animation.getKeyFrames().add(makeKeyFrame(fps));
+		return step;
+	}
+
+	private Button makeMenuButton() {
+		Button menu = new Button("Menu");
+		menu.setOnMouseClicked(e -> {
+			inAnimation = false;
 		});
-		
-		ToolBar toolBar = new ToolBar();
-		toolBar.setPrefWidth(WIDTH);
-		toolBar.getItems().addAll(menu, step, playPause, reset, sliderFPS);
-		root.getChildren().add(toolBar);
+		return menu;
 	}
 
 }

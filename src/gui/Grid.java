@@ -5,13 +5,17 @@ import java.io.File;
 import org.w3c.dom.NodeList;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import model.Cell;
 import model.Rules;
 import model.State;
 import xml.XMLParser;
 
+/**
+ * Handles the grid of cells used in simulation.
+ * @author Nathaniel Brooke
+ * @version 2-01-2017
+ */
 public class Grid {
 	
 	public static final int CELL_SIZE = 100;
