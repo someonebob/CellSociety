@@ -1,14 +1,22 @@
 package gui;
 
+import java.io.File;
+
 import javafx.scene.Group;
+import javafx.scene.Node;
+import model.Cell;
 import model.Rules;
 
 public class Grid {
 	
+	public static final int CELL_SIZE = 100;
+	
 	private Group myGroup;
+	private Cell[][] myCells;
 
-	public Grid() {
+	public Grid(File setupInfo) {
 		myGroup = new Group();
+		
 	}
 	
 	/**
@@ -21,7 +29,17 @@ public class Grid {
 	}
 	
 	public void nextFrame() {
-		// TODO Unimplemented method
+		for(int row = 0; row < myCells.length; row++) {
+			for(int col = 0; col < myCells[0].length; col++) {
+				myCells[row][col].calculateFutureState();
+			}
+		}
+		for(int row = 0; row < myCells.length; row++) {
+			for(int col = 0; col < myCells[0].length; col++) {
+				myCells[row][col].refreshState();;
+			}
+		}
+		updateGroup();
 	}
 	
 	private Rules getRules() {
@@ -38,7 +56,15 @@ public class Grid {
 	}
 	
 	private void updateGroup() {
-		// TODO Unimplemented method
+		myGroup.getChildren().clear();
+		for(int row = 0; row < myCells.length; row++) {
+			for(int col = 0; col < myCells[0].length; col++) {
+				Node n = myCells[row][col].getCurrentState().getStateNode();
+				n.setLayoutX(row*CELL_SIZE);
+				n.setLayoutY(col*CELL_SIZE);
+				myGroup.getChildren().add(n);
+			}
+		}
 	}
 
 }
