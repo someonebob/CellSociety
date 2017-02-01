@@ -8,6 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import model.Cell;
 import model.Rules;
+import model.State;
 import xml.XMLParser;
 
 public class Grid {
@@ -16,29 +17,18 @@ public class Grid {
 	
 	private Group myGroup;
 	private Cell[][] myCells;
-	
-	private XMLParser parser;
-	private Rules rules;
-	private int rows;
-	private int cols;
-	private NodeList stateList;
-	private File info;
 
 
+	/**
+	 * Initializes the Group and 2D Array of Cells.
+	 * @param setupInfo the File containing setup information
+	 * including grid size, rules, and starting states.
+	 */
 	public Grid(File setupInfo) {
 		myGroup = new Group();
-		
-		info = setupInfo;
-		parser = new XMLParser(info);	
-		rules = Rules.getRules(parser.getRuleName());
-		rows = parser.getGridRows();
-		cols = parser.getGridColumns();
-		stateList = parser.getInitialStates();
-		
-//		Just a test to see if it parses correctly		
-//		for(int i = 0; i < stateList.getLength(); i++){
-//			System.out.println(stateList.item(i).getTextContent());
-//		}
+		initializeArray(setupInfo);
+		passNeighbors();
+		updateGroup();
 	}
 	
 	/**
@@ -50,6 +40,12 @@ public class Grid {
 		return myGroup;
 	}
 	
+	/**
+	 * Updates every cell.
+	 * Calculates the future state of every cell, then
+	 * refreshes the state of every cell, then
+	 * updates the Group.
+	 */
 	public void nextFrame() {
 		for(int row = 0; row < myCells.length; row++) {
 			for(int col = 0; col < myCells[0].length; col++) {
@@ -64,8 +60,25 @@ public class Grid {
 		updateGroup();
 	}
 	
+	/**
+	 * Initializes the main 2D array of Cells.
+	 * Passes each Cell its rules and starting state.
+	 * @param setupInfo the File containing the size, rules, and starting states.
+	 */
 	private void initializeArray(File setupInfo) {
-		// TODO Unimplemented method
+		XMLParser parser = new XMLParser(setupInfo);	
+		Rules rules = Rules.getRules(parser.getRuleName());
+		NodeList stateList = parser.getInitialStates();
+		myCells = new Cell[parser.getGridRows()][parser.getGridColumns()];
+		
+		int count = 0;
+		for(int row = 0; row < myCells.length; row++) {
+			for(int col = 0; col < myCells[0].length; col++) {
+				String stateText = stateList.item(count++).toString();
+				State state = rules.getStartingState(stateText, row, col);
+				myCells[row][col] = new Cell(rules, state);
+			}
+		}
 	}
 	
 	/**
