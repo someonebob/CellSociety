@@ -3,24 +3,18 @@ package model;
 import java.util.Arrays;
 import java.util.List;
 
+import gui.Grid;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class FireStates extends State {
-	private Rectangle empty;
-	private Rectangle tree;
-	private Rectangle burning;
 	private String state;
 	private List<String> possibleStates = Arrays.asList(new String[] {"empty", "tree", "burning"});
-	private int rows, cols;
-	private int width = 1280;
-	private int height = 720;
 	
-	public FireStates(String state, int rows, int cols){
+	public FireStates(String state){
 		this.state = state;
-		this.rows = rows;
-		this.cols = cols;
+
 	}
 
 	@Override
@@ -35,22 +29,17 @@ public class FireStates extends State {
 		return null;
 	}
 	
-	private Rectangle getEmptyState(){
-		empty = new Rectangle(width/cols, height/rows, Color.YELLOW);
-	
-		return empty;
+	private Rectangle getEmptyState(){	
+		return new Rectangle(Grid.CELL_SIZE, Grid.CELL_SIZE, Color.YELLOW);
 	}
 	
 	private Rectangle getTreeState(){
-		tree = new Rectangle(width/cols, height/rows, Color.GREEN);
+		return new Rectangle(Grid.CELL_SIZE, Grid.CELL_SIZE, Color.GREEN);
 
-		return tree;
 	}
 	
 	private Rectangle getBurningState(){
-		burning = new Rectangle(width/cols, height/rows, Color.RED);
-
-		return burning;
+		return new Rectangle(Grid.CELL_SIZE, Grid.CELL_SIZE, Color.RED);
 	}
 
 }
