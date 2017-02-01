@@ -19,41 +19,57 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class Menu {
+	public static final int BUTTON_WIDTH = 150;
+	public static final int BUTTON_HEIGHT = 75;
+	public static final int WIDTH = 1280;
+	public static final int HEIGHT = 720;
+	public static final String CELL_IMAGE = "background.jpg";
+	public static final String EXTENSION = "*.xml";
+
 	private Stage window;
 	private StackPane layout;
 	private Scene titlescreen;
 	private VBox vbox;
 	private Text title;
 	private HBox buttons;
-	private Button load, quit;
-	private int buttonWidth = 150;
-	private int buttonHeight = 75;
-	private int width = 1280;
-	private int height = 720;
+	private Button load, quit;	
 	private Image image;
 	private ImageView background;
-	private String CELL_IMAGE = "background.jpg";
 	private FileChooser chooser;
 	private File defaultDirectory, selectedFile;
-	private String extension = "*.xml";
 	
+	/**
+	 * Takes in the stage to use throughout class
+	 * @param window
+	 */
 	public Menu(Stage window){
 		this.window = window;		
 	}
 	
+	/**
+	 * Initializes the titlescreen
+	 * @return titlescreen scene
+	 */
 	public Scene initialize(){
 		setupBackground();
 		setupInterface();
 		return titlescreen;
 	}
 	
+	/**
+	 * Returns the file that was selected in the File Chooser
+	 * @return selected file
+	 */
 	public File getFile(){	
 		return selectedFile;
 	}
 	
+	/**
+	 * Creates the background image for the titlescreen
+	 */
 	private void setupBackground(){
 		layout = new StackPane();
-		titlescreen = new Scene(layout, width, height);
+		titlescreen = new Scene(layout, WIDTH, HEIGHT);
 		
 		image = new Image(getClass().getClassLoader().getResourceAsStream(CELL_IMAGE));
 		background = new ImageView(image);
@@ -61,6 +77,9 @@ public class Menu {
 		layout.getChildren().add(background);
 	}
 	
+	/**
+	 * Sets up the User Interface
+	 */
 	private void setupInterface(){
 		title = new Text("CELL CIVILIZATION");
 		title.setFill(Color.WHITE);
@@ -74,15 +93,19 @@ public class Menu {
 		layout.getChildren().add(vbox);
 	}
 	
+	/**
+	 * Sets up buttons and their functionality
+	 * @return HBox containing aligned buttons
+	 */
 	private HBox setupButtons(){
 		load = new Button("Load File");	
-		load.setPrefSize(buttonWidth, buttonHeight);
+		load.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		
 		chooser = new FileChooser();
 		chooser.setTitle("CA Simulations");	
 		defaultDirectory = new File(System.getProperty("user.dir")+"/data");
 		chooser.setInitialDirectory(defaultDirectory);
-		chooser.getExtensionFilters().setAll(new ExtensionFilter("XML Files", extension));
+		chooser.getExtensionFilters().setAll(new ExtensionFilter("XML Files", EXTENSION));
 		
 		load.setOnMouseClicked(e -> {
 			selectedFile = chooser.showOpenDialog(window);		
@@ -95,7 +118,7 @@ public class Menu {
 		
 		quit = new Button("Quit");
 		quit.setOnMouseClicked(e -> System.exit(0));
-		quit.setPrefSize(buttonWidth, buttonHeight);
+		quit.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		
 		//magic number for spacing
 		buttons = new HBox(300);
