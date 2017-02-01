@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class Menu {
@@ -34,6 +35,7 @@ public class Menu {
 	private String CELL_IMAGE = "background.jpg";
 	private FileChooser chooser;
 	private File defaultDirectory, selectedFile;
+	private String extension = "*.xml";
 	
 	public Menu(Stage window){
 		this.window = window;		
@@ -80,13 +82,14 @@ public class Menu {
 		chooser.setTitle("CA Simulations");	
 		defaultDirectory = new File(System.getProperty("user.dir")+"/data");
 		chooser.setInitialDirectory(defaultDirectory);
+		chooser.getExtensionFilters().setAll(new ExtensionFilter("XML Files", extension));
 		
 		load.setOnMouseClicked(e -> {
 			selectedFile = chooser.showOpenDialog(window);		
 			if(selectedFile != null){
 				Animation animation = new Animation(window);
-				window.setScene(animation.initialize());
-				//animation.runAnimation(selectedFile);
+				window.setScene(animation.initialize());			
+				animation.runAnimation(selectedFile);
 			}	 
 		});
 		

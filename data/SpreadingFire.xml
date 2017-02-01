@@ -5,21 +5,16 @@
 	<author>Jesse Yue</author>
 
 	<dimension>7</dimension>
+	<dimension>7</dimension>
 
-	<states>
-		<empty>0</empty>
-		<tree>1</tree>
-		<burning>2</burning>
-	</states>
+	<probCatch>.15</probCatch>
 
-	<initialStates>
-		1 1 1 1 1 1 1
-		1 1 1 1 1 1 1
-		1 1 1 1 1 1 1
-		1 1 1 2 1 1 1
-		1 1 1 1 1 1 1
-		1 1 1 1 1 1 1
-		1 1 1 1 1 1 1
-	</initialStates>
+	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
+	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
+	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
+	<state>1</state><state>1</state><state>1</state><state>2</state><state>1</state><state>1</state><state>1</state>
+	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
+	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
+	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
 
 </CA>
