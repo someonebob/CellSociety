@@ -2,18 +2,22 @@ package model;
 
 import java.io.File;
 
-public abstract class Rules {
-	private static FireRules fireRules;
+import xml.XMLParser;
 
-	public static Rules getRules(String name) {
+public abstract class Rules {
+
+	public static Rules getRules(File setupInfo) {
+		XMLParser parser = new XMLParser(setupInfo);	
+		String name = parser.getRuleName();
+		
 		if(name.equals("Spreading of Fire")){
-			return fireRules;
+			return new FireRules(setupInfo);
 		}
 		return null;
 	}
 	
-	public abstract State getStartingState(String stateText, int rows, int cols);
+	public abstract State getStartingState(String stateText);
 	
-	public abstract State getNewState(State[][] states, File setupInfo);
+	public abstract State getNewState(State[][] states);
 
 }

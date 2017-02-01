@@ -67,7 +67,7 @@ public class Grid {
 	 */
 	private void initializeArray(File setupInfo) {
 		XMLParser parser = new XMLParser(setupInfo);	
-		Rules rules = Rules.getRules(parser.getRuleName());
+		Rules rules = Rules.getRules(setupInfo);
 		NodeList stateList = parser.getInitialStates();
 		myCells = new Cell[parser.getGridRows()][parser.getGridColumns()];
 		
@@ -75,7 +75,7 @@ public class Grid {
 		for(int row = 0; row < myCells.length; row++) {
 			for(int col = 0; col < myCells[0].length; col++) {
 				String stateText = stateList.item(count++).toString();
-				State state = rules.getStartingState(stateText, row, col);
+				State state = rules.getStartingState(stateText);
 				myCells[row][col] = new Cell(rules, state);
 			}
 		}
