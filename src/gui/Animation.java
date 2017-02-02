@@ -102,7 +102,6 @@ public class Animation {
 				isPlaying = true;
 			}
 		});
-<<<<<<< HEAD
 		return playPause;
 	}
 
@@ -110,11 +109,6 @@ public class Animation {
 		Button step = new Button("Step");
 		step.setOnMouseClicked(e -> {
 			grid.nextFrame();
-=======
-		Button reset = new Button("Reset");
-		reset.setOnMouseClicked(e -> {
-			setupAnimation();
->>>>>>> f242a511714c8583408737511d9bc859dc3a47bb
 		});
 		return step;
 	}
