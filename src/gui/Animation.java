@@ -82,9 +82,7 @@ public class Animation {
 
 	private Button makeResetButton() {
 		Button reset = new Button("Reset");
-		reset.setOnMouseClicked(e -> {
-			setupAnimation();
-		});
+		reset.setOnMouseClicked(e -> setupAnimation());
 		return reset;
 	}
 
@@ -107,17 +105,13 @@ public class Animation {
 
 	private Button makeStepButton() {
 		Button step = new Button("Step");
-		step.setOnMouseClicked(e -> {
-			grid.nextFrame();
-		});
+		step.setOnMouseClicked(e -> grid.nextFrame());
 		return step;
 	}
 
 	private Button makeMenuButton() {
 		Button menu = new Button("Menu");
-		menu.setOnMouseClicked(e -> {
-			inAnimation = false;
-		});
+		menu.setOnMouseClicked(e -> inAnimation = false);
 		return menu;
 	}
 }
