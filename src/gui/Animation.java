@@ -1,7 +1,5 @@
 package gui;
-
 import java.io.File;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -10,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToolBar;
 import javafx.util.Duration;
-
 public class Animation {
 	
 	public static final int WIDTH = 1280;
@@ -18,7 +15,6 @@ public class Animation {
 	private static final double MIN_FPS = 1;
 	private static final double MAX_FPS = 120;
 	private static final double DEFAULT_FPS = 60;
-
 	private Scene simulation;
 	private File setup;
 	private Timeline animation;
@@ -26,7 +22,6 @@ public class Animation {
 	private boolean inAnimation;
 	private boolean isPlaying;
 	private Grid grid;
-
 	public Animation() {
 		root = new Group();
 		simulation = new Scene(root, WIDTH, HEIGHT);
@@ -55,7 +50,6 @@ public class Animation {
 		animation.getKeyFrames().add(frame);
 		animation.play();
 	}
-
 	private KeyFrame makeKeyFrame(double framesPerSecond) {
 		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/framesPerSecond), e -> {
 			grid.nextFrame();
@@ -108,6 +102,7 @@ public class Animation {
 				isPlaying = true;
 			}
 		});
+<<<<<<< HEAD
 		return playPause;
 	}
 
@@ -115,6 +110,11 @@ public class Animation {
 		Button step = new Button("Step");
 		step.setOnMouseClicked(e -> {
 			grid.nextFrame();
+=======
+		Button reset = new Button("Reset");
+		reset.setOnMouseClicked(e -> {
+			setupAnimation();
+>>>>>>> f242a511714c8583408737511d9bc859dc3a47bb
 		});
 		return step;
 	}
@@ -126,5 +126,4 @@ public class Animation {
 		});
 		return menu;
 	}
-
 }

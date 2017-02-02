@@ -15,53 +15,88 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XMLParser {
+	public static final List<String> DATA_FIELDS = Arrays.asList(new String[] {"name", "dimension", "state", "parameter"});
+	public static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
+
 	private File info;
 	private String ruleName;
 	private int gridRows, gridColumns;
-	private String parameter;
-	private DocumentBuilder documentBuilder = getDocumentBuilder();
+	private NodeList parameter;
 	private Document xmlDocument;
 	private NodeList stateList;
-	private List<String> dataFields = Arrays.asList(new String[] {"name", "dimension", "state"});
 	
+	/**
+	 * Allows the file to be used throughout the class
+	 * @param setupInfo contains the File needed to be parsed
+	 */
 	public XMLParser(File setupInfo){
 		info = setupInfo;
 	}
 	
+	/**
+	 * Returns the name of the simulation used to choose the specific Rule subclass
+	 * @return name of simulation
+	 */
 	public String getRuleName(){
-		ruleName = getAttribute(getRootElement(), dataFields.get(0));
+		ruleName = getAttribute(getRootElement(), DATA_FIELDS.get(0));
 		
 		return ruleName;
 	}
 	
+	/**
+	 * Returns the dimension for rows
+	 * @return number of rows
+	 */
 	public int getGridRows(){
-		gridRows = Integer.parseInt(getRootElement().getElementsByTagName(dataFields.get(1)).item(0).getTextContent());
+		gridRows = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(0).getTextContent());
 		
 		return gridRows;
 	}
-	
+	/**
+	 * Returns the dimension for columns
+	 * @return number of columns
+	 */
 	public int getGridColumns(){
-		gridColumns = Integer.parseInt(getRootElement().getElementsByTagName(dataFields.get(1)).item(1).getTextContent());
+		gridColumns = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(1).getTextContent());
 
 		return gridColumns;
 	}
 	
+	/**
+	 * Returns a NodeList of all the initial states of the simulation
+	 * @return list of states
+	 */
 	public NodeList getInitialStates(){
-		stateList = getRootElement().getElementsByTagName(dataFields.get(2));
+		stateList = getRootElement().getElementsByTagName(DATA_FIELDS.get(2));
 
 		return stateList;
 	}
 	
-	public String getParameters(String tagName){
-		parameter = getRootElement().getElementsByTagName(tagName).item(0).getTextContent();
+	/**
+	 * Returns a NodeList of all the parameters unique to 
+	 * @param tagName
+	 * @return
+	 */
+	public NodeList getParameters(){
+		parameter = getRootElement().getElementsByTagName(DATA_FIELDS.get(3));
 		
 		return parameter;
 	}
 	
+	/**
+	 * Gets the attribute of the element
+	 * @param element
+	 * @param attributeName
+	 * @return
+	 */
+	public String getAttribute (Element element, String attributeName) {
+        return element.getAttribute(attributeName);
+    }
+	
 	private Element getRootElement () {
         try {
-            documentBuilder.reset();
-            xmlDocument = documentBuilder.parse(info);
+            DOCUMENT_BUILDER.reset();
+            xmlDocument = DOCUMENT_BUILDER.parse(info);
             Element root = xmlDocument.getDocumentElement();
             return root;
         }
@@ -70,21 +105,10 @@ public class XMLParser {
         }
     }
 	
-	private String getAttribute (Element element, String attributeName) {
-        return element.getAttribute(attributeName);
-    }
-	
-	private String getTextValue (Element element, String tagName) {
-        NodeList nodeList = element.getElementsByTagName(tagName);
-        if (nodeList != null && nodeList.getLength() > 0) {
-            return nodeList.item(0).getTextContent();
-        }
-        else {
-            // FIXME: empty string or null, is it an error to not find the text value?
-            return "";
-        }
-    }
-	
+	/**
+	 * Creates document builder with the necessary exceptions
+	 * @return
+	 */
 	private static DocumentBuilder getDocumentBuilder () {
         try {
             return DocumentBuilderFactory.newInstance().newDocumentBuilder();
