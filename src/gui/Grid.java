@@ -1,6 +1,8 @@
 package gui;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.w3c.dom.NodeList;
 
@@ -18,10 +20,62 @@ import xml.XMLParser;
  */
 public class Grid {
 	
+	/**
+	 * Holds a coordinate pair.
+	 * @author Nathaniel
+	 */
+	private class Coordinate implements Comparable<Coordinate> {
+		int x, y;
+		
+		/**
+		 * Creates a new coordinate pair.
+		 * @param x coordinate
+		 * @param y coordinate
+		 */
+		public Coordinate(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		
+		/**
+		 * Gets the x coordinate
+		 * @return x
+		 */
+		public int getX() {
+			return x;
+		}
+		
+		/**
+		 * Gets the y coordinate
+		 * @return y
+		 */
+		public int getY() {
+			return y;
+		}
+
+		@Override
+		public int compareTo(Coordinate other) {
+			int diff = this.x - other.x;
+			if(diff == 0) {
+				diff = this.y - other.y;
+			}
+			return diff;
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			if(o instanceof Coordinate) {
+				Coordinate other = (Coordinate)o;
+				return this.x == other.x && this.y == other.y;
+			}
+			return false;	
+		}
+	}
+	
 	public static final int CELL_SIZE = 100;
 	
 	private Group myGroup;
-	private Cell[][] myCells;
+	private Map<Coordinate, Cell> myCells;
 
 
 	/**
@@ -52,15 +106,11 @@ public class Grid {
 	 * updates the Group.
 	 */
 	public void nextFrame() {
-		for(int row = 0; row < myCells.length; row++) {
-			for(int col = 0; col < myCells[0].length; col++) {
-				myCells[row][col].calculateFutureState();
-			}
+		for(Cell c : myCells.values()) {
+			c.calculateFutureState();
 		}
-		for(int row = 0; row < myCells.length; row++) {
-			for(int col = 0; col < myCells[0].length; col++) {
-				myCells[row][col].refreshState();
-			}
+		for(Cell c : myCells.values()) {
+				c.refreshState();
 		}
 		updateGroup();
 	}
@@ -74,14 +124,15 @@ public class Grid {
 		XMLParser parser = new XMLParser(setupInfo);	
 		Rules rules = Rules.getRules(setupInfo);
 		NodeList stateList = parser.getInitialStates();
-		myCells = new Cell[parser.getGridRows()][parser.getGridColumns()];
-		
+		myCells = new HashMap<Coordinate, Cell>();		
+		int numRows = parser.getGridRows();
+		int numCols = parser.getGridColumns();		
 		int count = 0;
-		for(int row = 0; row < myCells.length; row++) {
-			for(int col = 0; col < myCells[0].length; col++) {
+		for(int row = 0; row < numRows; row++) {
+			for(int col = 0; col < numCols; col++) {
 				String stateText = stateList.item(count++).toString(); //TODO this doesn't work
 				State state = rules.getStartingState(stateText);
-				myCells[row][col] = new Cell(rules, state);
+				myCells.put(new Coordinate(row, col), new Cell(rules, state));
 			}
 		}
 	}
@@ -90,21 +141,20 @@ public class Grid {
 	 * Passes each Cell in the 2D array the cells directly next to it.
 	 */
 	private void passNeighbors() {
-		for(int row = 0; row < myCells.length; row++) {
-			for(int col = 0; col < myCells[0].length; col++) {
+		for(Coordinate c : myCells.keySet()) {
 				Cell[][] neighbors = new Cell[3][3];
 				for(int nRow = 0; nRow < neighbors.length; nRow++) {
 					for(int nCol = 0; nCol < neighbors[0].length; nCol++) {
 						try {
-							neighbors[nRow][nCol] = myCells[nRow + row - 1][nCol + col - 1];
+							Coordinate nbrLoc = new Coordinate(c.getX() + nRow, c.getY() + nCol);
+							neighbors[nRow][nCol] = myCells.get(nbrLoc);
 						}
 						catch (ArrayIndexOutOfBoundsException e) {
 							neighbors[nRow][nCol] = null;
 						}
 					}
 				}
-				myCells[row][col].setNeighbors(neighbors);
-			}
+				myCells.get(c).setNeighbors(neighbors);
 		}
 	}
 	
@@ -113,14 +163,12 @@ public class Grid {
 	 */
 	private void updateGroup() {
 		myGroup.getChildren().clear();
-		for(int row = 0; row < myCells.length; row++) {
-			for(int col = 0; col < myCells[0].length; col++) {
-				Rectangle r = (Rectangle)myCells[row][col].getCurrentState().getStateNode();
-				System.out.println("My Rectangle is " + r);
-				r.setX(row*CELL_SIZE);
-				r.setY(col*CELL_SIZE);
-				myGroup.getChildren().add(r);
-			}
+		for(Coordinate c : myCells.keySet()) {
+			Rectangle r = (Rectangle)myCells.get(c).getCurrentState().getStateNode();
+			System.out.println("My Rectangle is " + r);
+			r.setX(c.getX()*CELL_SIZE);
+			r.setY(c.getY()*CELL_SIZE);
+			myGroup.getChildren().add(r);
 		}
 	}
 
