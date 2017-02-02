@@ -79,7 +79,7 @@ public class Grid {
 		int count = 0;
 		for(int row = 0; row < myCells.length; row++) {
 			for(int col = 0; col < myCells[0].length; col++) {
-				String stateText = stateList.item(count++).toString();
+				String stateText = stateList.item(count++).toString(); //TODO this doesn't work
 				State state = rules.getStartingState(stateText);
 				myCells[row][col] = new Cell(rules, state);
 			}

@@ -10,8 +10,11 @@ public abstract class Rules {
 		XMLParser parser = new XMLParser(setupInfo);	
 		String name = parser.getRuleName();
 		
-		if(name.equals("Spreading of Fire")){
+		if(name.equals("Spreading of Fire")) {
 			return new FireRules(setupInfo);
+		}
+		if(name.equals("Predator Prey")) {
+			return new PredatorPreyRules(setupInfo);
 		}
 		return null;
 	}
