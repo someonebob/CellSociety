@@ -79,7 +79,7 @@ public class Grid {
 					neighbors.set(myCells.get(nbrLoc), nRow, nCol);
 				}
 			}
-			myCells.get(c).setNeighbors(neighbors);
+			myCells.get(c).setNeighborhood(neighbors);
 		}
 	}
 
