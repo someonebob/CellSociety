@@ -1,18 +1,18 @@
 package model;
 
-public class Object {
+public class Cell {
 	private Rules rules;
 	private State currentState, futureState;
-	private Object[][] neighborCells;
+	private Cell[][] neighborCells;
 	
-	public Object(Rules rules, State startingState){
+	public Cell(Rules rules, State startingState){
 		this.rules = rules;
 		this.currentState = startingState;
 		this.futureState = startingState;
-		this.neighborCells = new Object[3][3];
+		this.neighborCells = new Cell[3][3];
 	}
 	
-	public void setNeighbors(Object[][] neighbors){
+	public void setNeighbors(Cell[][] neighbors){
 		neighborCells = neighbors;
 	}
 	
