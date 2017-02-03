@@ -13,8 +13,8 @@ public abstract class Rules {
 		if(name.equals("Spreading of Fire")) {
 			return new FireRules(setupInfo);
 		}
-		if(name.equals("Predator Prey")) {
-			return new PredatorPreyRules(setupInfo);
+		if(name.equals("Wa-Tor")) {
+			return new WaTorRules(setupInfo);
 		}
 		return null;
 	}

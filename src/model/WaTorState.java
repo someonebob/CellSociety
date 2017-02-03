@@ -1,17 +1,16 @@
 package model;
 
-import gui.Grid;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class PredatorPreyState extends State {
+public class WaTorState extends State {
 	
 	private int currentState; // 0 = empty, 1 = fish, 2 = shark
 	private int moved;
 	private boolean eaten;
 
-	public PredatorPreyState(int state) {
+	public WaTorState(int state) {
 		currentState = state;
 		moved = 0;
 		eaten = false;
@@ -20,13 +19,13 @@ public class PredatorPreyState extends State {
 	@Override
 	public Node getStateNode() {
 		if(currentState == 0) {
-			return new Rectangle(Grid.CELL_SIZE, Grid.CELL_SIZE, Color.GREEN);
+			return new Rectangle(1, 1, Color.GREEN);
 		}
 		if(currentState == 1) {
-			return new Rectangle(Grid.CELL_SIZE, Grid.CELL_SIZE, Color.BLUE);
+			return new Rectangle(1, 1, Color.BLUE);
 		}
 		if(currentState == 2) {
-			return new Rectangle(Grid.CELL_SIZE, Grid.CELL_SIZE, Color.GRAY);
+			return new Rectangle(1, 1, Color.GRAY);
 		}
 		return null;
 	}

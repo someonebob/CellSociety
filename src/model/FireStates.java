@@ -3,7 +3,6 @@ package model;
 import java.util.Arrays;
 import java.util.List;
 
-import gui.Grid;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -30,16 +29,16 @@ public class FireStates extends State {
 	}
 	
 	private Rectangle getEmptyState(){	
-		return new Rectangle(Grid.CELL_SIZE, Grid.CELL_SIZE, Color.YELLOW);
+		return new Rectangle(1, 1, Color.YELLOW);
 	}
 	
 	private Rectangle getTreeState(){
-		return new Rectangle(Grid.CELL_SIZE, Grid.CELL_SIZE, Color.GREEN);
+		return new Rectangle(1, 1, Color.GREEN);
 
 	}
 	
 	private Rectangle getBurningState(){
-		return new Rectangle(Grid.CELL_SIZE, Grid.CELL_SIZE, Color.RED);
+		return new Rectangle(1, 1, Color.RED);
 	}
 
 }
