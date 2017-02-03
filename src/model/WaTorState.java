@@ -5,13 +5,13 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class PredatorPreyState extends State {
+public class WaTorState extends State {
 	
 	private int currentState; // 0 = empty, 1 = fish, 2 = shark
 	private int moved;
 	private boolean eaten;
 
-	public PredatorPreyState(int state) {
+	public WaTorState(int state) {
 		currentState = state;
 		moved = 0;
 		eaten = false;

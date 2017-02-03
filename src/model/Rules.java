@@ -14,7 +14,7 @@ public abstract class Rules {
 			return new FireRules(setupInfo);
 		}
 		if(name.equals("Predator Prey")) {
-			return new PredatorPreyRules(setupInfo);
+			return new WaTorRules(setupInfo);
 		}
 		return null;
 	}
