@@ -15,6 +15,7 @@ public class Animation {
 	private static final double MIN_FPS = 1;
 	private static final double MAX_FPS = 120;
 	private static final double DEFAULT_FPS = 60;
+	
 	private Scene simulation;
 	private File setup;
 	private Timeline animation;
@@ -22,6 +23,7 @@ public class Animation {
 	private boolean inAnimation;
 	private boolean isPlaying;
 	private Grid grid;
+	
 	public Animation() {
 		root = new Group();
 		simulation = new Scene(root, WIDTH, HEIGHT);
@@ -82,9 +84,7 @@ public class Animation {
 
 	private Button makeResetButton() {
 		Button reset = new Button("Reset");
-		reset.setOnMouseClicked(e -> {
-			setupAnimation();
-		});
+		reset.setOnMouseClicked(e -> setupAnimation());
 		return reset;
 	}
 
@@ -107,17 +107,13 @@ public class Animation {
 
 	private Button makeStepButton() {
 		Button step = new Button("Step");
-		step.setOnMouseClicked(e -> {
-			grid.nextFrame();
-		});
+		step.setOnMouseClicked(e -> grid.nextFrame());
 		return step;
 	}
 
 	private Button makeMenuButton() {
 		Button menu = new Button("Menu");
-		menu.setOnMouseClicked(e -> {
-			inAnimation = false;
-		});
+		menu.setOnMouseClicked(e -> inAnimation = false);
 		return menu;
 	}
 }

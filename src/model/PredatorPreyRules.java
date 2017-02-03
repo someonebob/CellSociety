@@ -12,7 +12,6 @@ public class PredatorPreyRules extends Rules {
 
 	@Override
 	public State getStartingState(String stateText) {
-		System.out.println(stateText);
 		return new PredatorPreyState(Integer.parseInt(stateText));
 	}
 
