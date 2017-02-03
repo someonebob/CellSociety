@@ -1,13 +1,27 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Creates a neighborhood of cells, with main cell in center and neighbors surrounding
  * @author DhruvKPatel
  */
 public class Neighborhood {
+		public static final String NW = "NW";
+		public static final String N = "N";
+		public static final String NE = "NE";
+		public static final String W = "W";
+		public static final String E = "E";
+		public static final String SW = "SW";
+		public static final String S = "S";
+		public static final String SE = "SE";
+		public static final List<String> LOCATIONS = Arrays.asList(new String[] {NW, N, NE, W, "", E, SW, S, SE});
+
 
 		private Cell[][] neighborhood;
 		
@@ -37,12 +51,15 @@ public class Neighborhood {
 		/**
 		 * Returns a collection of all neighbor cells
 		 */
-		public Collection<Cell> getNeighbors(){
-			Collection<Cell> neighbors = new ArrayList<Cell>();
+		public Map<String, Cell> getNeighbors(){
+			Map<String, Cell> neighbors = new HashMap<String, Cell>();
 			
+			int count = 0;
 			for(int row = 0; row < neighborhood.length; row++)
 				for(int col = 0; col < neighborhood[0].length; col++)
-					if(row != 2 || col != 2) neighbors.add(neighborhood[row][col]);
+					if(row != 1 || col != 1){
+						neighbors.put(LOCATIONS.get(count++), neighborhood[row][col]);
+					}
 			
 			return neighbors;
 		}
@@ -51,7 +68,7 @@ public class Neighborhood {
 		 * Returns center cell
 		 */
 		public Cell getCenter(){
-			return neighborhood[2][2];
+			return neighborhood[1][1];
 		}
 		
 		/**
