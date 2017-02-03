@@ -57,9 +57,9 @@ public class RulesLoader {
 	 */
 	private List<Rules> makeRulesList(XMLParser config) {
 		ArrayList<Rules> options = new ArrayList<Rules>();
-		options.add(new FireRules(config));
+//		options.add(new FireRules(config));
 		options.add(new LifeRules(config));
-		options.add(new WaTorRules(config));
+//		options.add(new WaTorRules(config));
 		return options;
 	}
 	

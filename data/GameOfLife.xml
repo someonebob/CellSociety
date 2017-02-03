@@ -1,5 +1,5 @@
-<CA name = "Game of Life">
-	<subclass>LifeRules</subclass>
+<CA>
+	<subclass>model.LifeRules</subclass>
 
 	<title>Conways's Game of Life</title>
 	<author>Dhruv Patel</author>
@@ -10,9 +10,9 @@
 	<stateDef ref="o" color="black">alive</stateDef>
 	<stateDef ref="x" color="white">dead</stateDef>
 	
-	<state>x</state><state>o</state><state>x</state><state>o</state><state>x</state><state>o</state>
-	<state>o</state><state>o</state><state>o</state><state>x</state><state>o</state><state>o</state>
-	<state>o</state><state>o</state><state>x</state><state>o</state><state>o</state><state>o</state>
-	<state>x</state><state>x</state><state>o</state><state>o</state><state>o</state><state>o</state>
-	<state>x</state><state>x</state><state>x</state><state>o</state><state>o</state><state>o</state>
+	<state>x</state><state>x</state><state>x</state><state>x</state><state>x</state><state>x</state>
+	<state>x</state><state>x</state><state>x</state><state>x</state><state>x</state><state>x</state>
+	<state>x</state><state>x</state><state>o</state><state>o</state><state>x</state><state>x</state>
+	<state>x</state><state>x</state><state>o</state><state>o</state><state>x</state><state>x</state>
+	<state>x</state><state>x</state><state>x</state><state>x</state><state>x</state><state>x</state>
 </CA>

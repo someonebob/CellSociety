@@ -107,7 +107,9 @@ public class Grid {
 			for(int nRow = -1; nRow <= 1; nRow++) {
 				for(int nCol = -1; nCol <= 1; nCol++) {
 					Coordinate nbrLoc = new Coordinate(c.getRow() + nRow, c.getCol() + nCol);
-					neighbors.set(myCells.get(nbrLoc), nRow, nCol);
+					try {
+						neighbors.set(myCells.get(nbrLoc), nRow, nCol);
+					} catch(IndexOutOfBoundsException e) {}
 				}
 			}
 			myCells.get(c).setNeighborhood(neighbors);

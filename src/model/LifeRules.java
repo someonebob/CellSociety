@@ -30,14 +30,14 @@ public class LifeRules extends Rules {
 	private int getNumNeighborsAlive(Neighborhood neighborhood){
 		int numAlive = 0;
 		for(Cell neighbor : neighborhood.getNeighbors().values()){
-			if(neighbor.getCurrentState().getValue().equals(LifeState.ALIVE))
+			if(neighbor != null && neighbor.getCurrentState().getValue().equals(LifeState.ALIVE))
 				numAlive++;
 		}
 		return numAlive;
 	}
 	
 	private boolean getAlive(Cell cell){
-		return cell.getCurrentState().getValue().equals(LifeState.ALIVE);
+		return (cell != null && cell.getCurrentState().getValue().equals(LifeState.ALIVE));
 	}
 
 }

@@ -94,8 +94,8 @@ public class XMLParser {
 		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
 
 		for(int i = 0; i < stateDefinitions.getLength(); i++){
-			String currentStateName = stateDefinitions.item(i).getNodeValue();
-			String color = stateDefinitions.item(i).getAttributes().getNamedItem("color").getNodeValue();
+			String currentStateName = stateDefinitions.item(i).getTextContent();
+			String color = getAttribute((Element) stateDefinitions.item(i), "color");
 			if(currentStateName.equals(stateName)) return color;
 		}
 		throw new XMLException("State definition not found", stateName);
@@ -108,9 +108,11 @@ public class XMLParser {
 		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
 
 		for(int i = 0; i < stateDefinitions.getLength(); i++){
-			String currentStateName = stateDefinitions.item(i).getNodeValue();
-			String ref = stateDefinitions.item(i).getAttributes().getNamedItem("ref").getNodeValue();
-			if(ref.equals(stateRef)) return currentStateName;
+			String currentStateName = stateDefinitions.item(i).getTextContent();
+			String ref = getAttribute((Element) stateDefinitions.item(i), "ref");
+			if(ref.equals(stateRef)) {
+				return currentStateName;
+			}
 		}
 		throw new XMLException("State definition not found", stateRef);
 	}
