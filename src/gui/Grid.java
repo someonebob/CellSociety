@@ -130,7 +130,7 @@ public class Grid {
 		int count = 0;
 		for(int row = 0; row < numRows; row++) {
 			for(int col = 0; col < numCols; col++) {
-				String stateText = stateList.item(count++).toString(); //TODO this doesn't work
+				String stateText = stateList.item(count++).getTextContent(); //TODO this doesn't work
 				State state = rules.getStartingState(stateText);
 				myCells.put(new Coordinate(row, col), new Cell(rules, state));
 			}
@@ -165,7 +165,6 @@ public class Grid {
 		myGroup.getChildren().clear();
 		for(Coordinate c : myCells.keySet()) {
 			Rectangle r = (Rectangle)myCells.get(c).getCurrentState().getStateNode();
-			System.out.println("My Rectangle is " + r);
 			r.setX(c.getX()*CELL_SIZE);
 			r.setY(c.getY()*CELL_SIZE);
 			myGroup.getChildren().add(r);
