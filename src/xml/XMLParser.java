@@ -14,6 +14,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * Handles XML Parsing
+ * @author Jesse
+ *
+ */
 public class XMLParser {
 	public static final List<String> DATA_FIELDS = Arrays.asList(new String[] {"name", "dimension", "state", "parameter"});
 	public static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();

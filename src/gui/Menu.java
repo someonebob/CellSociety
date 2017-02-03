@@ -1,6 +1,5 @@
 package gui;
 
-
 import java.io.File;
 
 import javafx.geometry.Pos;
@@ -17,7 +16,11 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-
+/**
+ * Creates the Title Screen
+ * @author Jesse
+ *
+ */
 public class Menu {
 	public static final int BUTTON_WIDTH = 150;
 	public static final int BUTTON_HEIGHT = 75;

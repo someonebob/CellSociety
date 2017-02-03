@@ -1,7 +1,7 @@
 <CA name = "Spreading of Fire">
 	<subclass>FireRules</subclass>
 
-	<title>Jesse's Fire Simulation</title>
+	<title>Fire Simulation</title>
 	<author>Jesse Yue</author>
 
 	<dimension>7</dimension>
