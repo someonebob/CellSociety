@@ -4,18 +4,20 @@ import xml.XMLParser;
 
 public class WaTorRules extends Rules {
 	
-	public WaTorRules(XMLParser config) {
-		
+	XMLParser config;
+	
+	public WaTorRules(XMLParser configuration) {
+		config = configuration;
 	}
 
 	@Override
 	public State getStartingState(String stateText) {
-		return new WaTorState(stateText);
+		return new WaTorState(config, stateText);
 	}
 
 	@Override
 	public State getNewState(Neighborhood neighbors) {
-		return new WaTorState(((WaTorState)neighbors.getCenter().getCurrentState()).getValue());
+		return new WaTorState(config, neighbors.getCenter().getCurrentState().getValue());
 	}
 
 }
