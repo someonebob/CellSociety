@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.File;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -18,7 +19,7 @@ import javafx.util.Duration;
 public class Animation {
 	
 	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 690;
+	public static final int HEIGHT = 700;
 	private static final double MIN_FPS = 1;
 	private static final double MAX_FPS = 120;
 	private static final double DEFAULT_FPS = 60;
@@ -27,9 +28,9 @@ public class Animation {
 	private File setup;
 	private Timeline animation;
 	private Group root;
-	private boolean inAnimation;
+	private ToolBar toolBar;
 	private boolean isPlaying;
-	private Grid grid;
+	private GridImager grid;
 	
 	/**
 	 * Initializes the Scene and Group for the animation.
@@ -55,15 +56,15 @@ public class Animation {
 	public void runAnimation(File setupInfo) {
 		setup = setupInfo;
 		setupAnimation();
-		inAnimation = true;
 		isPlaying = true;
-		//while(inAnimation);
-		//animation.stop();
 	}
 	
 	private void setupAnimation() {
-		grid = new Grid(setup);
-		root.getChildren().add(grid.getGroup());
+		grid = new GridImager(setup, simulation.getWidth(), 
+				simulation.getHeight() - toolBar.getHeight());
+		Group g = grid.getGroup();
+		g.setLayoutY(toolBar.getHeight());
+		root.getChildren().add(g);
 		KeyFrame frame = makeKeyFrame(DEFAULT_FPS);
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
@@ -85,7 +86,7 @@ public class Animation {
 		Button reset = makeResetButton();		
 		Slider slider = makeFPSSlider();
 		
-		ToolBar toolBar = new ToolBar();
+		toolBar = new ToolBar();
 		toolBar.setPrefWidth(WIDTH);
 		toolBar.getItems().addAll(menu, step, playPause, reset, slider);
 		root.getChildren().add(toolBar);
@@ -132,7 +133,10 @@ public class Animation {
 
 	private Button makeMenuButton() {
 		Button menu = new Button("Menu");
-		menu.setOnMouseClicked(e -> inAnimation = false);
+		menu.setOnMouseClicked(e -> {
+			animation.stop();
+			//TODO make it return to the menu
+		});
 		return menu;
 	}
 }

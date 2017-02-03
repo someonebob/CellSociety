@@ -1,10 +1,10 @@
-<CA name = "Predator Prey">
-	<subclass>PredatorPreyRules</subclass>
+<CA name = "Wa-Tor">
+	<subclass>WaTorRules</subclass>
 
-	<title>Nathaniel's Predator Prey Simulation</title>
+	<title>Wa-Tor Simulation</title>
 	<author>Nathaniel Brooke</author>
 
-	<dimension>7</dimension>
+	<dimension>10</dimension>
 	<dimension>7</dimension>
 
 	<state>0</state><state>1</state><state>0</state><state>1</state><state>1</state><state>0</state><state>1</state>
@@ -12,7 +12,10 @@
 	<state>1</state><state>1</state><state>1</state><state>1</state><state>0</state><state>1</state><state>1</state>
 	<state>0</state><state>1</state><state>1</state><state>2</state><state>1</state><state>0</state><state>1</state>
 	<state>0</state><state>1</state><state>1</state><state>0</state><state>1</state><state>1</state><state>0</state>
-	<state>1</state><state>1</state><state>2</state><state>1</state><state>1</state><state>1</state><state>1</state>
-	<state>2</state><state>1</state><state>1</state><state>1</state><state>1</state><state>2</state><state>1</state>
+	<state>1</state><state>1</state><state>0</state><state>1</state><state>1</state><state>1</state><state>1</state>
+	<state>2</state><state>1</state><state>0</state><state>1</state><state>1</state><state>2</state><state>1</state>
+	<state>0</state><state>1</state><state>1</state><state>1</state><state>0</state><state>1</state><state>1</state>
+	<state>2</state><state>1</state><state>0</state><state>1</state><state>0</state><state>2</state><state>1</state>
+	<state>0</state><state>1</state><state>0</state><state>2</state><state>1</state><state>0</state><state>1</state>
 
 </CA>
