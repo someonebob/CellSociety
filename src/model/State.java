@@ -1,7 +1,5 @@
 package model;
-
 import xml.XMLParser;
-
 public class State {	
 	
 	private String value;
