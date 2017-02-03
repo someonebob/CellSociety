@@ -1,44 +1,36 @@
 package model;
 
-import java.util.Arrays;
-import java.util.List;
-
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class FireStates extends State {
-	private String state;
-	private List<String> possibleStates = Arrays.asList(new String[] {"empty", "tree", "burning"});
+	private int currentstate; //0 = empty/burned 1 = tree 2 = burning
 	
-	public FireStates(String state){
-		this.state = state;
-
+	public FireStates(int state){
+		currentstate = state;
 	}
 
 	@Override
 	public Node getStateNode() {
-		if(state.equals(possibleStates.get(0))){
-			return getEmptyState();
-		}else if(state.equals(possibleStates.get(1))){
-			return getTreeState();
-		}else if(state.equals(possibleStates.get(2))){
-			return getBurningState();
+		if(currentstate == 0){
+			return new Rectangle(1, 1, Color.YELLOW);
+		}
+		if(currentstate == 1){
+			return new Rectangle(1, 1, Color.GREEN);
+		}
+		if(currentstate == 2){
+			return new Rectangle(1, 1, Color.RED);
 		}
 		return null;
 	}
 	
-	private Rectangle getEmptyState(){	
-		return new Rectangle(1, 1, Color.YELLOW);
+	public void setStateValue(int state){
+		currentstate = state;
 	}
 	
-	private Rectangle getTreeState(){
-		return new Rectangle(1, 1, Color.GREEN);
-
-	}
-	
-	private Rectangle getBurningState(){
-		return new Rectangle(1, 1, Color.RED);
+	public int getStateValue(){
+		return currentstate;
 	}
 
 }

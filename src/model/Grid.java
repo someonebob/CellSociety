@@ -16,7 +16,7 @@ import xml.XMLParser;
  */
 public class Grid {
 
-	private Map<Coordinate, Cell> myCells;
+	private Map<Coordinate, Object> myCells;
 	private int numRows, numCols;
 
 	/**
@@ -37,10 +37,10 @@ public class Grid {
 	 * refreshes the state of every cell.
 	 */
 	public void nextFrame() {
-		for(Cell c : myCells.values()) {
+		for(Object c : myCells.values()) {
 			c.calculateFutureState();
 		}
-		for(Cell c : myCells.values()) {
+		for(Object c : myCells.values()) {
 			c.refreshState();
 		}
 	}
@@ -54,7 +54,7 @@ public class Grid {
 		XMLParser parser = new XMLParser(setupInfo);	
 		Rules rules = Rules.getRules(setupInfo);
 		NodeList stateList = parser.getInitialStates();
-		myCells = new HashMap<Coordinate, Cell>();		
+		myCells = new HashMap<Coordinate, Object>();		
 		numRows = parser.getGridRows();
 		numCols = parser.getGridColumns();		
 		int count = 0;
@@ -62,7 +62,7 @@ public class Grid {
 			for(int col = 0; col < numCols; col++) {
 				String stateText = stateList.item(count++).getTextContent();
 				State state = rules.getStartingState(stateText);
-				myCells.put(new Coordinate(row, col), new Cell(rules, state));
+				myCells.put(new Coordinate(row, col), new Object(rules, state));
 			}
 		}
 	}
@@ -72,7 +72,7 @@ public class Grid {
 	 */
 	private void passNeighbors() {
 		for(Coordinate c : myCells.keySet()) {
-			Cell[][] neighbors = new Cell[3][3];
+			Object[][] neighbors = new Object[3][3];
 			for(int nRow = 0; nRow < neighbors.length; nRow++) {
 				for(int nCol = 0; nCol < neighbors[0].length; nCol++) {
 					try {
@@ -93,7 +93,7 @@ public class Grid {
 	 * @param coord the Coordinate indicating where the Cell is.
 	 * @return the Cell.
 	 */
-	public Cell getCell(Coordinate coord) {
+	public Object getCell(Coordinate coord) {
 		return myCells.get(coord);
 	}
 	

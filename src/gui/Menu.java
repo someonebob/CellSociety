@@ -29,14 +29,7 @@ public class Menu {
 	private Stage window;
 	private StackPane layout;
 	private Scene titlescreen;
-	private VBox vbox;
-	private Text title;
-	private HBox buttons;
-	private Button load, quit;	
-	private Image image;
-	private ImageView background;
-	private FileChooser chooser;
-	private File defaultDirectory, selectedFile;
+	private File selectedFile;
 	
 	/**
 	 * Takes in the stage to use throughout class
@@ -71,8 +64,8 @@ public class Menu {
 		layout = new StackPane();
 		titlescreen = new Scene(layout, WIDTH, HEIGHT);
 		
-		image = new Image(getClass().getClassLoader().getResourceAsStream(CELL_IMAGE));
-		background = new ImageView(image);
+		Image image = new Image(getClass().getClassLoader().getResourceAsStream(CELL_IMAGE));
+		ImageView background = new ImageView(image);
 		
 		layout.getChildren().add(background);
 	}
@@ -81,12 +74,12 @@ public class Menu {
 	 * Sets up the User Interface
 	 */
 	private void setupInterface(){
-		title = new Text("CELL CIVILIZATION");
+		Text title = new Text("CELL CIVILIZATION");
 		title.setFill(Color.WHITE);
 		title.setFont(Font.font(100));
 		
 		//magic number for spacing
-		vbox = new VBox(200);
+		VBox vbox = new VBox(200);
 		
 		vbox.getChildren().addAll(title, setupButtons());
 		vbox.setAlignment(Pos.CENTER);
@@ -98,34 +91,47 @@ public class Menu {
 	 * @return HBox containing aligned buttons
 	 */
 	private HBox setupButtons(){
-		load = new Button("Load File");	
+		Button load = new Button("Load File");	
 		load.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+				
+		load.setOnMouseClicked(e -> loadButtonAction(setupFileChooser()));
 		
-		chooser = new FileChooser();
-		chooser.setTitle("CA Simulations");	
-		defaultDirectory = new File(System.getProperty("user.dir")+"/data");
-		chooser.setInitialDirectory(defaultDirectory);
-		chooser.getExtensionFilters().setAll(new ExtensionFilter("XML Files", EXTENSION));
-		
-		load.setOnMouseClicked(e -> {
-			selectedFile = chooser.showOpenDialog(window);		
-			if(selectedFile != null){
-				Animation animation = new Animation();
-				window.setScene(animation.initialize());			
-				animation.runAnimation(selectedFile);
-			}	 
-		});
-		
-		quit = new Button("Quit");
+		Button quit = new Button("Quit");
 		quit.setOnMouseClicked(e -> System.exit(0));
 		quit.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		
 		//magic number for spacing
-		buttons = new HBox(300);
+		HBox buttons = new HBox(300);
 		buttons.getChildren().addAll(load, quit);
 		buttons.setAlignment(Pos.CENTER);
 		
 		return buttons;
+	}
+	/**
+	 * Sets up the action taken for the load button
+	 * @param chooser
+	 */
+	private void loadButtonAction(FileChooser chooser){
+		selectedFile = chooser.showOpenDialog(window);		
+		if(selectedFile != null){
+			Animation animation = new Animation();
+			window.setScene(animation.initialize());			
+			animation.runAnimation(selectedFile);
+		}	 
+	}
+	
+	/**
+	 * Sets up the File Chooser
+	 * @return Returns the File Chooser
+	 */
+	private FileChooser setupFileChooser(){
+		FileChooser chooser = new FileChooser();
+		chooser.setTitle("CA Simulations");	
+		File defaultDirectory = new File(System.getProperty("user.dir")+"/data");
+		chooser.setInitialDirectory(defaultDirectory);
+		chooser.getExtensionFilters().setAll(new ExtensionFilter("XML Files", EXTENSION));
+		
+		return chooser;
 	}
 	
 }
