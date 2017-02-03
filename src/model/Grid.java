@@ -83,7 +83,7 @@ public class Grid {
 	 * @param setupInfo the File containing the size, rules, and starting states.
 	 */
 	private void initializeArray(XMLParser configuration) {
-		Rules rules = Rules.getRules(configuration);
+		Rules rules = new RulesLoader(configuration).getRules();
 		NodeList stateList = configuration.getInitialStates();
 		myCells = new HashMap<Coordinate, Cell>();		
 		numRows = configuration.getGridRows();
