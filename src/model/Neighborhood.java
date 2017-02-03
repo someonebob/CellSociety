@@ -9,10 +9,10 @@ import java.util.Collection;
  */
 public class Neighborhood {
 
-		private Object[][] neighborhood;
+		private Cell[][] neighborhood;
 		
 		public Neighborhood(){
-			neighborhood = new Object[3][3];
+			neighborhood = new Cell[3][3];
 		}
 		
 		/**
@@ -21,7 +21,7 @@ public class Neighborhood {
 		 * @param col
 		 * @param cell
 		 */
-		public void set(Object cell, int row, int col){
+		public void set(Cell cell, int row, int col){
 			if(inRange(row, col))
 				neighborhood[row][col] = cell;
 			else throw new IndexOutOfBoundsException("Neighborhood coordinates out of range");
@@ -30,15 +30,15 @@ public class Neighborhood {
 		/**
 		 * Gets cell at certain coordinate in neighborhood
 		 */
-		public Object get(int row, int col){
+		public Cell get(int row, int col){
 			return neighborhood[row][col];
 		}
 		
 		/**
 		 * Returns a collection of all neighbor cells
 		 */
-		public Collection<Object> getNeighbors(){
-			Collection<Object> neighbors = new ArrayList<Object>();
+		public Collection<Cell> getNeighbors(){
+			Collection<Cell> neighbors = new ArrayList<Cell>();
 			
 			for(int row = 0; row < neighborhood.length; row++)
 				for(int col = 0; col < neighborhood[0].length; col++)
@@ -50,7 +50,7 @@ public class Neighborhood {
 		/**
 		 * Returns center cell
 		 */
-		public Object getCenter(){
+		public Cell getCenter(){
 			return neighborhood[2][2];
 		}
 		

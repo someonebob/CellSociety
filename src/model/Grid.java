@@ -93,7 +93,7 @@ public class Grid {
 	 * @param coord the Coordinate indicating where the Cell is.
 	 * @return the Cell.
 	 */
-	public Cell getCell(Coordinate coord) {
+	public Object getCell(Coordinate coord) {
 		return myCells.get(coord);
 	}
 	
