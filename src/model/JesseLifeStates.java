@@ -4,10 +4,10 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class LifeStates extends State {
+public class JesseLifeStates extends State {
 	private int currentstate;
 	
-	public LifeStates(int state){
+	public JesseLifeStates(int state){
 		currentstate = state;
 	}
 

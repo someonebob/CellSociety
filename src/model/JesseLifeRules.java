@@ -4,24 +4,24 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LifeRules extends Rules {
-	private LifeStates[][] lstates;
+public class JesseLifeRules extends Rules {
+	private JesseLifeStates[][] lstates;
 	private Map<Integer, Integer> neighborMap;
 	
-	public LifeRules(File setupInfo){
+	public JesseLifeRules(File setupInfo){
 		
 	}
 
 	@Override
 	public State getStartingState(String stateText) {
-		return new LifeStates(Integer.parseInt(stateText));
+		return new JesseLifeStates(Integer.parseInt(stateText));
 	}
 
 	@Override
 	public State getNewState(State[][] states) {
 		convertStates(states);
 		setupMap(lstates);
-		LifeStates state = lstates[1][1];
+		JesseLifeStates state = lstates[1][1];
 		int stateValue = state.getStateValue();
 		
 		//current state is dead
@@ -54,16 +54,16 @@ public class LifeRules extends Rules {
 	 * @param states
 	 */
 	private void convertStates(State[][] states){
-		lstates = new LifeStates[3][3];
+		lstates = new JesseLifeStates[3][3];
 		
 		for(int i = 0; i < lstates.length; i++){
 			for(int j = 0; j < lstates.length; j++){
-				lstates[i][j] = (LifeStates)states[i][j];
+				lstates[i][j] = (JesseLifeStates)states[i][j];
 			}
 		}
 	}
 	
-	private void setupMap(LifeStates[][] lstates){
+	private void setupMap(JesseLifeStates[][] lstates){
 		neighborMap = new HashMap<Integer, Integer>();
 
 		for(int i = 0; i < lstates.length; i++){
