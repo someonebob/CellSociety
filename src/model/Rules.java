@@ -6,18 +6,17 @@ import xml.XMLParser;
 
 public abstract class Rules {
 
-	public static Rules getRules(File setupInfo) {
-		XMLParser parser = new XMLParser(setupInfo);	
-		String name = parser.getRuleName();
+	public static Rules getRules(XMLParser configuration) {
+		String name = configuration.getRuleName();
 		
 		if(name.equals("Spreading of Fire")) {
-			return new FireRules(setupInfo);
+			return new FireRules(configuration);
 		}
 		if(name.equals("Wa-Tor")) {
-			return new WaTorRules(setupInfo);
+			return new WaTorRules(configuration);
 		}
 		if(name.equals("Game of Life")) {
-			return new LifeRules();
+			return new LifeRules(configuration);
 		}
 		return null;
 	}

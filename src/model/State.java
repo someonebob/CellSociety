@@ -1,9 +1,24 @@
 package model;
 
-public abstract class State {	
+import xml.XMLParser;
+
+public class State {	
 	
-	public abstract String getColor();
+	private String value;
+	private XMLParser configuration;
 	
-	public abstract String getValue();
+	public State(XMLParser configuration, String value){
+		this.configuration = configuration;
+		this.value = value;
+		
+	}
+	
+	public String getColor(){
+		return configuration.getStateColor(value);
+	}
+	
+	public String getValue(){
+		return value;
+	}
 	
 }

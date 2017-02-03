@@ -8,7 +8,8 @@
 	<dimension>7</dimension>
 
 	<parameter name="probCatch">15</parameter>
-
+	<probCath>15</probcat>
+	
 	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
 	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
 	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
@@ -16,5 +17,4 @@
 	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
 	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
 	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
-
 </CA>
