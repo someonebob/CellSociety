@@ -17,13 +17,13 @@ public abstract class Rules {
 			return new WaTorRules(setupInfo);
 		}
 		if(name.equals("Game of Life")) {
-			return new JesseLifeRules(setupInfo);
+			return new LifeRules();
 		}
 		return null;
 	}
 	
 	public abstract State getStartingState(String stateText);
 	
-	public abstract State getNewState(State[][] states);
+	public abstract State getNewState(Neighborhood neighborhood);
 
 }
