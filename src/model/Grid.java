@@ -29,8 +29,6 @@ public class Grid {
 		passNeighbors();
 	}
 
-
-
 	/**
 	 * Updates every cell.
 	 * Calculates the future state of every cell, then
@@ -42,44 +40,6 @@ public class Grid {
 		}
 		for(Cell c : myCells.values()) {
 			c.refreshState();
-		}
-	}
-
-	/**
-	 * Initializes the main 2D array of Cells.
-	 * Passes each Cell its rules and starting state.
-	 * @param setupInfo the File containing the size, rules, and starting states.
-	 */
-	private void initializeArray(File setupInfo) {
-		XMLParser parser = new XMLParser(setupInfo);	
-		Rules rules = Rules.getRules(setupInfo);
-		NodeList stateList = parser.getInitialStates();
-		myCells = new HashMap<Coordinate, Cell>();		
-		numRows = parser.getGridRows();
-		numCols = parser.getGridColumns();		
-		int count = 0;
-		for(int row = 0; row < numRows; row++) {
-			for(int col = 0; col < numCols; col++) {
-				String stateText = stateList.item(count++).getTextContent();
-				State state = rules.getStartingState(stateText);
-				myCells.put(new Coordinate(row, col), new Cell(rules, state));
-			}
-		}
-	}
-
-	/**
-	 * Passes each Cell in the 2D array the cells directly next to it.
-	 */
-	private void passNeighbors() {
-		for(Coordinate c : myCells.keySet()) {
-			Neighborhood neighbors = new Neighborhood();
-			for(int nRow = -1; nRow <= 1; nRow++) {
-				for(int nCol = -1; nCol <= 1; nCol++) {
-					Coordinate nbrLoc = new Coordinate(c.getRow() + nRow, c.getCol() + nCol);
-					neighbors.set(myCells.get(nbrLoc), nRow, nCol);
-				}
-			}
-			myCells.get(c).setNeighborhood(neighbors);
 		}
 	}
 
@@ -114,6 +74,44 @@ public class Grid {
 	 */
 	public int getCols() {
 		return numCols;
+	}
+	
+	/**
+	 * Initializes the main 2D array of Cells.
+	 * Passes each Cell its rules and starting state.
+	 * @param setupInfo the File containing the size, rules, and starting states.
+	 */
+	private void initializeArray(File setupInfo) {
+		XMLParser parser = new XMLParser(setupInfo);	
+		Rules rules = Rules.getRules(setupInfo);
+		NodeList stateList = parser.getInitialStates();
+		myCells = new HashMap<Coordinate, Cell>();		
+		numRows = parser.getGridRows();
+		numCols = parser.getGridColumns();		
+		int count = 0;
+		for(int row = 0; row < numRows; row++) {
+			for(int col = 0; col < numCols; col++) {
+				String stateText = stateList.item(count++).getTextContent();
+				State state = rules.getStartingState(stateText);
+				myCells.put(new Coordinate(row, col), new Cell(rules, state));
+			}
+		}
+	}
+	
+	/**
+	 * Passes each Cell in the 2D array the cells directly next to it.
+	 */
+	private void passNeighbors() {
+		for(Coordinate c : myCells.keySet()) {
+			Neighborhood neighbors = new Neighborhood();
+			for(int nRow = -1; nRow <= 1; nRow++) {
+				for(int nCol = -1; nCol <= 1; nCol++) {
+					Coordinate nbrLoc = new Coordinate(c.getRow() + nRow, c.getCol() + nCol);
+					neighbors.set(myCells.get(nbrLoc), nRow, nCol);
+				}
+			}
+			myCells.get(c).setNeighborhood(neighbors);
+		}
 	}
 
 }
