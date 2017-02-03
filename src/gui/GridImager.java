@@ -46,8 +46,6 @@ public class GridImager {
 	private void updateGroup() {
 		myGroup.getChildren().clear();
 		for(Coordinate c : myGrid.getCoordinates()) {
-			
-			// TODO change pass of Rectangle
 			Rectangle r = new Rectangle(cellWidth, cellHeight);
 			r.setFill(Color.web(myGrid.getCell(c).getCurrentState().getColor()));
 			r.setX(c.getRow()*cellWidth);
