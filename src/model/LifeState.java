@@ -1,30 +1,15 @@
 package model;
 
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import xml.XMLParser;
 
 public class LifeState extends State {
 
 	private boolean alive;
-	private Color aliveColor = Color.BLACK;
-	private Color deadColor = Color.WHITE;
+	public static final String ALIVE = "alive";
+	private static final String DEAD = "dead";
 	
-	public LifeState(String startingState){
-		if(startingState.equals("alive")) alive = true;
-		else alive = false;
-	}
-	
-	public Node getStateNode() {
-		if(alive) return new Rectangle(0, 0, aliveColor);
-		else return new Rectangle(0, 0, deadColor);
-	}
-	
-	public boolean isAlive(){
-		return alive;
-	}
-	
-	public void setAlive(boolean isAlive){
-		alive = isAlive;
+	public LifeState(XMLParser configuration, String value){
+		super(configuration, value);
+		alive = value.equals(ALIVE); // deafults to dead
 	}
 }
