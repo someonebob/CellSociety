@@ -17,7 +17,7 @@ public abstract class Rules {
 			return new WaTorRules(setupInfo);
 		}
 		if(name.equals("Game of Life")) {
-			return new LifeRules(setupInfo);
+			return new LifeRules();
 		}
 		return null;
 	}

@@ -16,7 +16,7 @@ import xml.XMLParser;
  */
 public class Grid {
 
-	private Map<Coordinate, Object> myCells;
+	private Map<Coordinate, Cell> myCells;
 	private int numRows, numCols;
 
 	/**
@@ -37,10 +37,10 @@ public class Grid {
 	 * refreshes the state of every cell.
 	 */
 	public void nextFrame() {
-		for(Object c : myCells.values()) {
+		for(Cell c : myCells.values()) {
 			c.calculateFutureState();
 		}
-		for(Object c : myCells.values()) {
+		for(Cell c : myCells.values()) {
 			c.refreshState();
 		}
 	}
@@ -54,7 +54,7 @@ public class Grid {
 		XMLParser parser = new XMLParser(setupInfo);	
 		Rules rules = Rules.getRules(setupInfo);
 		NodeList stateList = parser.getInitialStates();
-		myCells = new HashMap<Coordinate, Object>();		
+		myCells = new HashMap<Coordinate, Cell>();		
 		numRows = parser.getGridRows();
 		numCols = parser.getGridColumns();		
 		int count = 0;
@@ -62,7 +62,7 @@ public class Grid {
 			for(int col = 0; col < numCols; col++) {
 				String stateText = stateList.item(count++).getTextContent();
 				State state = rules.getStartingState(stateText);
-				myCells.put(new Coordinate(row, col), new Object(rules, state));
+				myCells.put(new Coordinate(row, col), new Cell(rules, state));
 			}
 		}
 	}
@@ -72,19 +72,14 @@ public class Grid {
 	 */
 	private void passNeighbors() {
 		for(Coordinate c : myCells.keySet()) {
-			Object[][] neighbors = new Object[3][3];
-			for(int nRow = 0; nRow < neighbors.length; nRow++) {
-				for(int nCol = 0; nCol < neighbors[0].length; nCol++) {
-					try {
-						Coordinate nbrLoc = new Coordinate(c.getRow() + nRow, c.getCol() + nCol);
-						neighbors[nRow][nCol] = myCells.get(nbrLoc);
-					}
-					catch (ArrayIndexOutOfBoundsException e) {
-						neighbors[nRow][nCol] = null;
-					}
+			Neighborhood neighbors = new Neighborhood();
+			for(int nRow = -1; nRow <= 1; nRow++) {
+				for(int nCol = -1; nCol <= 1; nCol++) {
+					Coordinate nbrLoc = new Coordinate(c.getRow() + nRow, c.getCol() + nCol);
+					neighbors.set(myCells.get(nbrLoc), nRow, nCol);
 				}
 			}
-			myCells.get(c).setNeighbors(neighbors);
+			myCells.get(c).setNeighborhood(neighbors);
 		}
 	}
 
@@ -93,7 +88,7 @@ public class Grid {
 	 * @param coord the Coordinate indicating where the Cell is.
 	 * @return the Cell.
 	 */
-	public Object getCell(Coordinate coord) {
+	public Cell getCell(Coordinate coord) {
 		return myCells.get(coord);
 	}
 	
