@@ -2,8 +2,18 @@ package model;
 
 public abstract class State {	
 	
-	public abstract String getColor();
+	private String myValue;
 	
-	public abstract String getValue();
+	public State(String value) {
+		myValue = value;
+	}
+	
+	public String getColor() {
+		return null;
+	}
+	
+	public String getValue() {
+		return myValue;
+	}
 	
 }

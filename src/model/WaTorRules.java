@@ -1,21 +1,20 @@
 package model;
 
-import java.io.File;
-import java.util.ArrayList;
+import xml.XMLParser;
 
 public class WaTorRules extends Rules {
 	
-	public WaTorRules(File setupInfo) {
+	public WaTorRules(XMLParser config) {
+		
 	}
 
 	@Override
 	public State getStartingState(String stateText) {
-		return new WaTorState(Integer.parseInt(stateText));
+		return new WaTorState(stateText);
 	}
 
 	@Override
 	public State getNewState(Neighborhood neighbors) {
-		
 		return new WaTorState(((WaTorState)neighbors.getCenter().getCurrentState()).getValue());
 	}
 
