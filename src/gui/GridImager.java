@@ -3,6 +3,7 @@ package gui;
 import java.io.File;
 
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.Grid;
 import model.Coordinate;
@@ -45,9 +46,8 @@ public class GridImager {
 	private void updateGroup() {
 		myGroup.getChildren().clear();
 		for(Coordinate c : myGrid.getCoordinates()) {
-			Rectangle r = (Rectangle)myGrid.getCell(c).getCurrentState().getStateNode();
-			// TODO change pass of Rectangle
-			r = new Rectangle(cellWidth, cellHeight, r.getFill());
+			Rectangle r = new Rectangle(cellWidth, cellHeight);
+			r.setFill(Color.web(myGrid.getCell(c).getCurrentState().getColor()));
 			r.setX(c.getRow()*cellWidth);
 			r.setY(c.getCol()*cellHeight);
 			myGroup.getChildren().add(r);
