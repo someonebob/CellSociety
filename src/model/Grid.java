@@ -72,19 +72,14 @@ public class Grid {
 	 */
 	private void passNeighbors() {
 		for(Coordinate c : myCells.keySet()) {
-			Cell[][] neighbors = new Cell[3][3];
-			for(int nRow = 0; nRow < neighbors.length; nRow++) {
-				for(int nCol = 0; nCol < neighbors[0].length; nCol++) {
-					try {
-						Coordinate nbrLoc = new Coordinate(c.getRow() + nRow, c.getCol() + nCol);
-						neighbors[nRow][nCol] = myCells.get(nbrLoc);
-					}
-					catch (ArrayIndexOutOfBoundsException e) {
-						neighbors[nRow][nCol] = null;
-					}
+			Neighborhood neighbors = new Neighborhood();
+			for(int nRow = -1; nRow <= 1; nRow++) {
+				for(int nCol = -1; nCol <= 1; nCol++) {
+					Coordinate nbrLoc = new Coordinate(c.getRow() + nRow, c.getCol() + nCol);
+					neighbors.set(myCells.get(nbrLoc), nRow, nCol);
 				}
 			}
-			myCells.get(c).setNeighbors(neighbors);
+			myCells.get(c).setNeighborhood(neighbors);
 		}
 	}
 
