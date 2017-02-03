@@ -73,8 +73,8 @@ public class Grid {
 	private void passNeighbors() {
 		for(Coordinate c : myCells.keySet()) {
 			Neighborhood neighbors = new Neighborhood();
-			for(int nRow = 0; nRow < 3; nRow++) {
-				for(int nCol = 0; nCol < 3; nCol++) {
+			for(int nRow = -1; nRow <= 1; nRow++) {
+				for(int nCol = -1; nCol <= 1; nCol++) {
 					Coordinate nbrLoc = new Coordinate(c.getRow() + nRow, c.getCol() + nCol);
 					neighbors.set(myCells.get(nbrLoc), nRow, nCol);
 				}
