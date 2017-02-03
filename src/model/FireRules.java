@@ -1,6 +1,8 @@
 package model;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.w3c.dom.Element;
@@ -34,7 +36,8 @@ public class FireRules extends Rules {
 
 	@Override
 	public State getNewState(Neighborhood hood) {
-		
+		Map<String, Cell> neighbors = hood.getNeighbors();
+		neighbors.get(Neighborhood.NW).getCurrentState();
 		return null;
 	}
 	
