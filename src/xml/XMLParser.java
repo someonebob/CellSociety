@@ -2,6 +2,7 @@ package xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import org.xml.sax.SAXException;
  *
  */
 public class XMLParser {
-	public static final List<String> DATA_FIELDS = Arrays.asList(new String[] {"name", "dimension", "state", "parameter"});
+	public static final List<String> DATA_FIELDS = Arrays.asList(new String[] {"name", "dimension", "state", "parameter", "stateDef"});
 	public static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
 
 	private File info;
@@ -78,16 +79,43 @@ public class XMLParser {
 	}
 	
 	/**
-	 * Returns a NodeList of all the parameters unique to 
+	 * Returns a String corresponding to the input parameter
 	 * @param tagName
 	 * @return
 	 */
-	public NodeList getParameters(){
-		parameter = getRootElement().getElementsByTagName(DATA_FIELDS.get(3));
-		
-		return parameter;
+	public String getParameter(String tagName){
+		return getRootElement().getElementsByTagName(tagName).item(0).getTextContent();
 	}
 	
+	/**
+	 * Finds a color given a state name
+	 */
+	public String getStateColor(String stateName){
+		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
+
+		for(int i = 0; i < stateDefinitions.getLength(); i++){
+			String currentStateName = stateDefinitions.item(i).getNodeValue();
+			String color = stateDefinitions.item(i).getAttributes().getNamedItem("color").getNodeValue();
+			if(currentStateName.equals(stateName)) return color;
+		}
+		throw new XMLException("State definition not found", stateName);
+	}
+	
+	/**
+	 * Finds a state name given a state reference name
+	 */
+	public String getStateName(String stateRef){
+		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
+
+		for(int i = 0; i < stateDefinitions.getLength(); i++){
+			String currentStateName = stateDefinitions.item(i).getNodeValue();
+			String ref = stateDefinitions.item(i).getAttributes().getNamedItem("ref").getNodeValue();
+			if(ref.equals(stateRef)) return currentStateName;
+		}
+		throw new XMLException("State definition not found", stateRef);
+	}
+	
+
 	/**
 	 * Gets the attribute of the element
 	 * @param element
