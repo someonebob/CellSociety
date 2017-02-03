@@ -35,7 +35,7 @@ public class GridImager {
 	 * refreshes the state of the Grid, then updates the Group.
 	 */
 	public void nextFrame() {
-		//myGrid.nextFrame(); TODO re-enable later
+		myGrid.nextFrame();
 		updateGroup();
 	}
 	
