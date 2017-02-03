@@ -60,6 +60,7 @@ public class RulesLoader {
 		options.add(new FireRules(config));
 		options.add(new LifeRules(config));
 		options.add(new WaTorRules(config));
+		return options;
 	}
 	
 }
