@@ -1,5 +1,8 @@
-package model;
+package simulation;
 
+import model.Neighborhood;
+import model.Rules;
+import model.State;
 import xml.XMLParser;
 
 public class WaTorRules extends Rules {

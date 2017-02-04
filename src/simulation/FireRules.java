@@ -1,4 +1,4 @@
-package model;
+package simulation;
 
 import java.io.File;
 import java.util.HashMap;
@@ -7,6 +7,10 @@ import java.util.Random;
 
 import org.w3c.dom.Element;
 
+import model.Cell;
+import model.Neighborhood;
+import model.Rules;
+import model.State;
 import xml.XMLParser;
 /**
  * Rules for Spreading Fire
