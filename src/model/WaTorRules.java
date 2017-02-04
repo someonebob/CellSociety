@@ -17,7 +17,22 @@ public class WaTorRules extends Rules {
 
 	@Override
 	public State getNewState(Neighborhood neighbors) {
-		return new WaTorState(config, neighbors.getCenter().getCurrentState().getValue());
+		String currentValue = neighbors.getCenter().getCurrentState().getValue();
+		String newValue = "";
+		if(currentValue.equals("empty")) {
+			
+		}
+		else if(currentValue.equals("fish")) {
+			
+		}
+		else if(currentValue.equals("shark")) {
+			
+		}
+		else {
+			throw new RulesException("Value of current state of given cell not recognized");
+		}
+		
+		return new WaTorState(config, newValue);
 	}
 
 }
