@@ -36,9 +36,12 @@ public class Neighborhood {
 		 * @param cell
 		 */
 		public void set(Cell cell, int row, int col){
-			if(inRange(row, col))
+			if(inRange(row, col)) {
 				neighborhood[row][col] = cell;
-			else throw new IndexOutOfBoundsException("Neighborhood coordinates out of range");
+			}
+			else {
+				throw new IndexOutOfBoundsException("Neighborhood coordinates out of range");
+			}
 		}
 		
 		/**
@@ -79,6 +82,23 @@ public class Neighborhood {
 		 */
 		private boolean inRange(int row, int col){
 			return row >= 0 && row < neighborhood.length && col >= 0 && col < neighborhood[0].length;
+		}
+		
+		@Override
+		public String toString() {
+			String output = "";
+			for(int row = 0; row < 3; row++) {
+				output += "\n";
+				for(int col = 0; col < 3; col++) {
+					if(neighborhood[row][col] != null) {
+						output += neighborhood[row][col].toString() + " ";
+					}
+					else {
+						output += "***null***";
+					}
+				}
+			}
+			return output.substring(1);
 		}
 		
 }

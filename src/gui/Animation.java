@@ -56,7 +56,7 @@ public class Animation {
 	public void runAnimation(File setupInfo) {
 		setup = setupInfo;
 		setupAnimation();
-		isPlaying = true;
+		isPlaying = false; //TODO change back to true
 	}
 	
 	private void setupAnimation() {
@@ -69,7 +69,7 @@ public class Animation {
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
-		animation.play();
+		//animation.play(); TODO re-enable
 	}
 	
 	private KeyFrame makeKeyFrame(double framesPerSecond) {
