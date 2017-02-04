@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import simulation.LifeRules;
 import xml.XMLException;
 import xml.XMLParser;
 

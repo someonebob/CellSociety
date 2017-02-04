@@ -1,5 +1,6 @@
-package model;
+package simulation;
 
+import model.State;
 import xml.XMLParser;
 
 public class LifeState extends State {

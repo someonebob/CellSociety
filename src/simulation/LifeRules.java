@@ -1,4 +1,8 @@
-package model;
+package simulation;
+import model.Cell;
+import model.Neighborhood;
+import model.Rules;
+import model.State;
 import xml.XMLParser;
 
 public class LifeRules extends Rules {
