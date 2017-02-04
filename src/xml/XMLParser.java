@@ -1,10 +1,14 @@
 package xml;
 
 import java.io.File;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,9 +16,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import model.Coordinate;
 /**
  * Handles XML Parsing
  * @author Jesse
@@ -72,10 +78,18 @@ public class XMLParser {
 	 * Returns a NodeList of all the initial states of the simulation
 	 * @return list of states
 	 */
-	public NodeList getInitialStates(){
-		stateList = getRootElement().getElementsByTagName(DATA_FIELDS.get(2));
-
-		return stateList;
+	public Map<Coordinate, String> getInitialStates(){
+		Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
+		String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
+		String[] linesRef = fullRef.trim().split("\n");
+		
+		for(int row = 0; row < linesRef.length; row++){
+			String[] stateRef = linesRef[row].trim().split("\\s+");
+			for(int col = 0; col < stateRef.length; col++){
+				stateTextGrid.put(new Coordinate(row, col), getStateName(stateRef[col]));
+			}
+		}
+		return stateTextGrid;
 	}
 	
 	/**

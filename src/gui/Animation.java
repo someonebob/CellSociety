@@ -22,7 +22,7 @@ public class Animation {
 	public static final int HEIGHT = 700;
 	private static final double MIN_FPS = 1;
 	private static final double MAX_FPS = 120;
-	private static final double DEFAULT_FPS = 60;
+	private static final double DEFAULT_FPS = 2;
 	
 	private Scene simulation;
 	private File setup;

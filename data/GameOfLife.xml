@@ -10,9 +10,11 @@
 	<stateDef ref="o" color="black">alive</stateDef>
 	<stateDef ref="x" color="white">dead</stateDef>
 	
-	<state>x</state><state>x</state><state>x</state><state>x</state><state>x</state><state>x</state>
-	<state>x</state><state>x</state><state>x</state><state>x</state><state>x</state><state>x</state>
-	<state>x</state><state>x</state><state>o</state><state>o</state><state>x</state><state>x</state>
-	<state>x</state><state>x</state><state>o</state><state>o</state><state>x</state><state>x</state>
-	<state>x</state><state>x</state><state>x</state><state>x</state><state>x</state><state>x</state>
+	<state>
+	x x x x x
+	x x o x x
+	x x o x x
+	x x o x x 
+	x x x x x	
+	</state>
 </CA>

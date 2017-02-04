@@ -78,23 +78,20 @@ public class Grid {
 	}
 	
 	/**
-	 * Initializes the main 2D array of Cells.
+	 * Initializes the Map of Coordinates and Cells.
 	 * Passes each Cell its rules and starting state.
 	 * @param setupInfo the File containing the size, rules, and starting states.
 	 */
 	private void initializeArray(XMLParser configuration) {
 		Rules rules = new RulesLoader(configuration).getRules();
-		NodeList stateList = configuration.getInitialStates();
-		myCells = new HashMap<Coordinate, Cell>();		
-		numRows = configuration.getGridRows();
-		numCols = configuration.getGridColumns();		
-		int count = 0;
-		for(int row = 0; row < numRows; row++) {
-			for(int col = 0; col < numCols; col++) {
-				String stateRef = stateList.item(count++).getTextContent();
-				State state = rules.getStartingState(configuration.getStateName(stateRef));
-				myCells.put(new Coordinate(row, col), new Cell(rules, state));
-			}
+		Map<Coordinate, String> stateReference = configuration.getInitialStates();
+		myCells = new HashMap<Coordinate, Cell>();	
+		
+		for(Coordinate c: stateReference.keySet()){
+			if(c.row + 1 > numRows) numRows = c.row + 1;
+			if(c.col + 1 > numCols) numCols = c.col + 1;
+			State state = rules.getStartingState(stateReference.get(c));			
+			myCells.put(c, new Cell(rules, state));
 		}
 	}
 	
