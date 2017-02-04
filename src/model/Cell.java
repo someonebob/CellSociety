@@ -30,4 +30,9 @@ public class Cell {
 	public State getCurrentState(){
 		return currentState;
 	}
+	
+	@Override
+	public String toString() {
+		return "[Cell: " + getCurrentState().getValue() + "]";
+	}
 }

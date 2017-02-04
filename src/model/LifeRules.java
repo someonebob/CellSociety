@@ -15,14 +15,21 @@ public class LifeRules extends Rules {
 	public LifeState getNewState(Neighborhood neighborhood) { 
 		int neighborsAlive = getNumNeighborsAlive(neighborhood);
 		boolean isAlive = getAlive(neighborhood.getCenter());
-		
 		if(isAlive){
-			if (neighborsAlive >= 2 && neighborsAlive <= 3) return new LifeState(configuration, "alive");
-			else return new LifeState(configuration, "dead");
+			if (neighborsAlive >= 2 && neighborsAlive <= 3) {
+				return new LifeState(configuration, "alive");
+			}
+			else {
+				return new LifeState(configuration, "dead");
+			}
 		}
 		else{
-			if(neighborsAlive == 3) return new LifeState(configuration, "alive");
-			else return new LifeState(configuration, "dead");
+			if(neighborsAlive == 3) {
+				return new LifeState(configuration, "alive");
+			}
+			else {
+				return new LifeState(configuration, "dead");
+			}
 		}
 		
 	}

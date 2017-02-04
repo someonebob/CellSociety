@@ -50,4 +50,9 @@ public class Coordinate implements Comparable<Coordinate> {
 		}
 		return false;	
 	}
+	
+	@Override
+	public String toString() {
+		return "(" + row + ", " + col + ")";
+	}
 }

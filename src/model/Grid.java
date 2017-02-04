@@ -1,11 +1,9 @@
 package model;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import org.w3c.dom.NodeList;
+import java.util.TreeMap;
 
 import xml.XMLParser;
 
@@ -85,7 +83,7 @@ public class Grid {
 	private void initializeArray(XMLParser configuration) {
 		Rules rules = new RulesLoader(configuration).getRules();
 		Map<Coordinate, String> stateReference = configuration.getInitialStates();
-		myCells = new HashMap<Coordinate, Cell>();	
+		myCells = new TreeMap<Coordinate, Cell>();	
 		
 		for(Coordinate c: stateReference.keySet()){
 			if(c.row + 1 > numRows) numRows = c.row + 1;
@@ -104,9 +102,7 @@ public class Grid {
 			for(int nRow = -1; nRow <= 1; nRow++) {
 				for(int nCol = -1; nCol <= 1; nCol++) {
 					Coordinate nbrLoc = new Coordinate(c.getRow() + nRow, c.getCol() + nCol);
-					try {
-						neighbors.set(myCells.get(nbrLoc), nRow, nCol);
-					} catch(IndexOutOfBoundsException e) {}
+					neighbors.set(myCells.get(nbrLoc), nRow + 1, nCol + 1);
 				}
 			}
 			myCells.get(c).setNeighborhood(neighbors);
