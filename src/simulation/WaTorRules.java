@@ -2,6 +2,7 @@ package simulation;
 
 import model.Neighborhood;
 import model.Rules;
+import model.RulesException;
 import model.State;
 import xml.XMLParser;
 
