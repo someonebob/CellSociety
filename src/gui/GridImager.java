@@ -48,8 +48,8 @@ public class GridImager {
 		for(Coordinate c : myGrid.getCoordinates()) {
 			Rectangle r = new Rectangle(cellWidth, cellHeight);
 			r.setFill(Color.web(myGrid.getCell(c).getCurrentState().getColor()));
-			r.setX(c.getRow()*cellWidth);
-			r.setY(c.getCol()*cellHeight);
+			r.setX(c.getCol()*cellWidth);
+			r.setY(c.getRow()*cellHeight);
 			myGroup.getChildren().add(r);
 		}
 	}
