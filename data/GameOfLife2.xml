@@ -1,0 +1,42 @@
+<CA>
+	<subclass>simulation.LifeRules</subclass>
+
+	<title>Conways's Game of Life</title>
+	<author>Nathaniel Brooke</author>
+	
+	<stateDef ref="o" color="black">alive</stateDef>
+	<stateDef ref="x" color="white">dead</stateDef>
+	
+	<state>
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x o x x x x x x x x x x x x x x x x x
+	x x x x x x o x x o x x o x x x x x x x x x x o x x x x x x
+	x x x x o o x o o o x x o x x x x x x x x x x x x x x x x x
+	x x x x x x o x x x x x o x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x o x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x o o o o o o o o o o o o o o o x x x
+	x x x x x x x x x x x x o x x x x o x x x x x x x x x x x x
+	x x x x x x x x x x x x o x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x o x o x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x o x o o o o o x x x x x x x x x x x
+	x x x x x x x x x x x x o x x x x x x x x x x x x x x x x x
+	x x x x x o x x x x x x x x o x x x x x x x x x x x x x x x
+	x x x x x x x x x x x o o o o o x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x o x x x x x x o o x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x o x o x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x o x x x x x x x
+	x x x x o o x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x o x o x x x x x x o o o o o o x x x x x x x x x x x x
+	x x x x o x x x x x x x o o o x x x x x x x x x x x x x x x
+	x x x x x x x o o x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x o x x o x x x x x x x x x x x x x x x x x x x x
+	x x x x x x o x x x x x x x x x x x x x x o o x x x x x x x
+	x x x x x x o x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x o x o x x x x x x x x x x x x x x o o x o x x x x
+	x x x x x x x x x x x o x x x x x x x x x x x x o x x x x x
+	x x x x x x x x x x o x o x x x x x x x x x x o x o x x x x
+	x x x x x x x x x x x o x x x x x x x x x x x x o x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x o x o x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	</state>
+</CA>

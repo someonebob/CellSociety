@@ -3,7 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import simulation.FireRules;
 import simulation.LifeRules;
+import simulation.WaTorRules;
 import xml.XMLException;
 import xml.XMLParser;
 
@@ -58,9 +60,15 @@ public class RulesLoader {
 	 */
 	private List<Rules> makeRulesList(XMLParser config) {
 		ArrayList<Rules> options = new ArrayList<Rules>();
-//		options.add(new FireRules(config));
-		options.add(new LifeRules(config));
-//		options.add(new WaTorRules(config));
+		try {
+			options.add(new FireRules(config));
+		} catch (XMLException e) {}
+		try {
+			options.add(new LifeRules(config));
+		} catch (XMLException e) {}
+		try {
+			options.add(new WaTorRules(config));
+		} catch (XMLException e) {}
 		return options;
 	}
 	

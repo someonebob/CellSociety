@@ -98,7 +98,12 @@ public class XMLParser {
 	 * @return
 	 */
 	public String getParameter(String tagName){
-		return getRootElement().getElementsByTagName(tagName).item(0).getTextContent();
+		try {
+			return getRootElement().getElementsByTagName(tagName).item(0).getTextContent();
+		}
+		catch(Exception e) {
+			throw new XMLException(e, "Invalid parameter requested");
+		}
 	}
 	
 	/**
