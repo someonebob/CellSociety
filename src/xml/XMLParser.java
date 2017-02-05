@@ -108,6 +108,8 @@ public class XMLParser {
 	
 	/**
 	 * Finds a color given a state name
+	 * @param stateName full-length string definition of state name
+	 * @exception XMLException if state not found in file
 	 */
 	public String getStateColor(String stateName){
 		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
@@ -122,6 +124,7 @@ public class XMLParser {
 	
 	/**
 	 * Finds a state name given a state reference name
+	 * @param stateRef Shortcut state reference value defined in xml file "stateDef" tag
 	 */
 	public String getStateName(String stateRef){
 		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));

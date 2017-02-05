@@ -1,3 +1,9 @@
+/**
+ * Creates a Cellular Automaton. Cell has knowledge of rules
+ * and its neighbors, but not the entire grid of cells.
+ * @author DhruvKPatel
+ */
+
 package model;
 
 public class Cell {
@@ -33,7 +39,7 @@ public class Cell {
 	 */
 	public void setFutureState(State nextState){
 		this.futureState = nextState;
-		futureStateIsLocked = true;
+		futureStateIsLocked = true;	// This overrieds "calculateFutureState()" until next turn to prevent blending of frames
 	}
 	
 	/**
@@ -70,7 +76,8 @@ public class Cell {
 	}
 	
 	/**
-	 * Return's cell's state value
+	 * Returns cell's current state formatted for printing
+	 * @return cell's current state formatted for printing
 	 */
 	@Override
 	public String toString() {
