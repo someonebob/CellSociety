@@ -40,7 +40,6 @@ public class Grid {
 		for(Cell c : myCells.values()) {
 			c.refreshState();
 		}
-		System.out.println("---------------------grid line 43");
 	}
 
 	/**
