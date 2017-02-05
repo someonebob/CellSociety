@@ -31,6 +31,10 @@ public class Cell {
 		return currentState;
 	}
 	
+	public Neighborhood getNeighborhood() {
+		return neighborhood;
+	}
+	
 	@Override
 	public String toString() {
 		return "[Cell: " + getCurrentState().getValue() + "]";

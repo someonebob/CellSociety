@@ -1,5 +1,5 @@
 <CA>
-	<subclass>model.LifeRules</subclass>
+	<subclass>simulation.LifeRules</subclass>
 
 	<title>Conways's Game of Life</title>
 	<author>Nathaniel Brooke</author>

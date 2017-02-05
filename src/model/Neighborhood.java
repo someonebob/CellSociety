@@ -20,7 +20,7 @@ public class Neighborhood {
 		public static final String SW = "SW";
 		public static final String S = "S";
 		public static final String SE = "SE";
-		public static final List<String> LOCATIONS = Arrays.asList(new String[] {NW, N, NE, W, "", E, SW, S, SE});
+		public static final List<String> LOCATIONS = Arrays.asList(new String[] {NW, N, NE, W, E, SW, S, SE});
 
 
 		private Cell[][] neighborhood;

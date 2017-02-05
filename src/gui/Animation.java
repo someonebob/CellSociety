@@ -22,7 +22,7 @@ public class Animation {
 	public static final int HEIGHT = 700;
 	private static final double MIN_FPS = 1;
 	private static final double MAX_FPS = 120;
-	private static final double DEFAULT_FPS = 2;
+	private static final double DEFAULT_FPS = 10;
 	
 	private Scene simulation;
 	private File setup;
@@ -56,7 +56,7 @@ public class Animation {
 	public void runAnimation(File setupInfo) {
 		setup = setupInfo;
 		setupAnimation();
-		isPlaying = false; //TODO change back to true
+		isPlaying = true;
 	}
 	
 	private void setupAnimation() {
@@ -69,7 +69,7 @@ public class Animation {
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
-		//animation.play(); TODO re-enable
+		animation.play();
 	}
 	
 	private KeyFrame makeKeyFrame(double framesPerSecond) {
