@@ -5,6 +5,7 @@ import java.util.List;
 
 import simulation.FireRules;
 import simulation.LifeRules;
+import simulation.SegregationRules;
 import simulation.WaTorRules;
 import xml.XMLException;
 import xml.XMLParser;
@@ -68,6 +69,9 @@ public class RulesLoader {
 		} catch (XMLException e) {}
 		try {
 			options.add(new WaTorRules(config));
+		} catch (XMLException e) {}
+		try {
+			options.add(new SegregationRules(config));
 		} catch (XMLException e) {}
 		return options;
 	}
