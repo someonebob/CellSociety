@@ -117,7 +117,7 @@ public class Menu {
 	private void loadButtonAction(FileChooser chooser){
 		selectedFile = chooser.showOpenDialog(window);		
 		if(selectedFile != null){
-			Animation animation = new Animation();
+			Animation animation = new Animation(window);
 			window.setScene(animation.initialize());			
 			animation.runAnimation(selectedFile);
 		}	 
