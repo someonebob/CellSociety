@@ -1,9 +1,7 @@
 package simulation;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-import model.Cell;
 import model.Neighborhood;
 import model.Rules;
 import model.State;
@@ -101,18 +99,16 @@ public class WaTorRules extends Rules {
 	}
 	
 	private ArrayList<WaTorState> getStatesAround(Neighborhood neighbors) {
-		Map<String, Cell> cells = neighbors.getNeighbors();
 		ArrayList<WaTorState> states = new ArrayList<WaTorState>();
-		if(cells.get(Neighborhood.N) != null) 
-			states.add((WaTorState)cells.get(Neighborhood.N).getCurrentState());
-		if(cells.get(Neighborhood.E) != null) 
-			states.add((WaTorState)cells.get(Neighborhood.E).getCurrentState());
-		if(cells.get(Neighborhood.W) != null) 
-			states.add((WaTorState)cells.get(Neighborhood.W).getCurrentState());
-		if(cells.get(Neighborhood.S) != null) 
-			states.add((WaTorState)cells.get(Neighborhood.S).getCurrentState());
+		
+		if(neighbors.get(0,1) != null) // N
+			states.add((WaTorState) neighbors.get(0,1).getCurrentState());
+		if(neighbors.get(1,2) != null) // E
+			states.add((WaTorState) neighbors.get(1,2).getCurrentState());
+		if(neighbors.get(1,0) != null) // W
+			states.add((WaTorState) neighbors.get(1,0).getCurrentState());
+		if(neighbors.get(2,1) != null) // S 
+			states.add((WaTorState) neighbors.get(2,1).getCurrentState());
 		return states;
 	}
-
-
 }

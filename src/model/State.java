@@ -24,6 +24,14 @@ public class State {
 	}
 	
 	/**
+	 * Constructs a copy of a state (to overcome pointer issues)
+	 * @param s State to copy
+	 */
+	public State(State s){
+		this(s.configuration, s.value);
+	}
+	
+	/**
 	 * Returns color code associated with state 
 	 * @return string color of state found in configuration file
 	 */
@@ -39,13 +47,21 @@ public class State {
 		return value;
 	}
 	
-	/**
-	 * Returns state's defined value
-	 * @return state's defined value
-	 */
-	
-	@Override
-	public String toString() {
-		return getValue();
-	}	
+//	/**
+//	 * Checks if two states have same values
+//	 * @param other State to compare with
+//	 * @return
+//	 */
+//	public boolean equals(State other) {
+//		return getValue().equals(other.getValue());
+//	}
+//	
+//	/**
+//	 * Returns state's defined value
+//	 * @return state's defined value
+//	 */
+//	@Override
+//	public String toString() {
+//		return getValue();
+//	}
 }

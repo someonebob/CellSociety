@@ -5,7 +5,9 @@
  */
 package model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,17 +55,26 @@ public class Neighborhood {
 	 * Returns a map of all neighbor cells.
 	 * Map keys are cardinal directions relative to center cell.
 	 */
-	public Map<String, Cell> getNeighbors(){
-		Map<String, Cell> neighbors = new HashMap<String, Cell>();
-		
-		int count = 0;
-		for(int row = 0; row < neighborhood.length; row++)
-			for(int col = 0; col < neighborhood[0].length; col++)
-				if(row != 1 || col != 1){
-					neighbors.put(LOCATIONS.get(count++), neighborhood[row][col]);
+	public Collection<Cell> getNeighbors(){
+		Collection<Cell> neighbors = new ArrayList<Cell>();
+		for(int r = 0; r < neighborhood.length; r++){
+			for(int c = 0 ; c < neighborhood[0].length; c++){
+				if(r != 1 || c != 1){
+					neighbors.add(get(r, c));
 				}
-		
+			}
+		}
 		return neighbors;
+//		Map<String, Cell> neighbors = new HashMap<String, Cell>();
+//		
+//		int count = 0;
+//		for(int row = 0; row < neighborhood.length; row++)
+//			for(int col = 0; col < neighborhood[0].length; col++)
+//				if(row != 1 || col != 1){
+//					neighbors.put(LOCATIONS.get(count++), neighborhood[row][col]);
+//				}
+//		
+//		return neighbors;
 	}
 	
 	/**

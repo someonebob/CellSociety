@@ -1,8 +1,8 @@
 package simulation;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Random;
+import java.util.Stack;
 
 import model.Cell;
 import model.Neighborhood;
@@ -11,6 +11,7 @@ import model.State;
 import xml.XMLParser;
 
 public class SegregationRules extends Rules{
+	public static final String VACANT = "vacant";
 	public static final String PERCENT_THRESHOLD_PARAMETER = "percentThreshold";
 	private XMLParser configuration;
 	private double percentThreshold;
@@ -22,44 +23,41 @@ public class SegregationRules extends Rules{
 	}
 	
 	public State getStartingState(String stateText) {
-		return new SegregationState(configuration, stateText);
+		return new State(configuration, stateText);
 	}
 
 	public State getNewState(Neighborhood neighborhood) {
 		me = neighborhood.getCenter();
 			
-//		if(!isVacant(me) && getPercentAlike(neighborhood) < (percentThreshold/100)) 
-//			swap(me, getNearestEmptyHome(neighborhood));
-		
-		if(!isVacant(me)) swap(me, getNearestEmptyHome(neighborhood));
-		
-		return new SegregationState(configuration,"vacant");//me.getCurrentState(); // Will be overridden if cells are swapped
+		if(!isVacant(me) && getPercentAlike(neighborhood) < (percentThreshold/100)) 
+			swap(me, getNearestEmptyHome(neighborhood));
+		return me.getCurrentState(); // Will be overridden if cells are swapped
 	}
 	
 	private Cell getNearestEmptyHome(Neighborhood neighborhood){
-		Queue<Cell> possibleHomes = new LinkedList<Cell>();
+		ArrayList<Cell> possibleHomes = new ArrayList<Cell>(); // Semi-Random search (looks at neighbors first)
 		ArrayList<Cell> alreadySearched = new ArrayList<Cell>();
-		for(Cell other : neighborhood.getNeighbors().values())
+		for(Cell other : neighborhood.getNeighbors()){
 			if(other != null) possibleHomes.add(other);
-		
+		}
 		while (!possibleHomes.isEmpty()){
-			Cell home = possibleHomes.poll();
+			Cell home = possibleHomes.get((new Random()).nextInt(possibleHomes.size()));
+			possibleHomes.remove(home);
 			alreadySearched.add(home);
-			if(isVacant(home)) return home;
+			
+			if(isVacant(home) && home != me && !home.futureStateIsLocked()) return home;
 			else{
-				for(Cell nextPossible : home.getNeighborhood().getNeighbors().values()){
-					if(nextPossible != null && !alreadySearched.contains(nextPossible)) {
+				for(Cell nextPossible : home.getNeighborhood().getNeighbors()){
+					if(nextPossible != null && !alreadySearched.contains(nextPossible) && nextPossible != me) {
 						possibleHomes.add(nextPossible);
 					}
 				}
 			}
 		}
 		return me; // Only gets to this if all other homes occupied
-		
 	}
-
+	
 	private void swap(Cell cell1, Cell cell2){
-		System.out.println("Swapped " + cell1 + " with " + cell2);
 		cell1.setFutureState(cell2.getCurrentState());
 		cell2.setFutureState(cell1.getCurrentState());
 	}
@@ -68,7 +66,7 @@ public class SegregationRules extends Rules{
 		double numNeighbors = 0;
 		double numAlike = 0;
 		
-		for(Cell other : neighborhood.getNeighbors().values()){
+		for(Cell other : neighborhood.getNeighbors()){
 			if(other != null && !isVacant(other)){
 				numNeighbors++;
 				if (isAlike(me, other)) numAlike++;
@@ -83,6 +81,6 @@ public class SegregationRules extends Rules{
 	}
 	
 	private boolean isVacant(Cell cell){
-		return cell.getCurrentState().getValue().equals(SegregationState.VACANT);
+		return cell.getCurrentState().getValue().equals(VACANT);
 	}
 }

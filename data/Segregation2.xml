@@ -1,0 +1,75 @@
+<CA>
+	<subclass>simulation.SegregationRules</subclass>
+
+	<title>Segregation</title>
+	<author>Dhruv Patel</author>
+	
+	<percentThreshold>60</percentThreshold>
+	
+	<stateDef ref = "o" color="red">agent1</stateDef>
+	<stateDef ref = "x" color="blue">agent2</stateDef>
+	<stateDef ref = "-" color="black">vacant</stateDef>
+	
+	<state>
+    x o - x o - - o x o - - x - - x - o - o x - o x o x 
+    o - - o - o o o x x - x x x - x - - x - x o - o x - 
+    - o o x x o - x o x - x - x o o - - o x - o x - o - 
+    x o x x x o x - o o x - - x - o o x - o x - x - x o 
+    - - x - x o o o x x o x - - x - o o - x - o - o x - 
+    - - o o - x - o x o x o x - o o o - x x - x x - o x 
+    x x x - - - o o o x x x x x o x o - x o - x o - o - 
+    - - - x o x x o o x o - - - o x - - o x - o x x o x 
+    - x - o o o o - - o x x o x o x - x o o o x x o x - 
+    o x x o - - x - o - x - o x - - x o x x o o o x x x 
+    - - x x o o - x o x o - - x o x - - o x x o x o x - 
+    x x - x x o o - x x x o o x - x x o x x o o o x x x 
+    - o o o - x o x x o - x o - x - x o o o x o o o x - 
+    o x - x o x - o x - - x x - o - x x o - o - x - o x 
+    x - o - o x x - x x - x o - x o x - o - o x - o - o 
+    - o - o x - o x - o x o - x - x x o - o x - x o x o 
+    - o - x o x o x - o x - o x - o x - x o x - o x o x 
+    - o x - x - x - - - o x - o - x o x - o - x - x x - 
+    x - x o x - o x - o x - o x x - o x - x - x - x - x 
+    o - x o - x o x - x o x - o x - o x x o x - o x - - 
+    o - o - x - x - x o - x o x - o x o o o - o - o o x 
+    - x - o x - o x - x o x - o x o x x o x o x o - x x 
+    </state>
+    
+    <ignore>
+    - o x x x - - x o - x o o - - x o x o - x - o x - o x - o x - x o x x
+    x x o - x o - - o x o - - x - - x - o - o x - o x o x - o - o x - o x
+    x o - - o - o o o x x - x x x - x - - x - x o - o x - x o - o x - x o 
+    - - o o x x o - x o x - x - x o o - - o x - o x - o - x o x - o x - x
+    - x o x x x o x - o o x - - x - o o x - o x - x - x o - o x - - - x x 
+    - - - x - x o o o x x o x - - x - o o - x - o - o x - o - o x - - x x 
+    - - - o o - x - o x o x o x - o o o - x x - x x - o x x - o - x o - o 
+    - x x x - - - o o o x x x x x o x o - x o - x o - o - o x - o - o - o 
+    - - - - x o x x o o x o - - - o x - - o x - o x x o x - o - o o - o x
+    x - x - o o o o - - o x x o x o x - x o o o x x o x - - x - o o - - -
+    o o x x o - - x - o - x - o x - - x o x x o o o x x x - o x o x x o o
+    o - - x x o o - x o x o - - x o x - - o x x o x o x - x o o o x x - o
+    - x x - x x o o - x x x o o x - x x o x x o o o x x x - o x o x x o o
+    - - o o o - x o x x o - x o - x - x o o o x o o o x - - o o x x o x -
+    x o x - x o x - o x - - x x - o - x x o - o - x - o x - x o x - o x x
+    o x - o - o x x - x x - x o - x o x - o - o x - o - o x o x x o o x o
+    x - o - o x - o x - o x o - x - x x o - o x - x o x o x o x - o - x -
+    x - o - x o x o x - o x - o x - o x - x o x - o x o x o x - o x x o o 
+    x - o x - x - x - - - o x - o - x o x - o - x - x x - x o o x o - x o
+    o x - x o x - o x - o x - o x x - o x - x - x - x - x - o o x o x o x
+    x o - x o - x o x - x o x - o x - o x x o x - o x - - - o x - o x o x
+    x o - o - x - x - x o - x o x - o x o o o - o - o o x o x - - o x - x
+    - - x - o x - o x - x o x - o x o x x o x o x o - x x - - o x o x - x
+    o x - x o x o x o x - o x - x o - x - x o - o x - o x - x o - x o - x
+    - x - x - x o - x - x o x - x o x o x o x - x o - x x o x - o o x - o
+    - x - x - x o x o x o x o x - - - x - x x o x o x o x o x - o - x - o
+    x - o o x - x o - o - x o - x - o x x - o x o - x - o x o - x o - x o
+    x o - o x - o x - x - o - x - - - o x o x x x - o x o - x o - o o o o 
+    x o - x - x o x - o x x o x o o o - - o - o o o o o o - o - x - x - o
+    - x o - x - o x - - x - x - x o x - o x x o x - o x - o o - o - - o -
+    - x - x o - x o - o - - - - - o - x x o x o x o x - o x x x o x o x -
+    - x o - x - x o o x o x - x o x - o x o - x o o - - - o x - x o x - o
+    x - o x o x o x o x x o - - o - o - x x o x o x o - o o o o o o - x o
+    - o x o - o - o o x o x - o x - o x o - x o x o - o x - o x o x x - o
+    o - o x x o x - o x - o x - x o o x o x o o x o x o x o x o x - - - o
+    </ignore>
+</CA>

@@ -66,5 +66,4 @@ public class WaTorState extends State {
 	public void setNoFoodTime(int noFoodTime) {
 		food = noFoodTime;
 	}
-
 }

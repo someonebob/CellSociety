@@ -35,11 +35,27 @@ public class Cell {
 	/**
 	 * Allows you to manually set Cell's future state. 
 	 * Overrides and locks intrinsic "calculateFutureState" until state is refreshed.
+	 * If already locked, will not change state, but will return false
+	 * If not already locked, will change state, lock, and return true
 	 * @param nextState
 	 */
-	public void setFutureState(State nextState){
-		this.futureState = nextState;
-		futureStateIsLocked = true;	// This overrieds "calculateFutureState()" until next turn to prevent blending of frames
+	public boolean setFutureState(State nextState){
+		if(!futureStateIsLocked){
+			this.futureState = new State(nextState);
+			futureStateIsLocked = true;	// This overrides "calculateFutureState()" until next turn to prevent blending of frames
+			return true;
+		}
+		else{
+			return false;
+		}		
+	}
+	
+	/**
+	 * Returns Cell's lock status (true if future state locked)
+	 * @return future state is locked
+	 */
+	public boolean futureStateIsLocked(){
+		return futureStateIsLocked;
 	}
 	
 	/**
@@ -47,8 +63,8 @@ public class Cell {
 	 * Does not update current state until cell is refreshed.
 	 */
 	public void calculateFutureState(){
-		if(!futureStateIsLocked)
-			this.futureState = rules.getNewState(neighborhood);		
+		State possibleFuture = new State(rules.getNewState(neighborhood));
+		if(!futureStateIsLocked) this.futureState = possibleFuture;
 	}
 	
 	/**
