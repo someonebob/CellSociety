@@ -4,9 +4,6 @@
 	<title>Conways's Game of Life</title>
 	<author>Dhruv Patel</author>
 
-	<dimension>5</dimension>
-	<dimension>5</dimension>
-	
 	<stateDef ref="o" color="black">alive</stateDef>
 	<stateDef ref="x" color="white">dead</stateDef>
 	

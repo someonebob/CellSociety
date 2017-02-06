@@ -84,5 +84,4 @@ public class FireRules extends Rules {
 			states.add((FireState) hood.get(2, 1).getCurrentState());
 		return states;
 	}
-
 }

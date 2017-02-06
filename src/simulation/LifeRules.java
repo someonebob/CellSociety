@@ -1,3 +1,6 @@
+/**
+ * Rule class for Game of Life Simulation
+ */
 package simulation;
 import model.Cell;
 import model.Neighborhood;
@@ -6,6 +9,8 @@ import model.State;
 import xml.XMLParser;
 
 public class LifeRules extends Rules {
+	public static final String ALIVE = "alive";
+	private static final String DEAD = "dead";
 	XMLParser configuration;
 	
 	public LifeRules(XMLParser configuration){
@@ -13,26 +18,26 @@ public class LifeRules extends Rules {
 	}
 	
 	public State getStartingState(String stateText){
-		return new LifeState(configuration, stateText);
+		return new State(configuration, stateText);
 	}
 	
-	public LifeState getNewState(Neighborhood neighborhood) { 
+	public State getNewState(Neighborhood neighborhood) { 
 		int neighborsAlive = getNumNeighborsAlive(neighborhood);
 		boolean isAlive = getAlive(neighborhood.getCenter());
 		if(isAlive){
 			if (neighborsAlive >= 2 && neighborsAlive <= 3) {
-				return new LifeState(configuration, "alive");
+				return new State(configuration, ALIVE);
 			}
 			else {
-				return new LifeState(configuration, "dead");
+				return new State(configuration, DEAD);
 			}
 		}
 		else{
 			if(neighborsAlive == 3) {
-				return new LifeState(configuration, "alive");
+				return new State(configuration, ALIVE);
 			}
 			else {
-				return new LifeState(configuration, "dead");
+				return new State(configuration, DEAD);
 			}
 		}
 		
@@ -40,9 +45,9 @@ public class LifeRules extends Rules {
 	
 	private int getNumNeighborsAlive(Neighborhood neighborhood){
 		int numAlive = 0;
-		for(Cell neighbor : neighborhood.getNeighbors().values()){
+		for(Cell neighbor : neighborhood.getNeighbors()){
 			if(neighbor != null){
-				if(neighbor.getCurrentState().getValue().equals(LifeState.ALIVE))
+				if(neighbor.getCurrentState().getValue().equals(ALIVE))
 					numAlive++;
 			}
 		}
@@ -50,7 +55,7 @@ public class LifeRules extends Rules {
 	}
 	
 	private boolean getAlive(Cell cell){
-		return (cell != null && cell.getCurrentState().getValue().equals(LifeState.ALIVE));
+		return (cell != null && cell.getCurrentState().getValue().equals(ALIVE));
 	}
 
 }
