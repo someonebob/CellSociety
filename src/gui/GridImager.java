@@ -10,16 +10,17 @@ import model.Coordinate;
 
 public class GridImager {
 	
-	private double cellWidth;
-	private double cellHeight;
+	private double cellSize;
 	private Group myGroup;
 	private Grid myGrid;
 
 	public GridImager(File setupInfo, double width, double height) {
 		myGroup = new Group();
 		myGrid = new Grid(setupInfo);
-		cellWidth = width/myGrid.getRows();
-		cellHeight = height/myGrid.getCols();
+		cellSize = width/myGrid.getRows();
+		if(cellSize > height/myGrid.getCols()) {
+			cellSize = height/myGrid.getCols();
+		}
 		updateGroup();
 	}
 	
@@ -46,10 +47,10 @@ public class GridImager {
 	private void updateGroup() {
 		myGroup.getChildren().clear();
 		for(Coordinate c : myGrid.getCoordinates()) {
-			Rectangle r = new Rectangle(cellWidth, cellHeight);
+			Rectangle r = new Rectangle(cellSize, cellSize);
 			r.setFill(Color.web(myGrid.getCell(c).getCurrentState().getColor()));
-			r.setX(c.getCol()*cellWidth);
-			r.setY(c.getRow()*cellHeight);
+			r.setX(c.getCol()*cellSize);
+			r.setY(c.getRow()*cellSize);
 			myGroup.getChildren().add(r);
 		}
 	}

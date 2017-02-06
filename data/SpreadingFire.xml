@@ -4,8 +4,7 @@
 	<title>Spreading of Fire</title>
 	<author>Jesse Yue</author>
 
-	<dimension>21</dimension>
-	<dimension>21</dimension>
+	<cyclesPerTick>1</cyclesPerTick>
 
 	<probCatch>55</probCatch>
 

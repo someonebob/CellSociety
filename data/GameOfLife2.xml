@@ -4,6 +4,8 @@
 	<title>Conways's Game of Life</title>
 	<author>Nathaniel Brooke</author>
 	
+	<cyclesPerTick>1</cyclesPerTick>
+	
 	<stateDef ref="o" color="black">alive</stateDef>
 	<stateDef ref="x" color="white">dead</stateDef>
 	

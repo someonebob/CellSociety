@@ -1,0 +1,24 @@
+<CA>
+	<subclass>simulation.WaTorRules</subclass>
+
+	<title>Wa-Tor World</title>
+	<author>Nathaniel Brooke</author>
+	
+	<cyclesPerTick>4</cyclesPerTick>
+	
+	<breedTime>10</breedTime>
+	<starveTime>10</starveTime>
+	
+	<stateDef ref="e" color="blue">empty</stateDef>
+	<stateDef ref="f" color="lime">fish</stateDef>
+	<stateDef ref="s" color="gray">shark</stateDef>
+	
+	<state>
+	e e e e e e
+	e e e e e e
+	e e e f e e
+	e e e s e e
+	e e e e e e
+	e e e e e e
+	</state>
+</CA>  

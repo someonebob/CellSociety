@@ -33,54 +33,72 @@ public class WaTorRules extends Rules {
 		
 		String value = neighbors.getCenter().getCurrentState().getValue();
 		if(step == 1) {
-			// Sharks Eat
-			if(value.equals("shark")) {
-				WaTorState eat = getStateOf("fish", neighbors);
-				if(eat != null) {
-					eat.setNextValue("empty");
-					getCenterState(neighbors).eat();
-				}
-			}
-			return neighbors.getCenter().getCurrentState();
+			return sharksEat(neighbors, value);
+		}
+		else if(step == 2) {
+			return updateStates(neighbors, step, age, noFood, false);
 		}
 		else if(step == 3) {
 			getCenterState(neighbors).setStep(0);
-			// Everybody moves or reproduces or starves
-			if((value.equals("shark") && (!getCenterState(neighbors).ate()
-							|| getCenterState(neighbors).getCellAge() >= breed)) 
-					|| value.equals("fish")) {
-				WaTorState move = getStateOf("empty", neighbors);
-				if(move != null) {
-					if(!value.equals("shark") || noFood < starve) {
-						// Not Starving
-						move.setNextValue(value);
-						move.setNoFoodTime(noFood);
-					}
-					if(age < breed) {
-						// Not reproducing
-						getCenterState(neighbors).setNextValue("empty");	
-						move.setCellAge(age);
-					}
-					else {
-						// Reproducing, reset age
-						getCenterState(neighbors).setCellAge(0);
-						move.setCellAge(0);
-						move.setNoFoodTime(0);
-					}
-				}
-			}
-			return neighbors.getCenter().getCurrentState();
+			return moveReproduceDie(neighbors, age, noFood, value);
 		}
 		else {
-			// Update everything
-			String nextVal = getCenterState(neighbors).getNextValue();
-			if(nextVal != null) {
-				return new WaTorState(config, nextVal, ++step, age, noFood);
-			}
-			else {
-				return new WaTorState(config, getCenterState(neighbors).getValue(), ++step, age, noFood);
+			return updateStates(neighbors, step, age, noFood, true);
+		}
+	}
+
+	private State updateStates(Neighborhood neighbors, int step, int age, int noFood, boolean shark) {
+		// Don't update a shark if it ate and needs to not move
+		if(!shark && getCenterState(neighbors).getValue().equals("shark")) {
+			return getCenterState(neighbors);
+		}
+		// Update to next value if next value initialized
+		String nextVal = getCenterState(neighbors).getNextValue();
+		if(nextVal != null) {
+			return new WaTorState(config, nextVal, ++step, age, noFood);
+		}
+		else {
+			return new WaTorState(config, getCenterState(neighbors).getValue(), ++step, age, noFood);
+		}
+	}
+
+	private State moveReproduceDie(Neighborhood neighbors, int age, int noFood, String value) {
+		if((value.equals("shark") && (!getCenterState(neighbors).ate()
+						|| getCenterState(neighbors).getCellAge() >= breed)) 
+				|| value.equals("fish")) {
+			WaTorState move = getStateOf("empty", neighbors);
+			if(move != null) {
+				if(!value.equals("shark") || noFood < starve) {
+					// Not Starving
+					move.setNextValue(value);
+					move.setNoFoodTime(noFood);
+				}
+				if(age < breed) {
+					// Not reproducing
+					getCenterState(neighbors).setNextValue("empty");	
+					move.setCellAge(age);
+				}
+				else {
+					// Reproducing, reset age
+					getCenterState(neighbors).setCellAge(0);
+					move.setCellAge(0);
+					move.setNoFoodTime(0);
+				}
 			}
 		}
+		return neighbors.getCenter().getCurrentState();
+	}
+
+	private State sharksEat(Neighborhood neighbors, String value) {
+		// Sharks Eat
+		if(value.equals("shark")) {
+			WaTorState eat = getStateOf("fish", neighbors);
+			if(eat != null) {
+				eat.setNextValue("empty");
+				getCenterState(neighbors).eat();
+			}
+		}
+		return neighbors.getCenter().getCurrentState();
 	}
 	
 	private WaTorState getCenterState(Neighborhood neighbors) {

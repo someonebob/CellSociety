@@ -4,6 +4,8 @@
 	<title>Segregation</title>
 	<author>Dhruv Patel</author>
 	
+	<cyclesPerTick>1</cyclesPerTick>
+	
 	<percentThreshold>51</percentThreshold>
 	
 	<stateDef ref = "o" color="orange">agent1</stateDef>
