@@ -4,8 +4,7 @@
 	<title>Life Simulation</title>
 	<author>Jesse Yue</author>
 
-	<dimension>20</dimension>
-	<dimension>20</dimension>
+	<cyclesPerTick>1</cyclesPerTick>
 
 	<state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state>
 	<state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state><state>0</state>

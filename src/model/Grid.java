@@ -16,6 +16,7 @@ public class Grid {
 
 	private Map<Coordinate, Cell> myCells;
 	private int numRows, numCols;
+	private int cyclesPerTick;
 
 	/**
 	 * Initializes the 2D Array of Cells.
@@ -23,8 +24,9 @@ public class Grid {
 	 * including grid size, rules, and starting states.
 	 */
 	public Grid(File setupInfo) {
-		XMLParser configuration = new XMLParser(setupInfo);
-		initializeArray(configuration);
+		XMLParser config = new XMLParser(setupInfo);
+		cyclesPerTick = Integer.parseInt(config.getParameter("cyclesPerTick"));
+		initializeArray(config);
 		passNeighbors();
 	}
 
@@ -34,11 +36,13 @@ public class Grid {
 	 * refreshes the state of every cell.
 	 */
 	public void nextFrame() {
-		for(Cell c : myCells.values()) {
-			c.calculateFutureState();
-		}
-		for(Cell c : myCells.values()) {
-			c.refreshState();
+		for(int i = 0; i < cyclesPerTick; i++) {
+			for(Cell c : myCells.values()) {
+				c.calculateFutureState();
+			}
+			for(Cell c : myCells.values()) {
+				c.refreshState();
+			}
 		}
 	}
 

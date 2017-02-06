@@ -4,8 +4,10 @@
 	<title>Wa-Tor World</title>
 	<author>Nathaniel Brooke</author>
 	
-	<breedTime>4</breedTime>
-	<starveTime>4</starveTime>
+	<cyclesPerTick>4</cyclesPerTick>
+	
+	<breedTime>10</breedTime>
+	<starveTime>10</starveTime>
 	
 	<stateDef ref="e" color="blue">empty</stateDef>
 	<stateDef ref="f" color="lime">fish</stateDef>
