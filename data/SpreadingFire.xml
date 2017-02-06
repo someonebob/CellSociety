@@ -1,19 +1,41 @@
-<CA name = "Spreading of Fire">
-	<subclass>FireRules</subclass>
+<CA>
+	<subclass>simulation.FireRules</subclass>
 
-	<title>Fire Simulation</title>
+	<title>Spreading of Fire</title>
 	<author>Jesse Yue</author>
 
-	<dimension>7</dimension>
-	<dimension>7</dimension>
+	<dimension>21</dimension>
+	<dimension>21</dimension>
 
-	<probCatch>15</probCatch>
+	<probCatch>55</probCatch>
+
+	<stateDef ref="e" color="yellow">empty</stateDef>
+	<stateDef ref="t" color="green">tree</stateDef>
+	<stateDef ref="b" color="red">burning</stateDef>
+
 	
-	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
-	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
-	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
-	<state>1</state><state>1</state><state>1</state><state>2</state><state>1</state><state>1</state><state>1</state>
-	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
-	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
-	<state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state><state>1</state>
+	<state>
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t b t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t b t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+
+	</state>
 </CA>
