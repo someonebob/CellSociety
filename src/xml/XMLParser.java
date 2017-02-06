@@ -1,11 +1,8 @@
 package xml;
 
 import java.io.File;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +13,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -33,9 +29,7 @@ public class XMLParser {
 	private File info;
 	private String ruleName;
 	private int gridRows, gridColumns;
-	private NodeList parameter;
 	private Document xmlDocument;
-	private NodeList stateList;
 	
 	/**
 	 * Allows the file to be used throughout the class

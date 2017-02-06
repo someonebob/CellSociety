@@ -41,7 +41,7 @@ public class Cell {
 	 */
 	public boolean setFutureState(State nextState){
 		if(!futureStateIsLocked){
-			this.futureState = new State(nextState);
+			this.futureState = nextState;
 			futureStateIsLocked = true;	// This overrides "calculateFutureState()" until next turn to prevent blending of frames
 			return true;
 		}
@@ -63,7 +63,7 @@ public class Cell {
 	 * Does not update current state until cell is refreshed.
 	 */
 	public void calculateFutureState(){
-		State possibleFuture = new State(rules.getNewState(neighborhood));
+		State possibleFuture = rules.getNewState(neighborhood);
 		if(!futureStateIsLocked) this.futureState = possibleFuture;
 	}
 	

@@ -74,6 +74,5 @@ public class RulesLoader {
 			options.add(new SegregationRules(config));
 		} catch (XMLException e) {}
 		return options;
-	}
-	
+	}	
 }

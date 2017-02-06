@@ -47,21 +47,21 @@ public class State {
 		return value;
 	}
 	
-//	/**
-//	 * Checks if two states have same values
-//	 * @param other State to compare with
-//	 * @return
-//	 */
-//	public boolean equals(State other) {
-//		return getValue().equals(other.getValue());
-//	}
-//	
-//	/**
-//	 * Returns state's defined value
-//	 * @return state's defined value
-//	 */
-//	@Override
-//	public String toString() {
-//		return getValue();
-//	}
+	/**
+	 * Checks if two states have same values
+	 * @param other State to compare with
+	 * @return
+	 */
+	public boolean equals(State other) {
+		return getValue().equals(other.getValue());
+	}
+	
+	/**
+	 * Returns state's defined value
+	 * @return state's defined value
+	 */
+	@Override
+	public String toString() {
+		return getValue();
+	}
 }
