@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToolBar;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
@@ -31,13 +32,15 @@ public class Animation {
 	private ToolBar toolBar;
 	private boolean isPlaying;
 	private GridImager grid;
+	private Stage window;
 	
 	/**
 	 * Initializes the Scene and Group for the animation.
 	 */
-	public Animation() {
+	public Animation(Stage window) {
 		root = new Group();
 		simulation = new Scene(root, WIDTH, HEIGHT);
+		this.window = window;
 	}
 	
 	/**
@@ -104,7 +107,10 @@ public class Animation {
 
 	private Button makeResetButton() {
 		Button reset = new Button("Reset");
-		reset.setOnMouseClicked(e -> setupAnimation());
+		reset.setOnMouseClicked(e -> {
+			animation.stop();
+			setupAnimation();
+		});
 		return reset;
 	}
 
@@ -133,9 +139,10 @@ public class Animation {
 
 	private Button makeMenuButton() {
 		Button menu = new Button("Menu");
+		Menu newMenu = new Menu(window);
 		menu.setOnMouseClicked(e -> {
 			animation.stop();
-			//TODO make it return to the menu
+			window.setScene(newMenu.initialize());
 		});
 		return menu;
 	}
