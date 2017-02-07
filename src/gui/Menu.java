@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.File;
+import java.util.ResourceBundle;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,6 +29,8 @@ public class Menu {
 	public static final int HEIGHT = 720;
 	public static final String CELL_IMAGE = "background.jpg";
 	public static final String EXTENSION = "*.xml";
+    public static final ResourceBundle RESOURCES = ResourceBundle.getBundle("resourcefiles/Menu");
+
 
 	private Stage window;
 	private StackPane layout;
@@ -77,7 +80,7 @@ public class Menu {
 	 * Sets up the User Interface
 	 */
 	private void setupInterface(){
-		Text title = new Text("CELL CIVILIZATION");
+		Text title = new Text(RESOURCES.getString("title"));
 		title.setFill(Color.WHITE);
 		title.setFont(Font.font(100));
 		
@@ -94,12 +97,12 @@ public class Menu {
 	 * @return HBox containing aligned buttons
 	 */
 	private HBox setupButtons(){
-		Button load = new Button("Load File");	
+		Button load = new Button(RESOURCES.getString("load"));	
 		load.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 				
 		load.setOnMouseClicked(e -> loadButtonAction(setupFileChooser()));
 		
-		Button quit = new Button("Quit");
+		Button quit = new Button(RESOURCES.getString("quit"));
 		quit.setOnMouseClicked(e -> System.exit(0));
 		quit.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		
@@ -129,10 +132,10 @@ public class Menu {
 	 */
 	private FileChooser setupFileChooser(){
 		FileChooser chooser = new FileChooser();
-		chooser.setTitle("CA Simulations");	
+		chooser.setTitle(RESOURCES.getString("chooser"));	
 		File defaultDirectory = new File(System.getProperty("user.dir")+"/data");
 		chooser.setInitialDirectory(defaultDirectory);
-		chooser.getExtensionFilters().setAll(new ExtensionFilter("XML Files", EXTENSION));
+		chooser.getExtensionFilters().setAll(new ExtensionFilter(RESOURCES.getString("type"), EXTENSION));
 		
 		return chooser;
 	}

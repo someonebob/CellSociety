@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.File;
+import java.util.ResourceBundle;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -24,6 +25,8 @@ public class Animation {
 	private static final double MIN_FPS = 0.1;
 	private static final double MAX_FPS = 20;
 	private static final double DEFAULT_FPS = 4;
+    public static final ResourceBundle RESOURCES = ResourceBundle.getBundle("resourcefiles/Animation");
+
 	
 	private Stage window;
 	private Rectangle2D screen;
@@ -103,7 +106,7 @@ public class Animation {
 	}
 
 	private Button makeResetButton() {
-		Button reset = new Button("Reset");
+		Button reset = new Button(RESOURCES.getString("reset"));
 		reset.setOnMouseClicked(e -> {
 			animation.stop();
 			setupAnimation();
@@ -116,16 +119,16 @@ public class Animation {
 	}
 
 	private Button makePlayPauseButton() {
-		Button playPause = new Button("Pause");
+		Button playPause = new Button(RESOURCES.getString("pause"));
 		playPause.setOnMouseClicked(e -> {
 			if(isPlaying) {
 				animation.pause();
-				playPause.setText("Play ");
+				playPause.setText(RESOURCES.getString("play"));
 				isPlaying = false;
 			}
 			else {
 				animation.play();
-				playPause.setText("Pause");
+				playPause.setText(RESOURCES.getString("pause"));
 				isPlaying = true;
 			}
 		});
@@ -133,13 +136,13 @@ public class Animation {
 	}
 
 	private Button makeStepButton() {
-		Button step = new Button("Step");
+		Button step = new Button(RESOURCES.getString("step"));
 		step.setOnMouseClicked(e -> grid.nextFrame());
 		return step;
 	}
 
 	private Button makeMenuButton() {
-		Button menu = new Button("Menu");
+		Button menu = new Button(RESOURCES.getString("menu"));
 		Menu newMenu = new Menu(window);
 		menu.setOnMouseClicked(e -> {
 			animation.stop();
