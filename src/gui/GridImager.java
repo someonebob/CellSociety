@@ -17,9 +17,9 @@ public class GridImager {
 	public GridImager(File setupInfo, double width, double height) {
 		myGroup = new Group();
 		myGrid = new Grid(setupInfo);
-		cellSize = width/myGrid.getRows();
-		if(cellSize > height/myGrid.getCols()) {
-			cellSize = height/myGrid.getCols();
+		cellSize = height/myGrid.getRows();
+		if(cellSize > width/myGrid.getCols()) {
+			cellSize = width/myGrid.getCols();
 		}
 		updateGroup();
 	}
