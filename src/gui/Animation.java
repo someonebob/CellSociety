@@ -107,6 +107,9 @@ public class Animation {
 		reset.setOnMouseClicked(e -> {
 			animation.stop();
 			setupAnimation();
+			if(isPlaying) {
+				animation.play();
+			}
 			
 		});
 		return reset;
