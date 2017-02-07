@@ -25,7 +25,8 @@ public class Animation {
 	private static final double MIN_FPS = 0.1;
 	private static final double MAX_FPS = 20;
 	private static final double DEFAULT_FPS = 4;
-    public static final ResourceBundle RESOURCES = ResourceBundle.getBundle("resourcefiles/Animation");
+    public static final ResourceBundle RESOURCES = 
+    		ResourceBundle.getBundle("resourcefiles/Animation");
 
 	
 	private Stage window;
@@ -70,7 +71,7 @@ public class Animation {
 	
 	private void setupAnimation() {
 		grid = new GridImager(setup, screen.getWidth(), 
-				screen.getHeight() - toolBar.getHeight());
+				screen.getHeight() - toolBar.getHeight() - screen.getMinY());
 		Group g = grid.getGroup();
 		g.setLayoutY(toolBar.getHeight() + screen.getMinY());
 		g.setLayoutX((screen.getMaxX() - g.getLayoutBounds().getWidth())/2);
