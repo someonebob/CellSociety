@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Neighborhood {
+public abstract class Neighborhood {
 	private HashMap<Coordinate, Cell> neighborhood;
 	private int xOffset, yOffset;
 	
@@ -50,7 +50,6 @@ public class Neighborhood {
 	/**
 	 * Returns cell at certain coordinate in neighborhood
 	 * relative to center cell
-	 * 
 	 */
 	public Cell get(int row, int col){
 		return neighborhood.get(new Coordinate(row, col));
@@ -76,6 +75,18 @@ public class Neighborhood {
 	public Cell getCenter(){
 		return neighborhood.get(new Coordinate(0, 0));
 	}	
+	
+	/**
+	 * Returns collection of Adjacent cells
+	 * (Edges are fully connected)
+	 */
+	public abstract Collection<Cell> getAdjacent();
+	
+	/**
+	 * Returns collection of Diagonal cells
+	 * (Edges are not fully connected)
+	 */
+	public abstract Collection<Cell> getDiagonal();
 	
 	/**
 	 * Returns a printable string describing the neighborhood of cells

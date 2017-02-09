@@ -33,6 +33,15 @@ public class Coordinate implements Comparable<Coordinate> {
 		return col;
 	}
 
+	
+	/**
+	 * Returns sum of two coordinates
+	 * add rows, add columns
+	 */
+	public Coordinate add(Coordinate other){
+		return new Coordinate(this.getCol() + other.getCol(), this.getRow() + other.getRow());
+	}
+	
 	@Override
 	public int compareTo(Coordinate other) {
 		int diff = this.row - other.row;
