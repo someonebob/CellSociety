@@ -113,7 +113,6 @@ public class XMLParser {
 		}
 		throw new XMLException("State definition not found", stateRef);
 	}
-	
 
 	/**
 	 * Gets the attribute of the element
