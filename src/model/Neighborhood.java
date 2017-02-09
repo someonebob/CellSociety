@@ -8,37 +8,52 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 public class Neighborhood {
-	private Cell[][] neighborhood;
+	private HashMap<Coordinate, Cell> neighborhood;
+	private int xOffset, yOffset;
 	
 	/**
 	 * Constructs a new empty neighborhood of null cells. To add a cell, use "set" method
 	 */
 	public Neighborhood(){
-		neighborhood = new Cell[3][3];
+		neighborhood = new HashMap<Coordinate, Cell>();
+	}
+	
+	/**
+	 * Sets input as "zero" cell. All neighbors will be 
+	 * automatically put into new coordinate system
+	 * centered at center cell
+	 * @param cell
+	 * @param row
+	 * @param col
+	 */
+	public void setCenter(Cell cell, int row, int col){
+		xOffset = col;
+		yOffset = row;
+		neighborhood.put(new Coordinate(0, 0), cell);
 	}
 	
 	/**
 	 * Sets cell at certain coordinate in neighborhood.
+	 * Input is in global coordinate; it will automatically
+	 * put cell in local coordinates relative to center cell
 	 * @param row
 	 * @param col
 	 * @param cell
 	 */
 	public void set(Cell cell, int row, int col){
-		if(inRange(row, col)) {
-			neighborhood[row][col] = cell;
-		}
-		else {
-			throw new IndexOutOfBoundsException("Neighborhood coordinates out of range");
-		}
+		neighborhood.put(new Coordinate(row - yOffset, col - xOffset), cell);
 	}
-	
+		
 	/**
-	 * Gets cell at certain coordinate in neighborhood
+	 * Returns cell at certain coordinate in neighborhood
+	 * relative to center cell
+	 * 
 	 */
 	public Cell get(int row, int col){
-		return neighborhood[row][col];
+		return neighborhood.get(new Coordinate(row, col));
 	}
 	
 	/**
@@ -48,12 +63,8 @@ public class Neighborhood {
 	 */
 	public Collection<Cell> getNeighbors(){
 		Collection<Cell> neighbors = new ArrayList<Cell>();
-		for(int r = 0; r < neighborhood.length; r++){
-			for(int c = 0 ; c < neighborhood[0].length; c++){
-				if(r != 1 || c != 1){
-					neighbors.add(get(r, c));
-				}
-			}
+		for(Coordinate position: neighborhood.keySet()){
+			if(!position.equals(new Coordinate(0, 0))) neighbors.add(neighborhood.get(position));
 		}
 		return neighbors;
 	}
@@ -63,19 +74,8 @@ public class Neighborhood {
 	 * @return center cell
 	 */
 	public Cell getCenter(){
-		return neighborhood[1][1];
-	}
-	
-	/**
-	 * Checks if coordinates are in range of neighborhood
-	 * @param row
-	 * @param col
-	 * @return coordinates in range
-	 */
-	private boolean inRange(int row, int col){
-		return row >= 0 && row < neighborhood.length && col >= 0 && col < neighborhood[0].length;
-	}
-	
+		return neighborhood.get(new Coordinate(0, 0));
+	}	
 	
 	/**
 	 * Returns a printable string describing the neighborhood of cells
@@ -83,18 +83,6 @@ public class Neighborhood {
 	 */
 	@Override
 	public String toString() {
-		String output = "";
-		for(int row = 0; row < 3; row++) {
-			output += "\n";
-			for(int col = 0; col < 3; col++) {
-				if(neighborhood[row][col] != null) {
-					output += neighborhood[row][col].toString() + " ";
-				}
-				else {
-					output += "***null***";
-				}
-			}
-		}
-		return output.substring(1);
+		return "Neighborhood of " + getCenter();
 	}	
 }
