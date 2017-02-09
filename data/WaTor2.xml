@@ -6,8 +6,7 @@
 	
 	<cyclesPerTick>4</cyclesPerTick>
 	
-	<breedTime>10</breedTime>
-	<starveTime>10</starveTime>
+	<parameters><breedTime>10</breedTime><starveTime>10</starveTime></parameters>
 	
 	<stateDef ref="e" color="blue">empty</stateDef>
 	<stateDef ref="f" color="lime">fish</stateDef>

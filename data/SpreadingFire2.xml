@@ -6,7 +6,7 @@
 
 	<cyclesPerTick>1</cyclesPerTick>
 
-	<probCatch>55</probCatch>
+	<parameters><probCatch>55</probCatch></parameters>
 
 	<stateDef ref="e" color="yellow">empty</stateDef>
 	<stateDef ref="t" color="green">tree</stateDef>

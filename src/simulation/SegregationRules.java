@@ -36,7 +36,7 @@ public class SegregationRules extends Rules{
 	private Cell getNearestEmptyHome(Neighborhood neighborhood){
 		ArrayList<Cell> possibleHomes = new ArrayList<Cell>(); // Semi-Random search (looks at neighbors first)
 		ArrayList<Cell> alreadySearched = new ArrayList<Cell>();
-		for(Cell other : neighborhood.getNeighbors()){
+		for(Cell other : neighborhood.getNeighbors(Neighborhood.ALL_INDICES)){
 			if(other != null) possibleHomes.add(other);
 		}
 		while (!possibleHomes.isEmpty()){
@@ -46,7 +46,7 @@ public class SegregationRules extends Rules{
 			
 			if(isVacant(home) && home != me && !home.futureStateIsLocked()) return home;
 			else{
-				for(Cell nextPossible : home.getNeighborhood().getNeighbors()){
+				for(Cell nextPossible : home.getNeighborhood().getNeighbors(Neighborhood.ALL_INDICES)){
 					if(nextPossible != null && !alreadySearched.contains(nextPossible) && nextPossible != me) {
 						possibleHomes.add(nextPossible);
 					}
@@ -65,7 +65,7 @@ public class SegregationRules extends Rules{
 		double numNeighbors = 0;
 		double numAlike = 0;
 		
-		for(Cell other : neighborhood.getNeighbors()){
+		for(Cell other : neighborhood.getNeighbors(Neighborhood.ALL_INDICES)){
 			if(other != null && !isVacant(other)){
 				numNeighbors++;
 				if (isAlike(me, other)) numAlike++;
