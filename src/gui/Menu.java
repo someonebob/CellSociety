@@ -1,8 +1,6 @@
 package gui;
-
 import java.io.File;
 import java.util.ResourceBundle;
-
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -30,8 +28,6 @@ public class Menu {
 	public static final String CELL_IMAGE = "background.jpg";
 	public static final String EXTENSION = "*.xml";
     public static final ResourceBundle RESOURCES = ResourceBundle.getBundle("resourcefiles/Menu");
-
-
 	private Stage window;
 	private StackPane layout;
 	private Scene titlescreen;
@@ -120,9 +116,9 @@ public class Menu {
 	private void loadButtonAction(FileChooser chooser){
 		selectedFile = chooser.showOpenDialog(window);		
 		if(selectedFile != null){
-			Animation animation = new Animation(window);
+			Animation animation = new Animation(window, selectedFile);
 			window.setScene(animation.initialize());			
-			animation.runAnimation(selectedFile);
+			animation.runAnimation();
 		}	 
 	}
 	

@@ -42,10 +42,12 @@ public class FireRules extends Rules {
 			if (neighborBurning(hood)) {
 				if (rand.nextDouble() <= probFire) {
 					return new FireState(configuration, FireState.BURNING);
+				} else {
+					return new FireState(configuration, FireState.TREE);
 				}
 			} else {
 				return new FireState(configuration, FireState.TREE);
-			}
+			} 
 		}
 
 		if (isBurning(hood)) {

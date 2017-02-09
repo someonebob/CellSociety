@@ -1,19 +1,15 @@
 package gui;
-
 import java.io.File;
-
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.Grid;
 import model.Coordinate;
-
 public class GridImager {
 	
 	private double cellSize;
 	private Group myGroup;
 	private Grid myGrid;
-
 	public GridImager(File setupInfo, double width, double height) {
 		myGroup = new Group();
 		myGrid = new Grid(setupInfo);
@@ -54,5 +50,4 @@ public class GridImager {
 			myGroup.getChildren().add(r);
 		}
 	}
-
 }

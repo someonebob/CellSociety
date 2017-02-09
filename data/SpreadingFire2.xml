@@ -6,7 +6,7 @@
 
 	<cyclesPerTick>1</cyclesPerTick>
 
-	<parameters><probCatch>55</probCatch></parameters>
+	<probCatch>55</probCatch>
 
 	<stateDef ref="e" color="yellow">empty</stateDef>
 	<stateDef ref="t" color="green">tree</stateDef>
@@ -17,7 +17,6 @@
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
-	t t t b t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
@@ -25,11 +24,12 @@
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t b t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
-	t t t t t t t t t t t t t t b t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
