@@ -127,11 +127,15 @@ public class SideMenu{
 		
 		ChoiceBox<String> type = new ChoiceBox<>();
 		
-		NodeList parameters = parser.getParameters("parameters");
-		System.out.println(parameters.getLength());
-		for(int i = 0; i < parameters.getLength(); i++){
-			type.getItems().add(parameters.item(i).getNodeName());
+		try{
+			NodeList parameters = parser.getParameters("parameters");
+			for(int i = 0; i < parameters.getLength(); i++){
+				type.getItems().add(parameters.item(i).getNodeName());
+			}
+		} catch(Exception e){
+			type.setDisable(true);
 		}
+		
 		
 		GridPane.setConstraints(type, 1, 5, 1, 1, HPos.RIGHT, VPos.CENTER);
 		
