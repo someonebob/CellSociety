@@ -50,25 +50,6 @@ public class XMLParser {
 	}
 	
 	/**
-	 * Returns the dimension for rows
-	 * @return number of rows
-	 */
-	public int getGridRows(){
-		gridRows = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(0).getTextContent());
-		
-		return gridRows;
-	}
-	/**
-	 * Returns the dimension for columns
-	 * @return number of columns
-	 */
-	public int getGridColumns(){
-		gridColumns = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(1).getTextContent());
-
-		return gridColumns;
-	}
-	
-	/**
 	 * Returns a NodeList of all the initial states of the simulation
 	 * @return list of states
 	 */
