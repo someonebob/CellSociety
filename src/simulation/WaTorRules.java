@@ -9,6 +9,10 @@ import xml.XMLParser;
 
 public class WaTorRules extends Rules {
 	
+	private static final String SHARK = "shark";
+	private static final String FISH = "fish";
+	private static final String EMPTY = "empty";
+	
 	private XMLParser config;
 	private int breed;
 	private int starve;
@@ -49,7 +53,7 @@ public class WaTorRules extends Rules {
 
 	private State updateStates(Neighborhood neighbors, int step, int age, int noFood, boolean shark) {
 		// Don't update a shark if it ate and needs to not move
-		if(!shark && getCenterState(neighbors).getValue().equals("shark")) {
+		if(!shark && getCenterState(neighbors).getValue().equals(SHARK)) {
 			return getCenterState(neighbors);
 		}
 		// Update to next value if next value initialized
@@ -63,19 +67,19 @@ public class WaTorRules extends Rules {
 	}
 
 	private State moveReproduceDie(Neighborhood neighbors, int age, int noFood, String value) {
-		if((value.equals("shark") && (!getCenterState(neighbors).ate()
+		if((value.equals(SHARK) && (!getCenterState(neighbors).ate()
 						|| getCenterState(neighbors).getCellAge() >= breed)) 
-				|| value.equals("fish")) {
-			WaTorState move = getStateOf("empty", neighbors);
+				|| value.equals(FISH)) {
+			WaTorState move = getStateOf(EMPTY, neighbors);
 			if(move != null) {
-				if(!value.equals("shark") || noFood < starve) {
+				if(!value.equals(SHARK) || noFood < starve) {
 					// Not Starving
 					move.setNextValue(value);
 					move.setNoFoodTime(noFood);
 				}
 				if(age < breed) {
 					// Not reproducing
-					getCenterState(neighbors).setNextValue("empty");	
+					getCenterState(neighbors).setNextValue(EMPTY);	
 					move.setCellAge(age);
 				}
 				else {
@@ -91,10 +95,10 @@ public class WaTorRules extends Rules {
 
 	private State sharksEat(Neighborhood neighbors, String value) {
 		// Sharks Eat
-		if(value.equals("shark")) {
-			WaTorState eat = getStateOf("fish", neighbors);
+		if(value.equals(SHARK)) {
+			WaTorState eat = getStateOf(FISH, neighbors);
 			if(eat != null) {
-				eat.setNextValue("empty");
+				eat.setNextValue(EMPTY);
 				getCenterState(neighbors).eat();
 			}
 		}

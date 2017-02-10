@@ -4,15 +4,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import xml.XMLParser;
+
 /**
  * Handles the grid of cells used in simulation.
  * @author Nathaniel Brooke
  * @version 2-01-2017
  */
 public class Grid {
+	
 	private Map<Coordinate, Cell> myCells;
 	private int numRows, numCols;
 	private int cyclesPerTick;
+	
 	/**
 	 * Initializes the 2D Array of Cells.
 	 * @param setupInfo the File containing setup information
@@ -24,6 +27,7 @@ public class Grid {
 		initializeArray(config);
 		passNeighbors();
 	}
+	
 	/**
 	 * Updates every cell.
 	 * Calculates the future state of every cell, then
@@ -39,6 +43,7 @@ public class Grid {
 			}
 		}
 	}
+	
 	/**
 	 * Accesses a specific Cell in the Grid.
 	 * @param coord the Coordinate indicating where the Cell is.
