@@ -15,7 +15,7 @@ import model.Grid;
  */
 public class TriangleGridImager extends GridImager {
 	
-	private double cellSize; // Side length of equilateral triangle
+	private double sideLength;
 
 	public TriangleGridImager(File setupInfo, double width, double height) {
 		super(setupInfo, width, height);
@@ -23,9 +23,9 @@ public class TriangleGridImager extends GridImager {
 
 	@Override
 	public void setCellSize(Grid grid, double gridHeight, double gridWidth) {
-		cellSize = gridHeight/grid.getRows()/Math.cos(Math.toRadians(30));
-		if(cellSize > gridWidth/((double)grid.getCols() + 0.5)) {
-			cellSize = gridWidth/((double)grid.getCols() + 0.5);
+		sideLength = gridHeight/grid.getRows()/Math.cos(Math.toRadians(30));
+		if(sideLength > gridWidth/((double)grid.getCols() + 0.5)) {
+			sideLength = gridWidth/((double)grid.getCols() + 0.5);
 		}
 	}
 
@@ -43,15 +43,15 @@ public class TriangleGridImager extends GridImager {
 	}
 	
 	private Polygon makeTriangle(int row, int col, boolean leftShift, boolean pointUp) {
-		double mainX = col*cellSize + ((leftShift)? cellSize/2 : 0);
-		double mainY = (row/2)*cellSize*Math.cos(Math.toRadians(30));
-		double middleCornerX = mainX + cellSize / 2;
-		double height = cellSize*Math.cos(Math.toRadians(30));
+		double mainX = col*sideLength + ((leftShift)? sideLength/2 : 0);
+		double mainY = (row/2)*sideLength*Math.cos(Math.toRadians(30));
+		double middleCornerX = mainX + sideLength / 2;
+		double height = sideLength*Math.cos(Math.toRadians(30));
 		if(pointUp) {
-			return new Polygon(mainX, mainY, mainX + cellSize, mainY, middleCornerX, mainY + height);
+			return new Polygon(mainX, mainY, mainX + sideLength, mainY, middleCornerX, mainY + height);
 		}
 		else {
-			return new Polygon(mainX, mainY + height, mainX + cellSize, mainY + height, middleCornerX, mainY);
+			return new Polygon(mainX, mainY + height, mainX + sideLength, mainY + height, middleCornerX, mainY);
 		}
 	}
 

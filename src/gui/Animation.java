@@ -72,7 +72,7 @@ public class Animation {
 	
 	private void setupAnimation() {
 		double dimension = screen.getHeight() - toolBar.getBoundsInParent().getMaxY() - screen.getMinY();
-		grid = new TriangleGridImager(setup, dimension, dimension);
+		grid = new SquareGridImager(setup, dimension, dimension);
 		Group g = grid.getGroup();
 		
 		root.setRight(g);

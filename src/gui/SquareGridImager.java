@@ -15,7 +15,7 @@ import model.Grid;
  */
 public class SquareGridImager extends GridImager {
 	
-	private double cellSize; // Side length of square
+	private double sideLength;
 	
 	public SquareGridImager(File setupInfo, double width, double height) {
 		super(setupInfo, width, height);
@@ -23,9 +23,9 @@ public class SquareGridImager extends GridImager {
 	
 	@Override
 	public void setCellSize(Grid grid, double gridWidth, double gridHeight) {
-		cellSize = gridHeight/grid.getRows();
-		if(cellSize > gridWidth/grid.getCols()) {
-			cellSize = gridWidth/grid.getCols();
+		sideLength = gridHeight/grid.getRows();
+		if(sideLength > gridWidth/grid.getCols()) {
+			sideLength = gridWidth/grid.getCols();
 		}
 	}
 	
@@ -33,10 +33,10 @@ public class SquareGridImager extends GridImager {
 	protected void updateGroup(Group group, Grid grid) {
 		group.getChildren().clear();
 		for(Coordinate c : grid.getCoordinates()) {
-			Rectangle r = new Rectangle(cellSize, cellSize);
+			Rectangle r = new Rectangle(sideLength, sideLength);
 			r.setFill(Color.web(grid.getCell(c).getCurrentState().getColor()));
-			r.setX(c.getCol()*cellSize);
-			r.setY(c.getRow()*cellSize);
+			r.setX(c.getCol()*sideLength);
+			r.setY(c.getRow()*sideLength);
 			group.getChildren().add(r);
 		}
 	}
