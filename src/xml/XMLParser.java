@@ -1,21 +1,18 @@
 package xml;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.TreeMap;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import model.Coordinate;
 /**
  * Handles XML Parsing
@@ -25,9 +22,9 @@ import model.Coordinate;
 public class XMLParser {
 	public static final List<String> DATA_FIELDS = Arrays.asList(new String[] {"name", "dimension", "state", "parameter", "stateDef"});
 	public static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
+    public static final ResourceBundle RESOURCES = ResourceBundle.getBundle("resourcefiles/XML");
 
 	private File info;
-	private String ruleName;
 	private int gridRows, gridColumns;
 	private Document xmlDocument;
 	
@@ -40,13 +37,21 @@ public class XMLParser {
 	}
 	
 	/**
-	 * Returns the name of the simulation used to choose the specific Rule subclass
-	 * @return name of simulation
+	 * Returns the dimension for rows
+	 * @return number of rows
 	 */
-	public String getRuleName(){
-		ruleName = getAttribute(getRootElement(), DATA_FIELDS.get(0));
+	public int getGridRows(){
+		gridRows = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(0).getTextContent());
 		
-		return ruleName;
+		return gridRows;
+	}
+	/**
+	 * Returns the dimension for columns
+	 * @return number of columns
+	 */
+	public int getGridColumns(){
+		gridColumns = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(1).getTextContent());
+		return gridColumns;
 	}
 	
 	/**
@@ -81,6 +86,15 @@ public class XMLParser {
 		}
 	}
 	
+	public NodeList getParameters(String tagName){
+		try {
+			return getRootElement().getElementsByTagName(tagName).item(0).getChildNodes();
+		}
+		catch(Exception e) {
+			throw new XMLException(e, "Invalid parameter requested");
+		}
+	}
+	
 	/**
 	 * Finds a color given a state name
 	 * @param stateName full-length string definition of state name
@@ -88,7 +102,6 @@ public class XMLParser {
 	 */
 	public String getStateColor(String stateName){
 		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
-
 		for(int i = 0; i < stateDefinitions.getLength(); i++){
 			String currentStateName = stateDefinitions.item(i).getTextContent();
 			String color = getAttribute((Element) stateDefinitions.item(i), "color");
@@ -103,7 +116,6 @@ public class XMLParser {
 	 */
 	public String getStateName(String stateRef){
 		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
-
 		for(int i = 0; i < stateDefinitions.getLength(); i++){
 			String currentStateName = stateDefinitions.item(i).getTextContent();
 			String ref = getAttribute((Element) stateDefinitions.item(i), "ref");
@@ -113,7 +125,7 @@ public class XMLParser {
 		}
 		throw new XMLException("State definition not found", stateRef);
 	}
-
+	
 	/**
 	 * Gets the attribute of the element
 	 * @param element
@@ -148,5 +160,4 @@ public class XMLParser {
             throw new XMLException(e);
         }
     }
-
 }

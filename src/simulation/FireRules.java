@@ -42,10 +42,12 @@ public class FireRules extends Rules {
 			if (neighborBurning(hood)) {
 				if (rand.nextDouble() <= probFire) {
 					return new FireState(configuration, FireState.BURNING);
+				} else {
+					return new FireState(configuration, FireState.TREE);
 				}
 			} else {
 				return new FireState(configuration, FireState.TREE);
-			}
+			} 
 		}
 
 		if (isBurning(hood)) {
@@ -74,14 +76,18 @@ public class FireRules extends Rules {
 
 	private ArrayList<FireState> getStatesAround(Neighborhood hood) {
 		ArrayList<FireState> states = new ArrayList<FireState>();
-		if (hood.get(0, 1) != null)
+		if (hood.get(0, 1) != null){
 			states.add((FireState) hood.get(0, 1).getCurrentState());
-		if (hood.get(1, 0) != null)
+		}
+		if (hood.get(1, 0) != null){
 			states.add((FireState) hood.get(1, 0).getCurrentState());
-		if (hood.get(1, 2) != null)
+		}
+		if (hood.get(1, 2) != null){
 			states.add((FireState) hood.get(1, 2).getCurrentState());
-		if (hood.get(2, 1) != null)
+		}
+		if (hood.get(2, 1) != null){
 			states.add((FireState) hood.get(2, 1).getCurrentState());
+		}
 		return states;
 	}
 }
