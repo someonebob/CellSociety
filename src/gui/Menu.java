@@ -118,7 +118,6 @@ public class Menu {
 		if(selectedFile != null){
 			Animation animation = new Animation(window, selectedFile);
 			window.setScene(animation.initialize());			
-			animation.runAnimation();
 		}	 
 	}
 	
