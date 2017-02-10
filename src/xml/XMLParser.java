@@ -2,8 +2,6 @@ package xml;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -23,12 +21,12 @@ import model.Coordinate;
  *
  */
 public class XMLParser {
-	public static final List<String> DATA_FIELDS = Arrays.asList(new String[] {"name", "dimension", "state", "parameter", "stateDef"});
 	public static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
+	
+	private static final String XML_STATE = "state";
+	private static final String XML_STATEDEF = "stateDef";
 
 	private File info;
-	private String ruleName;
-	private int gridRows, gridColumns;
 	private Document xmlDocument;
 	
 	/**
@@ -40,41 +38,12 @@ public class XMLParser {
 	}
 	
 	/**
-	 * Returns the name of the simulation used to choose the specific Rule subclass
-	 * @return name of simulation
-	 */
-	public String getRuleName(){
-		ruleName = getAttribute(getRootElement(), DATA_FIELDS.get(0));
-		
-		return ruleName;
-	}
-	
-	/**
-	 * Returns the dimension for rows
-	 * @return number of rows
-	 */
-	public int getGridRows(){
-		gridRows = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(0).getTextContent());
-		
-		return gridRows;
-	}
-	/**
-	 * Returns the dimension for columns
-	 * @return number of columns
-	 */
-	public int getGridColumns(){
-		gridColumns = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(1).getTextContent());
-
-		return gridColumns;
-	}
-	
-	/**
 	 * Returns a NodeList of all the initial states of the simulation
 	 * @return list of states
 	 */
 	public Map<Coordinate, String> getInitialStates(){
 		Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
-		String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
+		String fullRef = getRootElement().getElementsByTagName(XML_STATE).item(0).getTextContent();
 		String[] linesRef = fullRef.trim().split("\n");
 		
 		for(int row = 0; row < linesRef.length; row++){
@@ -106,12 +75,14 @@ public class XMLParser {
 	 * @exception XMLException if state not found in file
 	 */
 	public String getStateColor(String stateName){
-		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
+		NodeList stateDefinitions = getRootElement().getElementsByTagName(XML_STATEDEF);
 
 		for(int i = 0; i < stateDefinitions.getLength(); i++){
 			String currentStateName = stateDefinitions.item(i).getTextContent();
 			String color = getAttribute((Element) stateDefinitions.item(i), "color");
-			if(currentStateName.equals(stateName)) return color;
+			if(currentStateName.equals(stateName)) {
+				return color;
+			}
 		}
 		throw new XMLException("State definition not found", stateName);
 	}
@@ -121,7 +92,7 @@ public class XMLParser {
 	 * @param stateRef Shortcut state reference value defined in xml file "stateDef" tag
 	 */
 	public String getStateName(String stateRef){
-		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
+		NodeList stateDefinitions = getRootElement().getElementsByTagName(XML_STATEDEF);
 
 		for(int i = 0; i < stateDefinitions.getLength(); i++){
 			String currentStateName = stateDefinitions.item(i).getTextContent();

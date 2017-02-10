@@ -58,6 +58,19 @@ public class Neighborhood {
 		return neighbors;
 	}
 	
+	public Collection<Cell> getAdjacentCells() {
+		ArrayList<Cell> cells = new ArrayList<Cell>();
+		if (get(0, 1) != null)
+			cells.add(get(0, 1));
+		if (get(1, 0) != null)
+			cells.add(get(1, 0));
+		if (get(1, 2) != null)
+			cells.add(get(1, 2));
+		if (get(2, 1) != null)
+			cells.add(get(2, 1));
+		return cells;
+	}
+	
 	/**
 	 * Returns center cell
 	 * @return center cell
