@@ -126,17 +126,8 @@ public class SideMenu{
 		GridPane.setConstraints(parameter, 0, 5, 1, 1, HPos.LEFT, VPos.CENTER);
 		
 		ChoiceBox<String> type = new ChoiceBox<>();
-		
-		try{
-			NodeList parameters = parser.getParameters("parameters");
-			for(int i = 0; i < parameters.getLength(); i++){
-				type.getItems().add(parameters.item(i).getNodeName());
-			}
-		} catch(Exception e){
-			type.setDisable(true);
-		}
-		
-		
+		fillChoiceBox(type, "parameters");
+				
 		GridPane.setConstraints(type, 1, 5, 1, 1, HPos.RIGHT, VPos.CENTER);
 		
 		TextField input = new TextField();
@@ -144,5 +135,18 @@ public class SideMenu{
 
 		
 		grid.getChildren().addAll(parameter, type, input);
+	}
+	
+	private void fillChoiceBox(ChoiceBox<String> type, String parameter){
+		try{
+			NodeList parameters = parser.getParameters(parameter);
+			for(int i = 0; i < parameters.getLength(); i++){
+				if(!parameters.item(i).getNodeName().equals("#text")){
+					type.getItems().add(parameters.item(i).getNodeName());
+				}
+			}
+		} catch(Exception e){
+			type.setDisable(true);
+		}
 	}
 }
