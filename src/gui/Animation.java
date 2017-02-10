@@ -45,9 +45,9 @@ public class Animation {
 		setup = setupInfo;
 		screen = Screen.getPrimary().getVisualBounds();
 		root = new BorderPane();
-		simulation = new Scene(root, screen.getWidth(), screen.getHeight());
+		simulation = new Scene(root);
 		this.window = window;
-	}
+		}
 	
 	/**
 	 * Initializes the animation pane, including control buttons.
@@ -64,14 +64,15 @@ public class Animation {
 	 * @param setupInfo the XML file with setup information for the grid.
 	 */
 	public void runAnimation() {
-		
+		window.setMaximized(true);
 		setupAnimation();
 		animation.play();
 		isPlaying = true;
 	}
 	
 	private void setupAnimation() {
-		double dimension = screen.getHeight() - toolBar.getBoundsInParent().getMaxY() - screen.getMinY();
+		double dimension = screen.getHeight()
+				- toolBar.getBoundsInParent().getMaxY() - 22;
 		grid = new SquareGridImager(setup, dimension, dimension);
 		Group g = grid.getGroup();
 		

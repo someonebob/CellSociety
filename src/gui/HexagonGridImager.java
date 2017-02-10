@@ -6,7 +6,6 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import model.Coordinate;
-import model.Grid;
 
 /**
  * GridImager subclass used to image Grids containing hexagons.
@@ -22,19 +21,19 @@ public class HexagonGridImager extends GridImager {
 	}
 
 	@Override
-	public void setCellSize(Grid grid, double gridHeight, double gridWidth) {
-		sideLength = gridHeight/(grid.getRows()*1.5 + 0.5);
-		if(sideLength > gridWidth/(grid.getCols()*2*Math.cos(Math.toRadians(30)) + 0.5)) {
-			sideLength = gridWidth/(grid.getCols()*2*Math.cos(Math.toRadians(30)) + 0.5);
+	public void setCellSize(double gridHeight, double gridWidth) {
+		sideLength = gridHeight/(getGrid().getRows()*1.5 + 0.5);
+		if(sideLength > gridWidth/(getGrid().getCols()*2*Math.cos(Math.toRadians(30)) + 0.5)) {
+			sideLength = gridWidth/(getGrid().getCols()*2*Math.cos(Math.toRadians(30)) + 0.5);
 		}
 	}
 
 	@Override
-	protected void updateGroup(Group group, Grid grid) {
+	protected void updateGroup(Group group) {
 		group.getChildren().clear();
-		for(Coordinate c : grid.getCoordinates()) {
+		for(Coordinate c : getGrid().getCoordinates()) {
 			Polygon p = makeHexagon(c.getRow(), c.getCol(), c.getRow()%2 == 1);
-			p.setFill(Color.web(grid.getCell(c).getCurrentState().getColor()));
+			p.setFill(Color.web(getGrid().getCell(c).getCurrentState().getColor()));
 			p.setOnMouseClicked(e -> {
 				System.out.println(c);
 			});
