@@ -55,6 +55,7 @@ public class Animation {
 	private XMLParser parser;
 	private GridPane gridPane;
 	private double dimension;
+	private ComboBox<String> gridShape;
 	
 	/**
 	 * Initializes the Scene and Group for the animation.
@@ -138,12 +139,7 @@ public class Animation {
 	private Button makeResetButton() {
 		Button reset = new Button(RESOURCES.getString("reset"));
 		reset.setOnMouseClicked(e -> {
-			animation.stop();
-			setupAnimation(new SquareGridImager(setup, dimension, dimension));
-			if(isPlaying) {
-				animation.play();
-			}
-			
+			chooseGrid();
 		});
 		return reset;
 	}
@@ -242,25 +238,30 @@ public class Animation {
 		Label gridType = new Label("Grid Type");
 		GridPane.setConstraints(gridType, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
 		
-		ComboBox<String> type = new ComboBox<>();
-		type.getItems().addAll("Square", "Triangular", "Hexagonal");
-		type.setValue(type.getItems().get(0));
-		GridPane.setConstraints(type, 1, 1, 1, 1, HPos.RIGHT, VPos.CENTER);
+		gridShape = new ComboBox<>();
+		gridShape.getItems().addAll("Square", "Triangular", "Hexagonal");
+		gridShape.setValue(gridShape.getItems().get(0));
+		GridPane.setConstraints(gridShape, 1, 1, 1, 1, HPos.RIGHT, VPos.CENTER);
 		
-		type.setOnAction(e -> {
-			animation.stop();
-			if(type.getValue().equals(type.getItems().get(0))){
-				runAnimation(new SquareGridImager(setup, dimension, dimension));
-			}
-			if(type.getValue().equals(type.getItems().get(1))){
-				runAnimation(new TriangleGridImager(setup, dimension, dimension));
-			}
-			if(type.getValue().equals(type.getItems().get(2))){
-				runAnimation(new HexagonGridImager(setup, dimension, dimension));
-			}
+		gridShape.setOnAction(e -> {
+			chooseGrid();
 		});
 		
-		gridPane.getChildren().addAll(gridType, type);
+		gridPane.getChildren().addAll(gridType, gridShape);
+	}
+	
+	private void chooseGrid(){
+		animation.stop();
+
+		if(gridShape.getValue().equals(gridShape.getItems().get(0))){
+			runAnimation(new SquareGridImager(setup, dimension, dimension));
+		}
+		if(gridShape.getValue().equals(gridShape.getItems().get(1))){
+			runAnimation(new TriangleGridImager(setup, dimension, dimension));
+		}
+		if(gridShape.getValue().equals(gridShape.getItems().get(2))){
+			runAnimation(new HexagonGridImager(setup, dimension, dimension));
+		}
 	}
 	
 	/**
