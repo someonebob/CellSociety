@@ -72,7 +72,7 @@ public class Animation {
 	
 	private void setupAnimation() {
 		double dimension = screen.getHeight() - toolBar.getBoundsInParent().getMaxY() - screen.getMinY();
-		grid = new GridImager(setup, dimension, dimension);
+		grid = new TriangleGridImager(setup, dimension, dimension);
 		Group g = grid.getGroup();
 		
 		root.setRight(g);
@@ -97,6 +97,7 @@ public class Animation {
 		toolBar.getItems().addAll(menu, step, playPause, reset, slider);
 		root.setTop(toolBar);
 	}
+	
 	private void setupSideMenu(){
 		SideMenu menu = new SideMenu(setup);
 		VBox vbox = menu.getMenu();
@@ -104,6 +105,7 @@ public class Animation {
 
 		root.setLeft(vbox);
 	}
+	
 	private Slider makeFPSSlider() {
 		Slider sliderFPS = new Slider(MIN_FPS, MAX_FPS, DEFAULT_FPS);
 		sliderFPS.setOnMouseReleased(e -> {
@@ -111,6 +113,7 @@ public class Animation {
 		});
 		return sliderFPS;
 	}
+	
 	private Button makeResetButton() {
 		Button reset = new Button(RESOURCES.getString("reset"));
 		reset.setOnMouseClicked(e -> {
@@ -123,6 +126,7 @@ public class Animation {
 		});
 		return reset;
 	}
+	
 	private Button makePlayPauseButton() {
 		Button playPause = new Button(RESOURCES.getString("pause"));
 		playPause.setOnMouseClicked(e -> {
@@ -139,11 +143,13 @@ public class Animation {
 		});
 		return playPause;
 	}
+	
 	private Button makeStepButton() {
 		Button step = new Button(RESOURCES.getString("step"));
 		step.setOnMouseClicked(e -> grid.nextFrame());
 		return step;
 	}
+	
 	private Button makeMenuButton() {
 		Button menu = new Button(RESOURCES.getString("menu"));
 		Menu newMenu = new Menu(window);
