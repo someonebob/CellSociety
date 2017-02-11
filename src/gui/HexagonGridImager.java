@@ -42,7 +42,7 @@ public class HexagonGridImager extends GridImager {
 	protected void updateGroup(Group group, Grid grid) {
 		group.getChildren().clear();
 		for(Coordinate c : grid.getCoordinates()) {
-			Polygon p = makeHexagon(c.getRow(), c.getCol(), c.getRow()%2 == 1);
+			Polygon p = makeHexagon(c.getRow(), c.getCol(), Math.abs(c.getRow()%2) == 1);
 			p.setFill(Color.web(grid.getCell(c).getCurrentState().getColor()));
 			p.setOnMouseClicked(e -> {
 				System.out.println(c);

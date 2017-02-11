@@ -7,7 +7,7 @@
 	<cyclesPerTick>1</cyclesPerTick>
 
 	<parameters>
-		<probCatch type="Percentage">55</probCatch>
+		<probCatch type="Percentage">100</probCatch>
 	</parameters>
 
 	<colors>
@@ -24,9 +24,7 @@
 	<state>
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
-	t t t t t t t t t t t t t t t t t t t t t
-	t t t b t t t t t t t t t t t t t t t t t
-	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t b t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
@@ -37,7 +35,9 @@
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
-	t t t t t t t t t t t t t t b t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
+	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
 	t t t t t t t t t t t t t t t t t t t t t
