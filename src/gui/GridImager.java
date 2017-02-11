@@ -26,9 +26,7 @@ public abstract class GridImager {
 		updateGroup(myGroup, myGrid);
 		setCellSize(myGrid, width, height);
 	}
-	
-	public abstract Grid makeGrid(File setupInfo);
-	
+		
 	/**
 	 * Accesses the Group displaying all the cells.
 	 * Group will be updated when simulation changes frame.
@@ -46,6 +44,13 @@ public abstract class GridImager {
 		updateGroup(myGroup, myGrid);
 	}
 	
+	/**
+	 * Makes a specific grid based on the shape of the cell.
+	 * @param setupInfo File containing setup information.
+	 * @return the Grid.
+	 */
+	public abstract Grid makeGrid(File setupInfo);
+		
 	/**
 	 * Updates the cell size in the grid display to fit the specified total grid dimensions.
 	 * @param grid the Grid being used

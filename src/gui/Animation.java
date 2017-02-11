@@ -70,18 +70,17 @@ public class Animation {
 		setup = setupInfo;
 		screen = Screen.getPrimary().getVisualBounds();
 		root = new BorderPane();
-		simulation = new Scene(root, screen.getWidth(), screen.getHeight());
+		simulation = new Scene(root);
 		this.window = window;
-	}
+		}
 	
 	/**
 	 * Initializes the animation pane, including control buttons.
 	 * @return the Scene with everything in it.
 	 */
 	public Scene initialize() {
-		dimension = screen.getHeight();
+		dimension = screen.getHeight() - 60;
 		grid = new SquareGridImager(setup, dimension, dimension);
-		window.setMaximized(true);
 		setupControls();
 		setupSideMenu();
 		setupScrolling();
@@ -97,6 +96,7 @@ public class Animation {
 		setupAnimation(imager);
 		animation.play();
 		isPlaying = true;
+		window.setMaximized(true);
 	}
 	
 	private void setupAnimation(GridImager imager) {
