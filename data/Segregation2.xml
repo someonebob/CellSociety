@@ -5,8 +5,11 @@
 	<author>Dhruv Patel</author>
 	
 	<cyclesPerTick>1</cyclesPerTick>
-	
-	<percentThreshold>60</percentThreshold>
+
+	<parameters>
+	   <percentThreshold>60</percentThreshold>
+    </parameters>
+	<gridType>rectangular</gridType>
 	
 	<stateDef ref = "o" color="red">agent1</stateDef>
 	<stateDef ref = "x" color="blue">agent2</stateDef>

@@ -3,11 +3,14 @@
 
 	<title>Segregation</title>
 	<author>Dhruv Patel</author>
+	<gridType>rectangular</gridType>
 	
 	<cyclesPerTick>1</cyclesPerTick>
 	
-	<percentThreshold>51</percentThreshold>
-	
+	<parameters>
+		<percentThreshold>51</percentThreshold>
+	</parameters>
+
 	<stateDef ref = "o" color="orange">agent1</stateDef>
 	<stateDef ref = "x" color="blue">agent2</stateDef>
 	<stateDef ref = "-" color="black">vacant</stateDef>

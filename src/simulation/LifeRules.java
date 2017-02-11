@@ -45,6 +45,7 @@ public class LifeRules extends Rules {
 	
 	private int getNumNeighborsAlive(Neighborhood neighborhood){
 		int numAlive = 0;
+	
 		for(Cell neighbor : neighborhood.getNeighbors()){
 			if(neighbor != null){
 				if(neighbor.getCurrentState().getValue().equals(ALIVE))

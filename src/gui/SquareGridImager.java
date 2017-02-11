@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.Coordinate;
+import model.Grid;
 
 /**
  * GridImager subclass used to image Grids containing squares.
@@ -18,6 +19,15 @@ public class SquareGridImager extends GridImager {
 	
 	public SquareGridImager(File setupInfo, double width, double height) {
 		super(setupInfo, width, height);
+	}
+	
+	/**
+	 * Chooses correct grid type depending on Grid Imager type
+	 * @param setupInfo setup file for grid
+	 */
+	@Override
+	public Grid makeGrid(File setupInfo) {
+		return new Grid(setupInfo, "square");
 	}
 	
 	@Override
