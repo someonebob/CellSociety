@@ -2,6 +2,8 @@ package gui;
 import java.io.File;
 import java.util.ResourceBundle;
 
+import javax.xml.transform.TransformerException;
+
 import org.w3c.dom.NodeList;
 
 import javafx.animation.KeyFrame;
@@ -14,6 +16,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -242,7 +246,7 @@ public class Animation {
 		GridPane.setConstraints(cellType, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		
 		ComboBox<String> type = new ComboBox<>();
-		GridPane.setConstraints(type, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(type, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
 
 		gridPane.getChildren().addAll(cellType, type);
 	}
@@ -256,35 +260,14 @@ public class Animation {
 		gridShape = new ComboBox<>();
 		gridShape.getItems().addAll("Square", "Triangular", "Hexagonal");
 		gridShape.setValue(gridShape.getItems().get(0));
-		GridPane.setConstraints(gridShape, 1, 1, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(gridShape, 1, 1, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		gridShape.setOnAction(e -> {
 			chooseGrid(dimension);
 		});
 		
 		gridPane.getChildren().addAll(gridType, gridShape);
-	}
-	
-	/**
-	 * Chooses between the 3 types of grids
-	 * @param dimension
-	 */
-	private void chooseGrid(double dimension){
-		animation.stop();
-
-		if(gridShape.getValue().equals(gridShape.getItems().get(0))){
-			grid = new SquareGridImager(setup, dimension, dimension);
-			runAnimation(grid);
-		}
-		if(gridShape.getValue().equals(gridShape.getItems().get(1))){
-			grid = new TriangleGridImager(setup, dimension, dimension);
-			runAnimation(grid);
-		}
-		if(gridShape.getValue().equals(gridShape.getItems().get(2))){
-			grid = new HexagonGridImager(setup, dimension, dimension);
-			runAnimation(grid);
-		}
-	}
+	}		
 	
 	/**
 	 * Allows user to adjust the cell size
@@ -294,7 +277,7 @@ public class Animation {
 		GridPane.setConstraints(cellSize, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
 
 		Slider size = new Slider(dimension/10, dimension*4, dimension);
-		GridPane.setConstraints(size, 1, 2, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(size, 1, 2, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		size.setOnMouseReleased(e -> chooseGrid(size.getValue()));
 		
@@ -310,10 +293,9 @@ public class Animation {
 
 		CheckBox check = new CheckBox();
 		check.setSelected(true);
-		GridPane.setConstraints(check, 1, 3, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(check, 1, 3, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		gridPane.getChildren().addAll(outlines, check);
-
 	}
 	
 	/**
@@ -324,7 +306,18 @@ public class Animation {
 		GridPane.setConstraints(color, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
 		
 		ComboBox<String> type = new ComboBox<>();
-		GridPane.setConstraints(type, 1, 4, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(type, 1, 4, 2, 1, HPos.RIGHT, VPos.CENTER);
+		
+		fillComboBox(type, "scheme");
+		
+		type.setOnAction(event -> {
+			try {
+				parser.setColor(type.getValue());
+			} catch (TransformerException e) {
+				
+			}
+			chooseGrid(dimension);
+		});
 		
 		gridPane.getChildren().addAll(color, type);
 	}
@@ -347,7 +340,25 @@ public class Animation {
 			input.setDisable(true);
 		}
 		type.setOnAction(e -> {
-			input.setPromptText(parser.getParameterType(type.getValue()));
+			input.setPromptText(parser.getParameterAttribute(type.getValue(), "type"));
+		});
+		
+		input.setOnAction(event -> {
+			try {
+				int value = Integer.parseInt(input.getText());
+				int min = Integer.parseInt(parser.getParameterAttribute(type.getValue(), "minconstraint"));
+				int max = Integer.parseInt(parser.getParameterAttribute(type.getValue(), "maxconstraint"));
+				if(value >= min && value <= max){
+					parser.setParameter(type.getValue(), input.getText());
+					chooseGrid(dimension);
+				}else{
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setContentText("Input must be a number between "+min+" and "+max);
+					alert.showAndWait();
+				}
+			} catch(Exception e){
+				System.out.println("Must choose a parameter");
+			}
 		});
 	
 		gridPane.getChildren().addAll(parameter, type, input);
@@ -368,6 +379,27 @@ public class Animation {
 			}
 		} catch(Exception e){
 			type.setDisable(true);
+		}
+	}
+	
+	/**
+	 * Chooses between the 3 types of grids
+	 * @param dimension
+	 */
+	private void chooseGrid(double dimension){
+		animation.stop();
+
+		if(gridShape.getValue().equals(gridShape.getItems().get(0))){
+			grid = new SquareGridImager(setup, dimension, dimension);
+			runAnimation(grid);
+		}
+		if(gridShape.getValue().equals(gridShape.getItems().get(1))){
+			grid = new TriangleGridImager(setup, dimension, dimension);
+			runAnimation(grid);
+		}
+		if(gridShape.getValue().equals(gridShape.getItems().get(2))){
+			grid = new HexagonGridImager(setup, dimension, dimension);
+			runAnimation(grid);
 		}
 	}
 

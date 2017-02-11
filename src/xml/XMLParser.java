@@ -10,6 +10,12 @@ import java.util.TreeMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -26,6 +32,7 @@ public class XMLParser {
 	public static final List<String> DATA_FIELDS = Arrays
 			.asList(new String[] { "name", "dimension", "state", "parameter", "stateDef" });
 	public static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
+	public static final Transformer TRANSFORMER = getTransformer();
 	public static final ResourceBundle RESOURCES = ResourceBundle.getBundle("resourcefiles/XML");
 
 	private File info;
@@ -83,6 +90,42 @@ public class XMLParser {
 		return stateTextGrid;
 	}
 
+
+	public void setParameter(String tagName, String newParam) throws TransformerException {
+		getRootElement().getElementsByTagName(tagName).item(0).setTextContent(newParam);
+		TransformerFactory transformerfactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerfactory.newTransformer();
+		DOMSource source = new DOMSource(xmlDocument);
+		StreamResult result = new StreamResult(info);
+		transformer.transform(source, result);
+	}
+	
+	public void setColor(String newColor) throws TransformerException{
+		NodeList nodelist = getRootElement().getElementsByTagName("scheme").item(0).getChildNodes();
+		NodeList statelist = getRootElement().getElementsByTagName("stateDef");
+		NodeList colorlist = null;
+		
+		for(int i = 0; i < nodelist.getLength(); i++){
+			if(nodelist.item(i).getNodeName().equals(newColor)){
+				colorlist = nodelist.item(i).getChildNodes(); 			
+			}
+		}
+		
+		for(int j = 0; j < statelist.getLength(); j++){
+			for(int k = 0; k < colorlist.getLength(); k++){
+				if(statelist.item(j).getTextContent().equals(colorlist.item(k).getNodeName())){
+					statelist.item(j).getAttributes().getNamedItem("color").setTextContent(colorlist.item(k).getTextContent());
+				}
+			}
+		}
+		
+		TransformerFactory transformerfactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerfactory.newTransformer();
+		DOMSource source = new DOMSource(xmlDocument);
+		StreamResult result = new StreamResult(info);
+		transformer.transform(source, result);
+	}
+
 	/**
 	 * Returns a String corresponding to the input parameter
 	 * 
@@ -106,10 +149,10 @@ public class XMLParser {
 	}
 
 	// Consider renaming
-	public String getParameterType(String tagName) {
+	public String getParameterAttribute(String tagName, String attribute) {
 		try {
 			Element element = (Element) getRootElement().getElementsByTagName(tagName).item(0);
-			return getAttribute(element, "type");
+			return getAttribute(element, attribute);
 		} catch (Exception e) {
 			throw new XMLException(e, "Invalid parameter requested");
 		}
@@ -184,6 +227,15 @@ public class XMLParser {
 		try {
 			return DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
+			throw new XMLException(e);
+		}
+	}
+		
+	private static Transformer getTransformer() {
+		try{
+			return TransformerFactory.newInstance().newTransformer();
+
+		} catch(TransformerException e){
 			throw new XMLException(e);
 		}
 	}

@@ -1,4 +1,4 @@
-<CA>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><CA>
 	<subclass>simulation.FireRules</subclass>
 
 	<title>Spreading of Fire</title>
@@ -7,18 +7,32 @@
 	<cyclesPerTick>1</cyclesPerTick>
 
 	<parameters>
-		<probCatch type="Percentage">55</probCatch>
+		<probCatch maxconstraint="100" minconstraint="0" type="Percentage">55</probCatch>
 	</parameters>
 
-	<colors>
-		<default>yellow green red</default>
-		<space>black violet orange</space>
-		<invert>green red yellow</invert>
-	</colors>
+	<scheme>
+		<default>
+			<empty>yellow</empty>
+			<tree>green</tree>
+			<burning>red</burning>
+		</default>
 
-	<stateDef ref="e" color="yellow">empty</stateDef>
-	<stateDef ref="t" color="green">tree</stateDef>
-	<stateDef ref="b" color="red">burning</stateDef>
+		<space>
+			<empty>black</empty>
+			<tree>violet</tree>
+			<burning>orange</burning>
+		</space>
+
+		<invert>
+			<empty>green</empty>
+			<tree>red</tree>
+			<burning>yellow</burning>
+		</invert>
+	</scheme>
+
+	<stateDef color="green" ref="e">empty</stateDef>
+	<stateDef color="red" ref="t">tree</stateDef>
+	<stateDef color="yellow" ref="b">burning</stateDef>
 
 	
 	<state>
