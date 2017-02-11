@@ -5,7 +5,7 @@ package model;
  * @author Nathaniel
  */
 public class Coordinate implements Comparable<Coordinate> {
-	int row, col;
+	private int row, col;
 
 	/**
 	 * Creates a new coordinate pair.

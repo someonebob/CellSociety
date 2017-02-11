@@ -6,29 +6,29 @@ import java.util.Collection;
 public class RectangularNeighborhood extends Neighborhood {
 
 	/**
-	 * Returns collection of Adjacent cells
+	 * Returns collection of Adjacent local cell coordinates
 	 * (Edges are fully connected)
 	 */
 	@Override
-	public Collection<Cell> getAdjacent() {
-		Collection<Cell> adjacent = new ArrayList<Cell>();
-		adjacent.add(this.get(-1, 0)); // Above
-		adjacent.add(this.get(1, 0));  // Below
-		adjacent.add(this.get(0, -1)); // To the left
-		adjacent.add(this.get(0, 1));  // To the right
+	public Collection<Coordinate> getLocalAdjacentCoordinates() {
+		Collection<Coordinate> adjacent = new ArrayList<Coordinate>();
+		adjacent.add(new Coordinate(-1, 0)); // Above
+		adjacent.add(new Coordinate(1, 0));  // Below
+		adjacent.add(new Coordinate(0, -1)); // To the left
+		adjacent.add(new Coordinate(0, 1));  // To the right
 		return adjacent;
 	}
 
 	/**
-	 * Returns collection of Diagonal cells
+	 * Returns collection of Diagonal local cell coordinates
 	 * (Edges are not fully connected)
 	 */
-	public Collection<Cell> getDiagonal() {
-		Collection<Cell> diagonal = new ArrayList<Cell>();
-		diagonal.add(this.get(-1, -1)); // Top Left
-		diagonal.add(this.get(1, -1));	// Bottom left
-		diagonal.add(this.get(1, 1)); 	// Bottom right
-		diagonal.add(this.get(-1, 1));	// Top right
+	public Collection<Coordinate> getLocalDiagonalCoordinates() {
+		Collection<Coordinate> diagonal = new ArrayList<Coordinate>();
+		diagonal.add(new Coordinate(-1, -1)); // Top Left
+		diagonal.add(new Coordinate(1, -1));	// Bottom left
+		diagonal.add(new Coordinate(1, 1)); 	// Bottom right
+		diagonal.add(new Coordinate(-1, 1));	// Top right
 		return diagonal;
 	}
 	

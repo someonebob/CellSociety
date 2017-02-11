@@ -13,10 +13,11 @@ import xml.XMLParser;
  * @version 2-01-2017
  */
 public class Grid {
-
+	private String GRID_TYPE_REFERENCE = "gridType";
 	private Map<Coordinate, Cell> myCells;
 	private int numRows, numCols;
 	private int cyclesPerTick;
+	private String gridType;
 
 	/**
 	 * Initializes the 2D Array of Cells.
@@ -26,8 +27,9 @@ public class Grid {
 	public Grid(File setupInfo) {
 		XMLParser config = new XMLParser(setupInfo);
 		cyclesPerTick = Integer.parseInt(config.getParameter("cyclesPerTick"));
+		gridType = config.getParameter(GRID_TYPE_REFERENCE);
 		initializeArray(config);
-		passNeighbors();
+		passNeighbors(config);
 	}
 
 	/**
@@ -90,9 +92,9 @@ public class Grid {
 		myCells = new TreeMap<Coordinate, Cell>();	
 		
 		for(Coordinate c: stateReference.keySet()){
-			if(c.row + 1 > numRows) numRows = c.row + 1;
-			if(c.col + 1 > numCols) numCols = c.col + 1;
-			State state = rules.getStartingState(stateReference.get(c));			
+			if(c.getRow() + 1 > numRows) numRows = c.getRow() + 1;
+			if(c.getCol() + 1 > numCols) numCols = c.getCol() + 1;
+			State state = rules.getStartingState(stateReference.get(c));
 			myCells.put(c, new Cell(rules, state));
 		}
 	}
@@ -100,16 +102,23 @@ public class Grid {
 	/**
 	 * Passes each Cell in the 2D array the cells directly next to it.
 	 */
-	private void passNeighbors() {
+	private void passNeighbors(XMLParser configuration) {
+		NeighborhoodLoader gridTypeSelector = new NeighborhoodLoader();
+
 		for(Coordinate c : myCells.keySet()) {
-			Neighborhood neighbors = new Neighborhood();
-			for(int nRow = -1; nRow <= 1; nRow++) {
-				for(int nCol = -1; nCol <= 1; nCol++) {
-					Coordinate nbrLoc = new Coordinate(c.getRow() + nRow, c.getCol() + nCol);
-					neighbors.set(myCells.get(nbrLoc), nRow + 1, nCol + 1);
-				}
-			}
-			myCells.get(c).setNeighborhood(neighbors);
+			Neighborhood neighborhood = gridTypeSelector.getNeighborhood(gridType);
+			
+			neighborhood.setCenter(myCells.get(c), c);
+			
+			for(Coordinate neighborLocal : neighborhood.getLocalNeighborCoordinates()){
+				Coordinate neighborGlobal = c.add(neighborLocal);
+				neighborhood.set(myCells.get(neighborGlobal), neighborGlobal);
+			}	
+			myCells.get(c).setNeighborhood(neighborhood);
+		}
+		
+		for(Coordinate c: myCells.keySet()){
+			System.out.println(myCells.get(c).getNeighborhood().getLocalNeighborCoordinates() + "" +c);
 		}
 	}
 
