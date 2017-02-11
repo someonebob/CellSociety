@@ -1,10 +1,8 @@
 package model;
-
 import java.io.File;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import xml.XMLParser;
 
 /**
@@ -13,25 +11,26 @@ import xml.XMLParser;
  * @version 2-01-2017
  */
 public class Grid {
-	private String GRID_TYPE_REFERENCE = "gridType";
+
 	private Map<Coordinate, Cell> myCells;
 	private int numRows, numCols;
 	private int cyclesPerTick;
-	private String gridType;
+	private String type;
 
 	/**
 	 * Initializes the 2D Array of Cells.
 	 * @param setupInfo the File containing setup information
+	 * @param shape of grid
 	 * including grid size, rules, and starting states.
 	 */
-	public Grid(File setupInfo) {
+	public Grid(File setupInfo, String type) {
 		XMLParser config = new XMLParser(setupInfo);
 		cyclesPerTick = Integer.parseInt(config.getParameter("cyclesPerTick"));
-		gridType = config.getParameter(GRID_TYPE_REFERENCE);
+		this.type = type;
 		initializeArray(config);
 		passNeighbors(config);
 	}
-
+	
 	/**
 	 * Updates every cell.
 	 * Calculates the future state of every cell, then
@@ -47,7 +46,7 @@ public class Grid {
 			}
 		}
 	}
-
+	
 	/**
 	 * Accesses a specific Cell in the Grid.
 	 * @param coord the Coordinate indicating where the Cell is.
@@ -106,7 +105,7 @@ public class Grid {
 		NeighborhoodLoader gridTypeSelector = new NeighborhoodLoader();
 
 		for(Coordinate c : myCells.keySet()) {
-			Neighborhood neighborhood = gridTypeSelector.getNeighborhood(gridType);
+			Neighborhood neighborhood = gridTypeSelector.getNeighborhood(type);
 			
 			neighborhood.setCenter(myCells.get(c), c);
 			

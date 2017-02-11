@@ -1,28 +1,33 @@
 package gui;
 
 import java.io.File;
-
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import model.Grid;
-import model.Coordinate;
 
-public class GridImager {
+/**
+ * Creates a graphical representation of the Grid of cells for CellSociety.
+ * @author Nathaniel Brooke
+ * @version 02-10-2017
+ */
+public abstract class GridImager {
 	
-	private double cellSize;
 	private Group myGroup;
 	private Grid myGrid;
-
+	
+	/**
+	 * Sets up the Grid and Group for the simulation
+	 * @param setupInfo the XML file containing setup information
+	 * @param width the width of the grid representation on screen.
+	 * @param height the height of the grid representation on screen.
+	 */
 	public GridImager(File setupInfo, double width, double height) {
 		myGroup = new Group();
-		myGrid = new Grid(setupInfo);
-		cellSize = height/myGrid.getRows();
-		if(cellSize > width/myGrid.getCols()) {
-			cellSize = width/myGrid.getCols();
-		}
-		updateGroup();
+		myGrid = makeGrid(setupInfo);
+		updateGroup(myGroup, myGrid);
+		setCellSize(myGrid, width, height);
 	}
+	
+	public abstract Grid makeGrid(File setupInfo);
 	
 	/**
 	 * Accesses the Group displaying all the cells.
@@ -38,21 +43,21 @@ public class GridImager {
 	 */
 	public void nextFrame() {
 		myGrid.nextFrame();
-		updateGroup();
+		updateGroup(myGroup, myGrid);
 	}
 	
 	/**
-	 * Updates the Nodes held in the Group used for animation.
+	 * Updates the cell size in the grid display to fit the specified total grid dimensions.
+	 * @param grid the Grid being used
+	 * @param gridHeight the height of the display space for the grid.
+	 * @param gridWidth the width of the display space for the grid.
 	 */
-	private void updateGroup() {
-		myGroup.getChildren().clear();
-		for(Coordinate c : myGrid.getCoordinates()) {
-			Rectangle r = new Rectangle(cellSize, cellSize);
-			r.setFill(Color.web(myGrid.getCell(c).getCurrentState().getColor()));
-			r.setX(c.getCol()*cellSize);
-			r.setY(c.getRow()*cellSize);
-			myGroup.getChildren().add(r);
-		}
-	}
-
+	public abstract void setCellSize(Grid grid, double gridHeight, double gridWidth);
+	
+	/**
+	 * Updates the Nodes held in the Group used for animation.
+	 * @param group the GridImager's group.
+	 * @param grid the Grid being used.
+	 */
+	protected abstract void updateGroup(Group group, Grid grid);
 }

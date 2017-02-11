@@ -1,20 +1,34 @@
 package gui;
-
 import java.io.File;
 import java.util.ResourceBundle;
 
+import org.w3c.dom.NodeList;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
+import xml.XMLParser;
 /**
  * Runs the cells animation pane in the program.
  * @author Nathaniel Brooke
@@ -27,24 +41,29 @@ public class Animation {
 	private static final double DEFAULT_FPS = 4;
     public static final ResourceBundle RESOURCES = 
     		ResourceBundle.getBundle("resourcefiles/Animation");
-
 	
 	private Stage window;
 	private Rectangle2D screen;
 	private Scene simulation;
 	private File setup;
 	private Timeline animation;
-	private Group root;
+	private BorderPane root;
 	private ToolBar toolBar;
 	private boolean isPlaying;
 	private GridImager grid;
+	private VBox sideBox;
+	private XMLParser parser;
+	private GridPane gridPane;
+	private double dimension;
+	private ComboBox<String> gridShape;
 	
 	/**
 	 * Initializes the Scene and Group for the animation.
 	 */
-	public Animation(Stage window) {
+	public Animation(Stage window, File setupInfo) {
+		setup = setupInfo;
 		screen = Screen.getPrimary().getVisualBounds();
-		root = new Group();
+		root = new BorderPane();
 		simulation = new Scene(root, screen.getWidth(), screen.getHeight());
 		this.window = window;
 	}
@@ -55,6 +74,10 @@ public class Animation {
 	 */
 	public Scene initialize() {
 		setupControls();
+		setupSideMenu();
+		dimension = screen.getHeight() - toolBar.getBoundsInParent().getMaxY() - screen.getMinY();
+		grid = new SquareGridImager(setup, dimension, dimension);
+		runAnimation(grid);
 		return simulation;
 	}
 	
@@ -62,22 +85,18 @@ public class Animation {
 	 * Runs an animation with a newly selected simulation.
 	 * @param setupInfo the XML file with setup information for the grid.
 	 */
-	public void runAnimation(File setupInfo) {
-		setup = setupInfo;
-		setupAnimation();
+	public void runAnimation(GridImager imager) {	
+		setupAnimation(imager);
 		animation.play();
 		isPlaying = true;
 	}
 	
-	private void setupAnimation() {
-		grid = new GridImager(setup, screen.getWidth(), 
-				screen.getHeight() - toolBar.getHeight() - screen.getMinY());
-		Group g = grid.getGroup();
-		g.setLayoutY(toolBar.getHeight() + screen.getMinY());
-		g.setLayoutX((screen.getMaxX() - g.getLayoutBounds().getWidth())/2);
-		root.getChildren().add(g);
+	private void setupAnimation(GridImager imager) {
+		Group g = imager.getGroup();
+		
+		root.setRight(g);
 		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/DEFAULT_FPS), e -> {
-			grid.nextFrame();
+			imager.nextFrame();
 		});
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
@@ -95,9 +114,20 @@ public class Animation {
 		toolBar.setLayoutY(screen.getMinY());
 		toolBar.setPrefWidth(screen.getWidth());
 		toolBar.getItems().addAll(menu, step, playPause, reset, slider);
-		root.getChildren().add(toolBar);
+		root.setTop(toolBar);
 	}
+	
+	private void setupSideMenu(){
+		parser = new XMLParser(setup);
+		sideBox = new VBox(20);
+		setupHeading();
+		sideBox.setAlignment(Pos.TOP_CENTER);
+		
+		setupSideControls();
 
+		root.setLeft(sideBox);
+	}
+	
 	private Slider makeFPSSlider() {
 		Slider sliderFPS = new Slider(MIN_FPS, MAX_FPS, DEFAULT_FPS);
 		sliderFPS.setOnMouseReleased(e -> {
@@ -105,20 +135,15 @@ public class Animation {
 		});
 		return sliderFPS;
 	}
-
+	
 	private Button makeResetButton() {
 		Button reset = new Button(RESOURCES.getString("reset"));
 		reset.setOnMouseClicked(e -> {
-			animation.stop();
-			setupAnimation();
-			if(isPlaying) {
-				animation.play();
-			}
-			
+			chooseGrid();
 		});
 		return reset;
 	}
-
+	
 	private Button makePlayPauseButton() {
 		Button playPause = new Button(RESOURCES.getString("pause"));
 		playPause.setOnMouseClicked(e -> {
@@ -135,13 +160,13 @@ public class Animation {
 		});
 		return playPause;
 	}
-
+	
 	private Button makeStepButton() {
 		Button step = new Button(RESOURCES.getString("step"));
 		step.setOnMouseClicked(e -> grid.nextFrame());
 		return step;
 	}
-
+	
 	private Button makeMenuButton() {
 		Button menu = new Button(RESOURCES.getString("menu"));
 		Menu newMenu = new Menu(window);
@@ -150,5 +175,156 @@ public class Animation {
 			window.setScene(newMenu.initialize());
 		});
 		return menu;
+	}
+	
+	
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	/**
+	 * Sets up title of simulation and author
+	 */
+	private void setupHeading(){	
+		Text title = new Text(parser.getParameter("title"));
+		title.setFont(new Font(50));
+		title.setWrappingWidth(500);
+		
+		Text author = new Text(parser.getParameter("author"));
+		author.setFont(new Font(40));
+
+		VBox heading = new VBox(10);
+		heading.getChildren().addAll(title, author);
+		heading.setAlignment(Pos.CENTER);
+		sideBox.getChildren().add(heading);
+	}
+	
+	/**
+	 * Sets up all the controls
+	 */
+	private void setupSideControls(){
+		gridPane = new GridPane();
+		gridPane.setPadding(new Insets(10,10,10,10));
+		gridPane.setHgap(10);
+		gridPane.setVgap(20);
+		
+		makeCellTypeControl();
+		makeGridTypeControl();
+		makeCellSizeControl();
+		makeOutlinesControl();
+		makeColorControl();
+		makeParameterControl();
+		
+		sideBox.getChildren().add(gridPane);
+	}
+	
+	/**
+	 * Changes the shape within the cell
+	 */
+	private void makeCellTypeControl(){
+		Label cellType = new Label("Cell Type");
+		GridPane.setConstraints(cellType, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
+		
+		ComboBox<String> type = new ComboBox<>();
+		GridPane.setConstraints(type, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
+
+		gridPane.getChildren().addAll(cellType, type);
+	}
+	/**
+	 * Allows user to choose square, triangular, or hexagonal grid
+	 */
+	private void makeGridTypeControl(){
+		Label gridType = new Label("Grid Type");
+		GridPane.setConstraints(gridType, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
+		
+		gridShape = new ComboBox<>();
+		gridShape.getItems().addAll("Square", "Triangular", "Hexagonal");
+		gridShape.setValue(gridShape.getItems().get(0));
+		GridPane.setConstraints(gridShape, 1, 1, 1, 1, HPos.RIGHT, VPos.CENTER);
+		
+		gridShape.setOnAction(e -> {
+			chooseGrid();
+		});
+		
+		gridPane.getChildren().addAll(gridType, gridShape);
+	}
+	
+	private void chooseGrid(){
+		animation.stop();
+
+		if(gridShape.getValue().equals(gridShape.getItems().get(0))){
+			runAnimation(new SquareGridImager(setup, dimension, dimension));
+		}
+		if(gridShape.getValue().equals(gridShape.getItems().get(1))){
+			runAnimation(new TriangleGridImager(setup, dimension, dimension));
+		}
+		if(gridShape.getValue().equals(gridShape.getItems().get(2))){
+			runAnimation(new HexagonGridImager(setup, dimension, dimension));
+		}
+	}
+	
+	/**
+	 * Allows user to adjust the cell size
+	 */
+	private void makeCellSizeControl(){
+		Label cellSize = new Label("Cell Size");
+		GridPane.setConstraints(cellSize, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
+
+		Slider size = new Slider();
+		GridPane.setConstraints(size, 1, 2, 1, 1, HPos.RIGHT, VPos.CENTER);
+		
+		gridPane.getChildren().addAll(cellSize, size);
+	}
+	
+	private void makeOutlinesControl(){
+		Label outlines = new Label("Outlines");
+		GridPane.setConstraints(outlines, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
+
+		CheckBox check = new CheckBox();
+		check.setSelected(true);
+		GridPane.setConstraints(check, 1, 3, 1, 1, HPos.RIGHT, VPos.CENTER);
+		
+		gridPane.getChildren().addAll(outlines, check);
+
+	}
+	
+	private void makeColorControl(){
+		Label color = new Label("Color Scheme");
+		GridPane.setConstraints(color, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
+		
+		ComboBox<String> type = new ComboBox<>();
+		GridPane.setConstraints(type, 1, 4, 1, 1, HPos.RIGHT, VPos.CENTER);
+		
+		gridPane.getChildren().addAll(color, type);
+	}
+	
+	private void makeParameterControl(){
+		Label parameter = new Label("Parameter");
+		GridPane.setConstraints(parameter, 0, 5, 1, 1, HPos.LEFT, VPos.CENTER);
+		
+		ComboBox<String> type = new ComboBox<>();
+		fillComboBox(type, "parameters");
+				
+		GridPane.setConstraints(type, 1, 5, 1, 1, HPos.RIGHT, VPos.CENTER);
+		
+		TextField input = new TextField();
+		GridPane.setConstraints(input, 2, 5, 1, 1, HPos.RIGHT, VPos.CENTER);
+
+		
+		gridPane.getChildren().addAll(parameter, type, input);
+	}
+	
+	private void fillComboBox(ComboBox<String> type, String parameter){
+		try{
+			NodeList parameters = parser.getParameters(parameter);
+			for(int i = 0; i < parameters.getLength(); i++){
+				if(!parameters.item(i).getNodeName().equals("#text")){
+					type.getItems().add(parameters.item(i).getNodeName());
+				}
+			}
+		} catch(Exception e){
+			type.setDisable(true);
+		}
 	}
 }

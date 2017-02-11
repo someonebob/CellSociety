@@ -3,7 +3,6 @@
 
 	<title>Conways's Game of Life</title>
 	<author>Dhruv Patel</author>
-	<gridType>rectangular</gridType>
 	
 	<cyclesPerTick>1</cyclesPerTick>
 

@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class RectangularNeighborhood extends Neighborhood {
+public class SquareNeighborhood extends Neighborhood {
 
 	/**
 	 * Returns collection of Adjacent local cell coordinates
