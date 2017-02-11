@@ -21,6 +21,10 @@ public class LifeRules extends Rules {
 		return new State(configuration, stateText);
 	}
 	
+	public State getDefaultState(){
+		return new State(configuration, DEAD);
+	}
+	
 	public State getNewState(Neighborhood neighborhood) { 
 		int neighborsAlive = getNumNeighborsAlive(neighborhood);
 		boolean isAlive = getAlive(neighborhood.getCenter());
@@ -40,7 +44,6 @@ public class LifeRules extends Rules {
 				return new State(configuration, DEAD);
 			}
 		}
-		
 	}
 	
 	private int getNumNeighborsAlive(Neighborhood neighborhood){

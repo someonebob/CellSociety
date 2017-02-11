@@ -23,8 +23,8 @@ public abstract class GridImager {
 	public GridImager(File setupInfo, double width, double height) {
 		myGroup = new Group();
 		myGrid = makeGrid(setupInfo);
-		updateGroup(myGroup);
-		setCellSize(width, height);
+		updateGroup(myGroup, myGrid);
+		setCellSize(myGrid, width, height);
 	}
 		
 	/**
@@ -41,15 +41,7 @@ public abstract class GridImager {
 	 */
 	public void nextFrame() {
 		myGrid.nextFrame();
-		updateGroup(myGroup);
-	}
-	
-	/**
-	 * Gets the Grid held by the GridImager object.
-	 * @return the grid.
-	 */
-	protected Grid getGrid() {
-		return myGrid;
+		updateGroup(myGroup, myGrid);
 	}
 	
 	/**
@@ -65,12 +57,12 @@ public abstract class GridImager {
 	 * @param gridHeight the height of the display space for the grid.
 	 * @param gridWidth the width of the display space for the grid.
 	 */
-	public abstract void setCellSize(double gridHeight, double gridWidth);
+	public abstract void setCellSize(Grid grid, double gridHeight, double gridWidth);
 	
 	/**
 	 * Updates the Nodes held in the Group used for animation.
 	 * @param group the GridImager's group.
 	 * @param grid the Grid being used.
 	 */
-	protected abstract void updateGroup(Group group);
+	protected abstract void updateGroup(Group group, Grid grid);
 }

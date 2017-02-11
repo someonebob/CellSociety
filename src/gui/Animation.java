@@ -75,9 +75,8 @@ public class Animation {
 	 * @return the Scene with everything in it.
 	 */
 	public Scene initialize() {
-		dimension = screen.getHeight();
+		dimension = screen.getHeight() - 60;
 		grid = new SquareGridImager(setup, dimension, dimension);
-		window.setMaximized(true);
 		setupControls();
 		setupSideMenu();
 		setupScrolling();
@@ -90,10 +89,10 @@ public class Animation {
 	 * @param setupInfo the XML file with setup information for the grid.
 	 */
 	public void runAnimation(GridImager imager) {	
-		window.setMaximized(true);
 		setupAnimation(imager);
 		animation.play();
 		isPlaying = true;
+		window.setMaximized(true);
 	}
 	
 	private void setupAnimation(GridImager imager) {

@@ -31,19 +31,19 @@ public class SquareGridImager extends GridImager {
 	}
 	
 	@Override
-	public void setCellSize(double gridWidth, double gridHeight) {
-		sideLength = gridHeight/getGrid().getRows();
-		if(sideLength > gridWidth/getGrid().getCols()) {
-			sideLength = gridWidth/getGrid().getCols();
+	public void setCellSize(Grid grid, double gridWidth, double gridHeight) {
+		sideLength = gridHeight/grid.getRows();
+		if(sideLength > gridWidth/grid.getCols()) {
+			sideLength = gridWidth/grid.getCols();
 		}
 	}
 	
 	@Override
-	protected void updateGroup(Group group) {
+	protected void updateGroup(Group group, Grid grid) {
 		group.getChildren().clear();
-		for(Coordinate c : getGrid().getCoordinates()) {
+		for(Coordinate c : grid.getCoordinates()) {
 			Rectangle r = new Rectangle(sideLength, sideLength);
-			r.setFill(Color.web(getGrid().getCell(c).getCurrentState().getColor()));
+			r.setFill(Color.web(grid.getCell(c).getCurrentState().getColor()));
 			r.setX(c.getCol()*sideLength);
 			r.setY(c.getRow()*sideLength);
 			group.getChildren().add(r);

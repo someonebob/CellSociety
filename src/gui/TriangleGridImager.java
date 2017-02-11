@@ -31,19 +31,19 @@ public class TriangleGridImager extends GridImager {
 	}
 
 	@Override
-	public void setCellSize(double gridHeight, double gridWidth) {
-		sideLength = gridHeight/getGrid().getRows()/Math.cos(Math.toRadians(30));
-		if(sideLength > gridWidth/((double)getGrid().getCols() + 0.5)) {
-			sideLength = gridWidth/((double)getGrid().getCols() + 0.5);
+	public void setCellSize(Grid grid, double gridHeight, double gridWidth) {
+		sideLength = gridHeight/grid.getRows()/Math.cos(Math.toRadians(30));
+		if(sideLength > gridWidth/((double)grid.getCols() + 0.5)) {
+			sideLength = gridWidth/((double)grid.getCols() + 0.5);
 		}
 	}
 
 	@Override
-	protected void updateGroup(Group group) {
+	protected void updateGroup(Group group, Grid grid) {
 		group.getChildren().clear();
-		for(Coordinate c : getGrid().getCoordinates()) {
-			Polygon p = makeTriangle(c.getRow(), c.getCol(), (c.getRow()+1)%4 > 1, c.getRow()%2 == 0);
-			p.setFill(Color.web(getGrid().getCell(c).getCurrentState().getColor()));
+		for(Coordinate c : grid.getCoordinates()) {
+			Polygon p = makeTriangle(c.getRow(), c.getCol(), Math.abs((c.getRow()+1)%4) > 1, Math.abs(c.getRow()%2) == 0);
+			p.setFill(Color.web(grid.getCell(c).getCurrentState().getColor()));
 			p.setOnMouseClicked(e -> {
 				System.out.println(c);
 			});
