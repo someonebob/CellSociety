@@ -6,8 +6,15 @@
 
 	<cyclesPerTick>1</cyclesPerTick>
 
-	<probCatch>55</probCatch>
-	<parameters><probCatch>55</probCatch></parameters>
+	<parameters>
+		<probCatch type="Percentage">55</probCatch>
+	</parameters>
+
+	<colors>
+		<default>yellow green red</default>
+		<space>black violet orange</space>
+		<invert>green red yellow</invert>
+	</colors>
 
 	<stateDef ref="e" color="yellow">empty</stateDef>
 	<stateDef ref="t" color="green">tree</stateDef>
