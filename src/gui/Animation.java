@@ -8,6 +8,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
@@ -17,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -73,10 +75,12 @@ public class Animation {
 	 * @return the Scene with everything in it.
 	 */
 	public Scene initialize() {
+		dimension = screen.getHeight();
+		grid = new SquareGridImager(setup, dimension, dimension);
+		window.setMaximized(true);
 		setupControls();
 		setupSideMenu();
-		dimension = screen.getHeight() - toolBar.getBoundsInParent().getMaxY() - screen.getMinY();
-		grid = new SquareGridImager(setup, dimension, dimension);
+		setupScrolling();
 		runAnimation(grid);
 		return simulation;
 	}
@@ -93,14 +97,22 @@ public class Animation {
 	
 	private void setupAnimation(GridImager imager) {
 		Group g = imager.getGroup();
-		
-		root.setRight(g);
+		root.setCenter(g);
 		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/DEFAULT_FPS), e -> {
 			imager.nextFrame();
 		});
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
+	}
+	
+	private void setupScrolling(){
+		ScrollBar vertical = new ScrollBar();
+		vertical.setOrientation(Orientation.VERTICAL);
+		root.setRight(vertical);
+		
+		ScrollBar horizontal = new ScrollBar();
+		root.setBottom(horizontal);
 	}
 	
 	private void setupControls() {		
@@ -139,7 +151,7 @@ public class Animation {
 	private Button makeResetButton() {
 		Button reset = new Button(RESOURCES.getString("reset"));
 		reset.setOnMouseClicked(e -> {
-			chooseGrid();
+			chooseGrid(dimension);
 		});
 		return reset;
 	}
@@ -179,8 +191,11 @@ public class Animation {
 	
 	
 	
+	/**
+	 * Side Menu Stuff
+	 * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	 */
 	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
 	/**
@@ -244,23 +259,30 @@ public class Animation {
 		GridPane.setConstraints(gridShape, 1, 1, 1, 1, HPos.RIGHT, VPos.CENTER);
 		
 		gridShape.setOnAction(e -> {
-			chooseGrid();
+			chooseGrid(dimension);
 		});
 		
 		gridPane.getChildren().addAll(gridType, gridShape);
 	}
 	
-	private void chooseGrid(){
+	/**
+	 * Chooses between the 3 types of grids
+	 * @param dimension
+	 */
+	private void chooseGrid(double dimension){
 		animation.stop();
 
 		if(gridShape.getValue().equals(gridShape.getItems().get(0))){
-			runAnimation(new SquareGridImager(setup, dimension, dimension));
+			grid = new SquareGridImager(setup, dimension, dimension);
+			runAnimation(grid);
 		}
 		if(gridShape.getValue().equals(gridShape.getItems().get(1))){
-			runAnimation(new TriangleGridImager(setup, dimension, dimension));
+			grid = new TriangleGridImager(setup, dimension, dimension);
+			runAnimation(grid);
 		}
 		if(gridShape.getValue().equals(gridShape.getItems().get(2))){
-			runAnimation(new HexagonGridImager(setup, dimension, dimension));
+			grid = new HexagonGridImager(setup, dimension, dimension);
+			runAnimation(grid);
 		}
 	}
 	
@@ -271,12 +293,17 @@ public class Animation {
 		Label cellSize = new Label("Cell Size");
 		GridPane.setConstraints(cellSize, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
 
-		Slider size = new Slider();
+		Slider size = new Slider(dimension/10, dimension*4, dimension);
 		GridPane.setConstraints(size, 1, 2, 1, 1, HPos.RIGHT, VPos.CENTER);
+		
+		size.setOnMouseReleased(e -> chooseGrid(size.getValue()));
 		
 		gridPane.getChildren().addAll(cellSize, size);
 	}
 	
+	/**
+	 * Allows user to choose if they want outlines or not
+	 */
 	private void makeOutlinesControl(){
 		Label outlines = new Label("Outlines");
 		GridPane.setConstraints(outlines, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
@@ -289,6 +316,9 @@ public class Animation {
 
 	}
 	
+	/**
+	 * Allows user to change the color scheme
+	 */
 	private void makeColorControl(){
 		Label color = new Label("Color Scheme");
 		GridPane.setConstraints(color, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
@@ -299,22 +329,35 @@ public class Animation {
 		gridPane.getChildren().addAll(color, type);
 	}
 	
+	/**
+	 * Allows user to change the parameters of the simulation 
+	 */
 	private void makeParameterControl(){
 		Label parameter = new Label("Parameter");
 		GridPane.setConstraints(parameter, 0, 5, 1, 1, HPos.LEFT, VPos.CENTER);
 		
 		ComboBox<String> type = new ComboBox<>();
-		fillComboBox(type, "parameters");
-				
 		GridPane.setConstraints(type, 1, 5, 1, 1, HPos.RIGHT, VPos.CENTER);
 		
 		TextField input = new TextField();
 		GridPane.setConstraints(input, 2, 5, 1, 1, HPos.RIGHT, VPos.CENTER);
-
 		
+		fillComboBox(type, "parameters");		
+		if(type.isDisabled()){
+			input.setDisable(true);
+		}
+		type.setOnAction(e -> {
+			input.setPromptText(parser.getParameterType(type.getValue()));
+		});
+	
 		gridPane.getChildren().addAll(parameter, type, input);
 	}
 	
+	/**
+	 * Fills out the combo box with the correct parameters
+	 * @param type
+	 * @param parameter
+	 */
 	private void fillComboBox(ComboBox<String> type, String parameter){
 		try{
 			NodeList parameters = parser.getParameters(parameter);
@@ -327,4 +370,5 @@ public class Animation {
 			type.setDisable(true);
 		}
 	}
+
 }
