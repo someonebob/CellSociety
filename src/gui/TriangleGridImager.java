@@ -39,7 +39,7 @@ public class TriangleGridImager extends GridImager {
 	}
 
 	@Override
-	public void updateGroup(Group group, Grid grid) {
+	public void updateGroup(Group group, Grid grid, boolean outline) {
 		group.getChildren().clear();
 		for(Coordinate c : grid.getCoordinates()) {
 			Polygon p = makeTriangle(c.getRow(), c.getCol());
@@ -47,6 +47,9 @@ public class TriangleGridImager extends GridImager {
 			p.setOnMouseClicked(e -> {
 				System.out.println(c);
 			});
+			if(outline){
+				p.setStroke(Color.BLACK);
+			}
 			group.getChildren().add(p);
 		}
 	}

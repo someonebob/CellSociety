@@ -22,6 +22,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -61,6 +62,8 @@ public class Animation {
 	private GridPane gridPane;
 	private double dimension;
 	private ComboBox<String> gridShape;
+	private ScrollPane scroll;
+	private CheckBox check;
 	
 	/**
 	 * Initializes the Scene and Group for the animation.
@@ -82,6 +85,8 @@ public class Animation {
 		grid = new SquareGridImager(setup, dimension, dimension);
 		setupControls();
 		setupSideMenu();
+		scroll = new ScrollPane();
+
 		runAnimation(grid);
 		return simulation;
 	}
@@ -99,12 +104,16 @@ public class Animation {
 	
 	private void setupAnimation(GridImager imager) {
 		Group g = imager.getGroup();
-		ScrollPane scroll = new ScrollPane();
+		
 		scroll.setContent(g);
+		scroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		scroll.setHbarPolicy(ScrollBarPolicy.ALWAYS);
+		
 		root.setCenter(scroll);
 		
+		
 		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/DEFAULT_FPS), e -> {
-			imager.nextFrame();
+			imager.nextFrame(check.isSelected());
 		});
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
@@ -173,7 +182,7 @@ public class Animation {
 	
 	private Button makeStepButton() {
 		Button step = new Button(RESOURCES.getString("step"));
-		step.setOnMouseClicked(e -> grid.nextFrame());
+		step.setOnMouseClicked(e -> grid.nextFrame(check.isSelected()));
 		return step;
 	}
 	
@@ -245,13 +254,18 @@ public class Animation {
 	 * Changes the shape within the cell
 	 */
 	private void makeGridEdgeControl(){
-		Label gridEdge = new Label("Cell Type");
+		Label gridEdge = new Label("Grid Edge Type");
 		GridPane.setConstraints(gridEdge, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		
 		ComboBox<String> type = new ComboBox<>();
 		GridPane.setConstraints(type, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
+		type.getItems().addAll("Finite", "Toroidal", "Infinite");
+		type.setPromptText(type.getItems().get(0));
 		
+		type.setOnAction(e -> {
+			
+		});
 
 		gridPane.getChildren().addAll(gridEdge, type);
 	}
@@ -296,8 +310,7 @@ public class Animation {
 		Label outlines = new Label("Outlines");
 		GridPane.setConstraints(outlines, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
 
-		CheckBox check = new CheckBox();
-		check.setSelected(true);
+		check = new CheckBox();
 		GridPane.setConstraints(check, 1, 3, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		gridPane.getChildren().addAll(outlines, check);
