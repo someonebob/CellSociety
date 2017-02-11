@@ -116,10 +116,5 @@ public class Grid {
 			}	
 			myCells.get(c).setNeighborhood(neighborhood);
 		}
-		
-		for(Coordinate c: myCells.keySet()){
-			System.out.println(myCells.get(c).getNeighborhood().getLocalNeighborCoordinates() + "" +c);
-		}
 	}
-
 }

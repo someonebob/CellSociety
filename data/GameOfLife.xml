@@ -11,6 +11,12 @@
 	<stateDef ref="x" color="white">dead</stateDef>
 	
 	<state>
+	x o x 
+	x o x 
+	x o x  	
+	</state>
+	
+	<state>
 	x x x x x
 	x x o x x
 	x x o x x

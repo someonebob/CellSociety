@@ -39,7 +39,7 @@ public class Coordinate implements Comparable<Coordinate> {
 	 * add rows, add columns
 	 */
 	public Coordinate add(Coordinate other){
-		return new Coordinate(this.getCol() + other.getCol(), this.getRow() + other.getRow());
+		return new Coordinate(this.getRow() + other.getRow(), this.getCol() + other.getCol());
 	}
 	
 	@Override
