@@ -64,5 +64,5 @@ public abstract class GridImager {
 	 * @param group the GridImager's group.
 	 * @param grid the Grid being used.
 	 */
-	protected abstract void updateGroup(Group group, Grid grid);
+	public abstract void updateGroup(Group group, Grid grid);
 }
