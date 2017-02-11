@@ -10,7 +10,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
@@ -22,7 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -70,7 +69,7 @@ public class Animation {
 		setup = setupInfo;
 		screen = Screen.getPrimary().getVisualBounds();
 		root = new BorderPane();
-		simulation = new Scene(root);
+		simulation = new Scene(root, screen.getWidth(), screen.getHeight());
 		this.window = window;
 		}
 	
@@ -83,7 +82,6 @@ public class Animation {
 		grid = new SquareGridImager(setup, dimension, dimension);
 		setupControls();
 		setupSideMenu();
-		setupScrolling();
 		runAnimation(grid);
 		return simulation;
 	}
@@ -101,7 +99,10 @@ public class Animation {
 	
 	private void setupAnimation(GridImager imager) {
 		Group g = imager.getGroup();
-		root.setCenter(g);
+		ScrollPane scroll = new ScrollPane();
+		scroll.setContent(g);
+		root.setCenter(scroll);
+		
 		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/DEFAULT_FPS), e -> {
 			imager.nextFrame();
 		});
@@ -110,14 +111,6 @@ public class Animation {
 		animation.getKeyFrames().add(frame);
 	}
 	
-	private void setupScrolling(){
-		ScrollBar vertical = new ScrollBar();
-		vertical.setOrientation(Orientation.VERTICAL);
-		root.setRight(vertical);
-		
-		ScrollBar horizontal = new ScrollBar();
-		root.setBottom(horizontal);
-	}
 	
 	private void setupControls() {		
 		Button menu = makeMenuButton();
@@ -228,7 +221,7 @@ public class Animation {
 		gridPane.setHgap(10);
 		gridPane.setVgap(20);
 		
-		makeCellTypeControl();
+		makeGridEdgeControl();
 		makeGridTypeControl();
 		makeCellSizeControl();
 		makeOutlinesControl();
@@ -241,14 +234,16 @@ public class Animation {
 	/**
 	 * Changes the shape within the cell
 	 */
-	private void makeCellTypeControl(){
-		Label cellType = new Label("Cell Type");
-		GridPane.setConstraints(cellType, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
+	private void makeGridEdgeControl(){
+		Label gridEdge = new Label("Cell Type");
+		GridPane.setConstraints(gridEdge, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		
 		ComboBox<String> type = new ComboBox<>();
 		GridPane.setConstraints(type, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
+		
+		
 
-		gridPane.getChildren().addAll(cellType, type);
+		gridPane.getChildren().addAll(gridEdge, type);
 	}
 	/**
 	 * Allows user to choose square, triangular, or hexagonal grid
