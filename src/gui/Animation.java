@@ -64,6 +64,8 @@ public class Animation {
 	private ComboBox<String> gridShape;
 	private ScrollPane scroll;
 	private CheckBox check;
+	private Slider size;
+	ComboBox<String> colorType;
 	
 	/**
 	 * Initializes the Scene and Group for the animation.
@@ -86,7 +88,9 @@ public class Animation {
 		setupControls();
 		setupSideMenu();
 		scroll = new ScrollPane();
-
+		window.setOnCloseRequest(e -> {
+			resetDefault();
+		});
 		runAnimation(grid);
 		return simulation;
 	}
@@ -158,7 +162,9 @@ public class Animation {
 	private Button makeResetButton() {
 		Button reset = new Button(RESOURCES.getString("reset"));
 		reset.setOnMouseClicked(e -> {
-			chooseGrid(dimension);
+			animation.stop();
+			resetDefault();
+			runAnimation(grid);
 		});
 		return reset;
 	}
@@ -257,17 +263,17 @@ public class Animation {
 		Label gridEdge = new Label("Grid Edge Type");
 		GridPane.setConstraints(gridEdge, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		
-		ComboBox<String> type = new ComboBox<>();
-		GridPane.setConstraints(type, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
+		ComboBox<String> edgeType = new ComboBox<>();
+		GridPane.setConstraints(edgeType, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
-		type.getItems().addAll("Finite", "Toroidal", "Infinite");
-		type.setPromptText(type.getItems().get(0));
+		edgeType.getItems().addAll("Finite", "Toroidal", "Infinite");
+		edgeType.setPromptText(edgeType.getItems().get(0));
 		
-		type.setOnAction(e -> {
+		edgeType.setOnAction(e -> {
 			
 		});
 
-		gridPane.getChildren().addAll(gridEdge, type);
+		gridPane.getChildren().addAll(gridEdge, edgeType);
 	}
 	/**
 	 * Allows user to choose square, triangular, or hexagonal grid
@@ -282,7 +288,7 @@ public class Animation {
 		GridPane.setConstraints(gridShape, 1, 1, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		gridShape.setOnAction(e -> {
-			chooseGrid(dimension);
+			chooseGrid(size.getValue());
 		});
 		
 		gridPane.getChildren().addAll(gridType, gridShape);
@@ -295,7 +301,7 @@ public class Animation {
 		Label cellSize = new Label("Cell Size");
 		GridPane.setConstraints(cellSize, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
 
-		Slider size = new Slider(dimension/10, dimension*4, dimension);
+		size = new Slider(dimension/10, dimension*4, dimension);
 		GridPane.setConstraints(size, 1, 2, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		size.setOnMouseReleased(e -> chooseGrid(size.getValue()));
@@ -323,21 +329,21 @@ public class Animation {
 		Label color = new Label("Color Scheme");
 		GridPane.setConstraints(color, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
 		
-		ComboBox<String> type = new ComboBox<>();
-		GridPane.setConstraints(type, 1, 4, 2, 1, HPos.RIGHT, VPos.CENTER);
+		colorType = new ComboBox<>();
+		GridPane.setConstraints(colorType, 1, 4, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
-		fillComboBox(type, "scheme");
+		fillComboBox(colorType, "scheme");
 		
-		type.setOnAction(event -> {
+		colorType.setOnAction(event -> {
 			try {
-				parser.setColor(type.getValue());
+				parser.setColor(colorType.getValue());
 			} catch (TransformerException e) {
 				
 			}
-			chooseGrid(dimension);
+			chooseGrid(size.getValue());
 		});
 		
-		gridPane.getChildren().addAll(color, type);
+		gridPane.getChildren().addAll(color, colorType);
 	}
 	
 	/**
@@ -368,7 +374,7 @@ public class Animation {
 				int max = Integer.parseInt(parser.getParameterAttribute(type.getValue(), "maxconstraint"));
 				if(value >= min && value <= max){
 					parser.setParameter(type.getValue(), input.getText());
-					chooseGrid(dimension);
+					chooseGrid(size.getValue());
 				}else{
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setContentText("Input must be a number between "+min+" and "+max);
@@ -419,6 +425,20 @@ public class Animation {
 			grid = new HexagonGridImager(setup, dimension, dimension);
 			runAnimation(grid);
 		}
+	}
+	
+	private void resetDefault(){
+		size.setValue(dimension);
+		try {
+			parser.setColor(colorType.getItems().get(0));
+			colorType.setValue(colorType.getItems().get(0));
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		check.setSelected(false);
+		grid = new SquareGridImager(setup, dimension, dimension);
+		gridShape.setValue(gridShape.getItems().get(0));
 	}
 
 }
