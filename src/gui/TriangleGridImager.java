@@ -39,7 +39,7 @@ public class TriangleGridImager extends GridImager {
 	}
 
 	@Override
-	protected void updateGroup(Group group, Grid grid) {
+	public void updateGroup(Group group, Grid grid) {
 		group.getChildren().clear();
 		for(Coordinate c : grid.getCoordinates()) {
 			Polygon p = makeTriangle(c.getRow(), c.getCol());

@@ -39,7 +39,7 @@ public class HexagonGridImager extends GridImager {
 	}
 
 	@Override
-	protected void updateGroup(Group group, Grid grid) {
+	public void updateGroup(Group group, Grid grid) {
 		group.getChildren().clear();
 		for(Coordinate c : grid.getCoordinates()) {
 			Polygon p = makeHexagon(c.getRow(), c.getCol(), Math.abs(c.getRow()%2) == 1);

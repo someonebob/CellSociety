@@ -13,7 +13,7 @@ import java.util.TreeMap;
 
 public abstract class Neighborhood {
 	private Map<Coordinate, Cell> neighborhood;
-	public int xOffset, yOffset; // TODO SWITCH TO PRIVATE AFTER DEBUGGING
+	private Coordinate offset;
 	
 	/**
 	 * Constructs a new empty neighborhood of null cells. To add a cell, use "set" method
@@ -31,8 +31,7 @@ public abstract class Neighborhood {
 	 * @param col
 	 */
 	public void setCenter(Cell cell, Coordinate c){
-		xOffset = c.getCol();
-		yOffset = c.getRow();
+		offset = new Coordinate(c.getRow(), c.getCol());
 		neighborhood.put(new Coordinate(0, 0), cell);
 	}
 	
@@ -44,7 +43,7 @@ public abstract class Neighborhood {
 	 * @param c 
 	 */
 	public void set(Cell cell, Coordinate c){
-		neighborhood.put(new Coordinate(c.getRow() - yOffset, c.getCol() - xOffset), cell);
+		neighborhood.put(c.subtract(offset), cell);
 	}
 	
 	/**

@@ -114,6 +114,7 @@ public class Animation {
 	
 	private void setupControls() {		
 		Button menu = makeMenuButton();
+		Button noo = makeNewButton();
 		Button step = makeStepButton();		
 		Button playPause = makePlayPauseButton();
 		Button reset = makeResetButton();		
@@ -122,7 +123,7 @@ public class Animation {
 		toolBar = new ToolBar();
 		toolBar.setLayoutY(screen.getMinY());
 		toolBar.setPrefWidth(screen.getWidth());
-		toolBar.getItems().addAll(menu, step, playPause, reset, slider);
+		toolBar.getItems().addAll(menu, noo, step, playPause, reset, slider);
 		root.setTop(toolBar);
 	}
 	
@@ -178,10 +179,19 @@ public class Animation {
 	
 	private Button makeMenuButton() {
 		Button menu = new Button(RESOURCES.getString("menu"));
-		Menu newMenu = new Menu(window);
 		menu.setOnMouseClicked(e -> {
 			animation.stop();
-			window.setScene(newMenu.initialize());
+			window.setScene(new Menu(window).initialize());
+		});
+		return menu;
+	}
+	
+	private Button makeNewButton() {
+		Button menu = new Button(RESOURCES.getString("new"));
+		menu.setOnMouseClicked(e -> {
+			Stage stage = new Stage();
+			stage.setScene(new Menu(stage).initialize());
+			stage.show();
 		});
 		return menu;
 	}
