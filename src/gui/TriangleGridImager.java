@@ -42,7 +42,7 @@ public class TriangleGridImager extends GridImager {
 	protected void updateGroup(Group group, Grid grid) {
 		group.getChildren().clear();
 		for(Coordinate c : grid.getCoordinates()) {
-			Polygon p = makeTriangle(c.getRow(), c.getCol(), Math.abs((c.getRow()+1)%4) > 1, Math.abs(c.getRow()%2) == 0);
+			Polygon p = makeTriangle(c.getRow(), c.getCol());
 			p.setFill(Color.web(grid.getCell(c).getCurrentState().getColor()));
 			p.setOnMouseClicked(e -> {
 				System.out.println(c);
@@ -51,12 +51,12 @@ public class TriangleGridImager extends GridImager {
 		}
 	}
 	
-	private Polygon makeTriangle(int row, int col, boolean leftShift, boolean pointUp) {
-		double mainX = col*sideLength + ((leftShift)? sideLength/2 : 0);
-		double mainY = (row/2)*sideLength*Math.cos(Math.toRadians(30));
+	private Polygon makeTriangle(int row, int col) {
+		double mainX = col*sideLength/2;
+		double mainY = row*sideLength*Math.cos(Math.toRadians(30));
 		double middleCornerX = mainX + sideLength / 2;
 		double height = sideLength*Math.cos(Math.toRadians(30));
-		if(pointUp) {
+		if(Math.abs((col + row)%2) == 0) {
 			return new Polygon(mainX, mainY, mainX + sideLength, mainY, middleCornerX, mainY + height);
 		}
 		else {
