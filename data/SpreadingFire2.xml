@@ -7,7 +7,7 @@
 	<cyclesPerTick>1</cyclesPerTick>
 
 	<parameters>
-		<probCatch>55</probCatch>
+		<probCatch type="Percentage" minconstraint="0" maxconstraint="100" >55</probCatch>
 	</parameters>
 
 	<stateDef ref="e" color="yellow">empty</stateDef>
