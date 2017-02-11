@@ -42,6 +42,14 @@ public class Coordinate implements Comparable<Coordinate> {
 		return new Coordinate(this.getRow() + other.getRow(), this.getCol() + other.getCol());
 	}
 	
+	/**
+	 * Returns difference of two coordinates.
+	 * Parameter is assumed right side of subtraction
+	 */
+	public Coordinate subtract(Coordinate other){
+		return add(new Coordinate(-other.getRow(), -other.getCol()));
+	}
+	
 	@Override
 	public int compareTo(Coordinate other) {
 		int diff = this.row - other.row;
