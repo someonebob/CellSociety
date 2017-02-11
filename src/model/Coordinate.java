@@ -5,7 +5,7 @@ package model;
  * @author Nathaniel
  */
 public class Coordinate implements Comparable<Coordinate> {
-	int row, col;
+	private int row, col;
 
 	/**
 	 * Creates a new coordinate pair.
@@ -33,6 +33,15 @@ public class Coordinate implements Comparable<Coordinate> {
 		return col;
 	}
 
+	
+	/**
+	 * Returns sum of two coordinates
+	 * add rows, add columns
+	 */
+	public Coordinate add(Coordinate other){
+		return new Coordinate(this.getRow() + other.getRow(), this.getCol() + other.getCol());
+	}
+	
 	@Override
 	public int compareTo(Coordinate other) {
 		int diff = this.row - other.row;

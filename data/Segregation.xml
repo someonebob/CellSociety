@@ -3,6 +3,7 @@
 
 	<title>Segregation</title>
 	<author>Dhruv Patel</author>
+	<gridType>rectangular</gridType>
 	
 	<cyclesPerTick>1</cyclesPerTick>
 	

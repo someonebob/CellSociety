@@ -20,6 +20,15 @@ public class TriangleGridImager extends GridImager {
 	public TriangleGridImager(File setupInfo, double width, double height) {
 		super(setupInfo, width, height);
 	}
+	
+	/**
+	 * Chooses correct grid type depending on Grid Imager type
+	 * @param setupInfo setup file for grid
+	 */
+	@Override
+	public Grid makeGrid(File setupInfo) {
+		return new Grid(setupInfo, "triangular");
+	}
 
 	@Override
 	public void setCellSize(Grid grid, double gridHeight, double gridWidth) {

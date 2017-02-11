@@ -2,6 +2,8 @@ package simulation;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import model.Cell;
 import model.Neighborhood;
 import model.Rules;
 import model.State;
@@ -76,17 +78,10 @@ public class FireRules extends Rules {
 
 	private ArrayList<FireState> getStatesAround(Neighborhood hood) {
 		ArrayList<FireState> states = new ArrayList<FireState>();
-		if (hood.get(0, 1) != null){
-			states.add((FireState) hood.get(0, 1).getCurrentState());
-		}
-		if (hood.get(1, 0) != null){
-			states.add((FireState) hood.get(1, 0).getCurrentState());
-		}
-		if (hood.get(1, 2) != null){
-			states.add((FireState) hood.get(1, 2).getCurrentState());
-		}
-		if (hood.get(2, 1) != null){
-			states.add((FireState) hood.get(2, 1).getCurrentState());
+
+		for(Cell neighbor : hood.getAdjacent()){
+			if(neighbor != null) states.add((FireState) neighbor.getCurrentState());
+
 		}
 		return states;
 	}

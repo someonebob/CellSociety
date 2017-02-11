@@ -1,5 +1,5 @@
 /**
- * Creates a Cellular Automaton. Cell has knowledge of rules
+- * Creates a Cellular Automaton. Cell has knowledge of rules
  * and its neighbors, but not the entire grid of cells.
  * @author DhruvKPatel
  */

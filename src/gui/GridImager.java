@@ -22,10 +22,12 @@ public abstract class GridImager {
 	 */
 	public GridImager(File setupInfo, double width, double height) {
 		myGroup = new Group();
-		myGrid = new Grid(setupInfo);
+		myGrid = makeGrid(setupInfo);
 		updateGroup(myGroup, myGrid);
 		setCellSize(myGrid, width, height);
 	}
+	
+	public abstract Grid makeGrid(File setupInfo);
 	
 	/**
 	 * Accesses the Group displaying all the cells.

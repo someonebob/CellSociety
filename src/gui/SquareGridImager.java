@@ -21,6 +21,15 @@ public class SquareGridImager extends GridImager {
 		super(setupInfo, width, height);
 	}
 	
+	/**
+	 * Chooses correct grid type depending on Grid Imager type
+	 * @param setupInfo setup file for grid
+	 */
+	@Override
+	public Grid makeGrid(File setupInfo) {
+		return new Grid(setupInfo, "square");
+	}
+	
 	@Override
 	public void setCellSize(Grid grid, double gridWidth, double gridHeight) {
 		sideLength = gridHeight/grid.getRows();
