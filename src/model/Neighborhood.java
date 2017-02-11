@@ -46,6 +46,14 @@ public abstract class Neighborhood {
 	public void set(Cell cell, Coordinate c){
 		neighborhood.put(new Coordinate(c.getRow() - yOffset, c.getCol() - xOffset), cell);
 	}
+	
+	/**
+	 * Sets cell at certain local coordinate
+	 * within neighborhood.
+	 */
+	public void setLocally(Cell cell, Coordinate c){
+		neighborhood.put(c, cell);
+	}
 		
 	/**
 	 * Returns cell at certain coordinate in neighborhood

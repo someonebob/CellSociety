@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import model.Cell;
+import model.Coordinate;
 import model.Neighborhood;
 import model.Rules;
 import model.State;
@@ -34,6 +35,11 @@ public class FireRules extends Rules {
 	@Override
 	public State getStartingState(String stateText) {
 		return new FireState(configuration, stateText);
+	}
+	
+	@Override
+	public State getDefaultState(){
+		return new FireState(configuration, "tree");
 	}
 
 	@Override
@@ -78,7 +84,6 @@ public class FireRules extends Rules {
 
 	private ArrayList<FireState> getStatesAround(Neighborhood hood) {
 		ArrayList<FireState> states = new ArrayList<FireState>();
-
 		for(Cell neighbor : hood.getAdjacent()){
 			if(neighbor != null) states.add((FireState) neighbor.getCurrentState());
 

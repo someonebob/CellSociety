@@ -24,6 +24,10 @@ public class SegregationRules extends Rules{
 	public State getStartingState(String stateText) {
 		return new State(configuration, stateText);
 	}
+	
+	public State getDefaultState(){
+		return new State(configuration, VACANT);
+	}
 
 	public State getNewState(Neighborhood neighborhood) {
 		me = neighborhood.getCenter();

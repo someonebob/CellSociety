@@ -16,6 +16,13 @@ public class Coordinate implements Comparable<Coordinate> {
 		this.row = row;
 		this.col = col;
 	}
+	
+	/**
+	 * Constructs a copy of a coordinate
+	 */
+	public Coordinate(Coordinate c){
+		this(c.getRow(), c.getCol());
+	}
 
 	/**
 	 * Gets the x coordinate
@@ -41,7 +48,7 @@ public class Coordinate implements Comparable<Coordinate> {
 	public Coordinate add(Coordinate other){
 		return new Coordinate(this.getRow() + other.getRow(), this.getCol() + other.getCol());
 	}
-	
+
 	/**
 	 * Returns difference of two coordinates.
 	 * Parameter is assumed right side of subtraction
