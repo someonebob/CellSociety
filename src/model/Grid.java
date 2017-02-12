@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import model.Neighborhoods.NeighborhoodLoader;
 import xml.XMLParser;
 
 /**

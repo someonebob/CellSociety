@@ -30,9 +30,9 @@
 		</invert>
 	</scheme>
 
-	<stateDef color="yellow" ref="e">empty</stateDef>
-	<stateDef color="green" ref="t">tree</stateDef>
-	<stateDef color="red" ref="b">burning</stateDef>
+	<stateDef color="green" ref="e">empty</stateDef>
+	<stateDef color="red" ref="t">tree</stateDef>
+	<stateDef color="yellow" ref="b">burning</stateDef>
 
 	
 	<state>

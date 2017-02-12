@@ -1,7 +1,11 @@
-package model;
+package model.Neighborhoods;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import model.Cell;
+import model.Coordinate;
+import model.Neighborhood;
 
 public class TriangularNeighborhood extends Neighborhood {
 	private boolean cellIsUpsideDown;

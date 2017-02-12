@@ -1,6 +1,8 @@
-package model;
+package model.Neighborhoods;
 
 import java.util.HashMap;
+
+import model.Neighborhood;
 
 public class NeighborhoodLoader {	
 	public Neighborhood getNeighborhood(String gridType){
