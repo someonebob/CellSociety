@@ -52,14 +52,6 @@ public class Menu {
 	}
 	
 	/**
-	 * Returns the file that was selected in the File Chooser
-	 * @return selected file
-	 */
-	public File getFile(){	
-		return selectedFile;
-	}
-	
-	/**
 	 * Creates the background image for the titlescreen
 	 */
 	private void setupBackground(){
@@ -116,8 +108,7 @@ public class Menu {
 	private void loadButtonAction(FileChooser chooser){
 		selectedFile = chooser.showOpenDialog(window);		
 		if(selectedFile != null){
-			Animation animation = new Animation(window, selectedFile);
-			window.setScene(animation.initialize());			
+			new Animation(window, selectedFile).startAnimation();
 		}	 
 	}
 	
