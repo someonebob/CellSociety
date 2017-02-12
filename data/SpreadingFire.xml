@@ -7,7 +7,7 @@
 	<cyclesPerTick>1</cyclesPerTick>
 
 	<parameters>
-		<probCatch maxconstraint="100" minconstraint="0" type="Percentage">55</probCatch>
+		<probCatch maxconstraint="100" minconstraint="0" type="Percentage">40</probCatch>
 	</parameters>
 
 	<scheme>

@@ -62,6 +62,7 @@ public class Animation {
 	private GridPane gridPane;
 	private double dimension;
 	private ComboBox<String> gridShape;
+	private ComboBox<String> edgeType;
 	private CheckBox check;
 	private Slider size;
 	private ComboBox<String> colorType;
@@ -83,7 +84,7 @@ public class Animation {
 	 */
 	public Scene initialize() {
 		dimension = screen.getHeight() - 70;
-		grid = new SquareGridImager(setup, dimension, dimension);
+		grid = new SquareGridImager(setup, dimension, dimension, "default");
 		setupControls();
 		setupSideMenu();
 		window.setOnCloseRequest(e -> {
@@ -240,7 +241,7 @@ public class Animation {
 	private void restartAnimation() {
 		boolean wasPlaying = animation.getCurrentRate() != 0;
 		animation.stop();
-		grid.reset(check.isSelected());
+		grid.reset(check.isSelected(), edgeType.getValue());
 		setupAnimation(grid);
 		if(wasPlaying) {
 			animation.play();
@@ -299,14 +300,14 @@ public class Animation {
 		Label gridEdge = new Label("Grid Edge Type");
 		GridPane.setConstraints(gridEdge, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		
-		ComboBox<String> edgeType = new ComboBox<>();
+		edgeType = new ComboBox<>();
 		GridPane.setConstraints(edgeType, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		edgeType.getItems().addAll("Finite", "Toroidal", "Infinite");
 		edgeType.setPromptText(edgeType.getItems().get(0));
 		
 		edgeType.setOnAction(e -> {
-			
+			chooseGrid(size.getValue());
 		});
 
 		gridPane.getChildren().addAll(gridEdge, edgeType);
@@ -450,15 +451,15 @@ public class Animation {
 		animation.stop();
 
 		if(gridShape.getValue().equals(gridShape.getItems().get(0))){
-			grid = new SquareGridImager(setup, dimension, dimension);
+			grid = new SquareGridImager(setup, dimension, dimension, edgeType.getValue());
 			restartAnimation();
 		}
 		if(gridShape.getValue().equals(gridShape.getItems().get(1))){
-			grid = new TriangleGridImager(setup, dimension, dimension);
+			grid = new TriangleGridImager(setup, dimension, dimension, edgeType.getValue());
 			restartAnimation();
 		}
 		if(gridShape.getValue().equals(gridShape.getItems().get(2))){
-			grid = new HexagonGridImager(setup, dimension, dimension);
+			grid = new HexagonGridImager(setup, dimension, dimension, edgeType.getValue());
 			restartAnimation();
 		}
 	}
@@ -474,7 +475,7 @@ public class Animation {
 			alert.showAndWait();
 		}
 		check.setSelected(false);
-		grid = new SquareGridImager(setup, dimension, dimension);
+		grid = new SquareGridImager(setup, dimension, dimension, "Finite");
 		gridShape.setValue(gridShape.getItems().get(0));
 	}
 

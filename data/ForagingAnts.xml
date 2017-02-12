@@ -1,0 +1,42 @@
+<CA>
+	<subclass>simulation.ForagingAnts.ForagingAntRules</subclass>
+
+	<title>Foraging Ants</title>
+	<author>Dhruv Patel</author>
+	
+	<cyclesPerTick>1</cyclesPerTick>
+
+	<stateDef ref="h" color="yellow">home</stateDef>
+	<stateDef ref="f" color="orange">food</stateDef>
+	<stateDef ref="e" color="gray">empty-food</stateDef>
+	<stateDef ref="x" color="white">empty</stateDef>
+	<stateDef ref="o" color="violet">obstacle</stateDef>
+	<stateDef ref="a" color="black">ant</stateDef>
+	
+	
+	<state>
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x o x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x h h h h x x x x x x x x x x x x x x f f f x x x
+	x x x h h h h x x x x x x x x x x x x x x f f f x x x
+	x x x h h h h x x x x x x o x x x x x x x f f f x x x
+	x x x h h h h x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x o x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x
+	x x x x x x x x x x x x x x x x x x x x x x x x x x x	
+	</state>
+</CA>

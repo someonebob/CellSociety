@@ -92,6 +92,14 @@ public class Cell {
 	}
 	
 	/**
+	 * Swaps cells in next frame of simulation by setting future states
+	 */
+	public void swapWith(Cell other){
+		this.setFutureState(other.getCurrentState());		
+		other.setFutureState(this.getCurrentState());
+	}
+	
+	/**
 	 * Returns cell's current state formatted for printing
 	 * @return cell's current state formatted for printing
 	 */
