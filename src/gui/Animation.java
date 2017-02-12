@@ -10,7 +10,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
@@ -22,7 +21,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -55,13 +55,16 @@ public class Animation {
 	private Timeline animation;
 	private BorderPane root;
 	private ToolBar toolBar;
-	private boolean isPlaying;
 	private GridImager grid;
 	private VBox sideBox;
 	private XMLParser parser;
+	private ScrollPane scroll;
 	private GridPane gridPane;
 	private double dimension;
 	private ComboBox<String> gridShape;
+	private CheckBox check;
+	private Slider size;
+	private ComboBox<String> colorType;
 	
 	/**
 	 * Initializes the Scene and Group for the animation.
@@ -70,7 +73,7 @@ public class Animation {
 		setup = setupInfo;
 		screen = Screen.getPrimary().getVisualBounds();
 		root = new BorderPane();
-		simulation = new Scene(root);
+		simulation = new Scene(root, screen.getWidth(), screen.getHeight());
 		this.window = window;
 		}
 	
@@ -83,7 +86,9 @@ public class Animation {
 		grid = new SquareGridImager(setup, dimension, dimension);
 		setupControls();
 		setupSideMenu();
-		setupScrolling();
+		window.setOnCloseRequest(e -> {
+			resetDefault();
+		});
 		runAnimation(grid);
 		return simulation;
 	}
@@ -95,31 +100,34 @@ public class Animation {
 	public void runAnimation(GridImager imager) {	
 		setupAnimation(imager);
 		animation.play();
-		isPlaying = true;
 		window.setMaximized(true);
 	}
 	
 	private void setupAnimation(GridImager imager) {
 		Group g = imager.getGroup();
-		root.setCenter(g);
+		scroll = new ScrollPane();
+		scroll.setContent(g);
+		scroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		scroll.setHbarPolicy(ScrollBarPolicy.ALWAYS);
+		
+		root.setCenter(scroll);
+		
+		
 		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/DEFAULT_FPS), e -> {
-			imager.nextFrame();
+			double scrollHVal = scroll.getHvalue();
+			double scrollVVal = scroll.getVvalue();
+			imager.nextFrame(check.isSelected());
+			scroll.setHvalue(scrollHVal);
+			scroll.setVvalue(scrollVVal);
 		});
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
 	}
 	
-	private void setupScrolling(){
-		ScrollBar vertical = new ScrollBar();
-		vertical.setOrientation(Orientation.VERTICAL);
-		root.setRight(vertical);
-		
-		ScrollBar horizontal = new ScrollBar();
-		root.setBottom(horizontal);
-	}
 	
 	private void setupControls() {		
+		Button side = makeSideButton();
 		Button menu = makeMenuButton();
 		Button noo = makeNewButton();
 		Button step = makeStepButton();		
@@ -130,7 +138,7 @@ public class Animation {
 		toolBar = new ToolBar();
 		toolBar.setLayoutY(screen.getMinY());
 		toolBar.setPrefWidth(screen.getWidth());
-		toolBar.getItems().addAll(menu, noo, step, playPause, reset, slider);
+		toolBar.getItems().addAll(side, menu, noo, step, playPause, reset, slider);
 		root.setTop(toolBar);
 	}
 	
@@ -156,7 +164,9 @@ public class Animation {
 	private Button makeResetButton() {
 		Button reset = new Button(RESOURCES.getString("reset"));
 		reset.setOnMouseClicked(e -> {
-			chooseGrid(dimension);
+			animation.stop();
+			resetDefault();
+			runAnimation(grid);
 		});
 		return reset;
 	}
@@ -164,15 +174,13 @@ public class Animation {
 	private Button makePlayPauseButton() {
 		Button playPause = new Button(RESOURCES.getString("pause"));
 		playPause.setOnMouseClicked(e -> {
-			if(isPlaying) {
+			if(animation.getCurrentRate() != 0) {
 				animation.pause();
 				playPause.setText(RESOURCES.getString("play"));
-				isPlaying = false;
 			}
 			else {
 				animation.play();
 				playPause.setText(RESOURCES.getString("pause"));
-				isPlaying = true;
 			}
 		});
 		return playPause;
@@ -180,7 +188,7 @@ public class Animation {
 	
 	private Button makeStepButton() {
 		Button step = new Button(RESOURCES.getString("step"));
-		step.setOnMouseClicked(e -> grid.nextFrame());
+		step.setOnMouseClicked(e -> grid.nextFrame(check.isSelected()));
 		return step;
 	}
 	
@@ -201,6 +209,23 @@ public class Animation {
 			stage.show();
 		});
 		return menu;
+	}
+	
+	private Button makeSideButton() {
+		Button side = new Button(RESOURCES.getString("sideIn"));
+		side.setOnMouseClicked(e -> {
+			if(sideBox.isVisible()) {
+				sideBox.setVisible(false);
+				root.setLeft(null);
+				side.setText(RESOURCES.getString("sideOut"));
+			}
+			else {
+				sideBox.setVisible(true);
+				root.setLeft(sideBox);
+				side.setText(RESOURCES.getString("sideIn"));
+			}
+		});
+		return side;
 	}
 	
 	
@@ -238,7 +263,7 @@ public class Animation {
 		gridPane.setHgap(10);
 		gridPane.setVgap(20);
 		
-		makeCellTypeControl();
+		makeGridEdgeControl();
 		makeGridTypeControl();
 		makeCellSizeControl();
 		makeOutlinesControl();
@@ -251,14 +276,21 @@ public class Animation {
 	/**
 	 * Changes the shape within the cell
 	 */
-	private void makeCellTypeControl(){
-		Label cellType = new Label("Cell Type");
-		GridPane.setConstraints(cellType, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
+	private void makeGridEdgeControl(){
+		Label gridEdge = new Label("Grid Edge Type");
+		GridPane.setConstraints(gridEdge, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		
-		ComboBox<String> type = new ComboBox<>();
-		GridPane.setConstraints(type, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
+		ComboBox<String> edgeType = new ComboBox<>();
+		GridPane.setConstraints(edgeType, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
+		
+		edgeType.getItems().addAll("Finite", "Toroidal", "Infinite");
+		edgeType.setPromptText(edgeType.getItems().get(0));
+		
+		edgeType.setOnAction(e -> {
+			
+		});
 
-		gridPane.getChildren().addAll(cellType, type);
+		gridPane.getChildren().addAll(gridEdge, edgeType);
 	}
 	/**
 	 * Allows user to choose square, triangular, or hexagonal grid
@@ -273,7 +305,7 @@ public class Animation {
 		GridPane.setConstraints(gridShape, 1, 1, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		gridShape.setOnAction(e -> {
-			chooseGrid(dimension);
+			chooseGrid(size.getValue());
 		});
 		
 		gridPane.getChildren().addAll(gridType, gridShape);
@@ -286,7 +318,7 @@ public class Animation {
 		Label cellSize = new Label("Cell Size");
 		GridPane.setConstraints(cellSize, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
 
-		Slider size = new Slider(dimension/10, dimension*4, dimension);
+		size = new Slider(dimension/10, dimension*4, dimension);
 		GridPane.setConstraints(size, 1, 2, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		size.setOnMouseReleased(e -> chooseGrid(size.getValue()));
@@ -301,8 +333,7 @@ public class Animation {
 		Label outlines = new Label("Outlines");
 		GridPane.setConstraints(outlines, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
 
-		CheckBox check = new CheckBox();
-		check.setSelected(true);
+		check = new CheckBox();
 		GridPane.setConstraints(check, 1, 3, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		gridPane.getChildren().addAll(outlines, check);
@@ -315,21 +346,21 @@ public class Animation {
 		Label color = new Label("Color Scheme");
 		GridPane.setConstraints(color, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
 		
-		ComboBox<String> type = new ComboBox<>();
-		GridPane.setConstraints(type, 1, 4, 2, 1, HPos.RIGHT, VPos.CENTER);
+		colorType = new ComboBox<>();
+		GridPane.setConstraints(colorType, 1, 4, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
-		fillComboBox(type, "scheme");
+		fillComboBox(colorType, "scheme");
 		
-		type.setOnAction(event -> {
+		colorType.setOnAction(event -> {
 			try {
-				parser.setColor(type.getValue());
+				parser.setColor(colorType.getValue());
 			} catch (TransformerException e) {
 				
 			}
-			chooseGrid(dimension);
+			chooseGrid(size.getValue());
 		});
 		
-		gridPane.getChildren().addAll(color, type);
+		gridPane.getChildren().addAll(color, colorType);
 	}
 	
 	/**
@@ -360,7 +391,7 @@ public class Animation {
 				int max = Integer.parseInt(parser.getParameterAttribute(type.getValue(), "maxconstraint"));
 				if(value >= min && value <= max){
 					parser.setParameter(type.getValue(), input.getText());
-					chooseGrid(dimension);
+					chooseGrid(size.getValue());
 				}else{
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setContentText("Input must be a number between "+min+" and "+max);
@@ -411,6 +442,21 @@ public class Animation {
 			grid = new HexagonGridImager(setup, dimension, dimension);
 			runAnimation(grid);
 		}
+	}
+	
+	private void resetDefault(){
+		size.setValue(dimension);
+		try {
+			parser.setColor(colorType.getItems().get(0));
+			colorType.setValue(colorType.getItems().get(0));
+		} catch (TransformerException e) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Cannot write color specified to XML file");
+			alert.showAndWait();
+		}
+		check.setSelected(false);
+		grid = new SquareGridImager(setup, dimension, dimension);
+		gridShape.setValue(gridShape.getItems().get(0));
 	}
 
 }
