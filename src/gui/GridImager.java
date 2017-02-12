@@ -13,6 +13,7 @@ public abstract class GridImager {
 	
 	private Group myGroup;
 	private Grid myGrid;
+	private File mySetup;
 	
 	/**
 	 * Sets up the Grid and Group for the simulation
@@ -23,8 +24,9 @@ public abstract class GridImager {
 	public GridImager(File setupInfo, double width, double height) {
 		myGroup = new Group();
 		myGrid = makeGrid(setupInfo);
-		updateGroup(myGroup, myGrid, false);
+		mySetup = setupInfo;
 		setCellSize(myGrid, width, height);
+		updateGroup(myGroup, myGrid, false);
 	}
 		
 	/**
@@ -42,6 +44,12 @@ public abstract class GridImager {
 	public void nextFrame(boolean outline) {
 		myGrid.nextFrame();
 		updateGroup(myGroup, myGrid, outline);
+	}
+	
+	public void reset(boolean outline) {
+		myGrid = makeGrid(mySetup);
+		updateGroup(myGroup, myGrid, outline);
+
 	}
 	
 	/**
@@ -65,4 +73,5 @@ public abstract class GridImager {
 	 * @param grid the Grid being used.
 	 */
 	public abstract void updateGroup(Group group, Grid grid, boolean outline);
+	
 }

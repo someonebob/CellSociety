@@ -123,7 +123,6 @@ public class Animation {
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
-		imager.nextFrame(check.isSelected());
 	}
 	
 	
@@ -133,13 +132,14 @@ public class Animation {
 		Button noo = makeNewButton();
 		Button step = makeStepButton();		
 		Button playPause = makePlayPauseButton();
+		Button restart = makeRestartButton();
 		Button reset = makeResetButton();		
 		Slider slider = makeFPSSlider();
 		
 		toolBar = new ToolBar();
 		toolBar.setLayoutY(screen.getMinY());
 		toolBar.setPrefWidth(screen.getWidth());
-		toolBar.getItems().addAll(side, menu, noo, step, playPause, reset, slider);
+		toolBar.getItems().addAll(side, menu, noo, step, playPause, reset, restart, slider);
 		root.setTop(toolBar);
 	}
 	
@@ -165,15 +165,18 @@ public class Animation {
 	private Button makeResetButton() {
 		Button reset = new Button(RESOURCES.getString("reset"));
 		reset.setOnMouseClicked(e -> {
-			boolean wasPlaying = animation.getCurrentRate() != 0;
-			animation.stop();
 			resetDefault();
-			setupAnimation(grid);
-			if(wasPlaying) {
-				animation.play();
-			}
+			restartAnimation();
 		});
 		return reset;
+	}
+	
+	private Button makeRestartButton() {
+		Button restart = new Button(RESOURCES.getString("restart"));
+		restart.setOnMouseClicked(e -> {
+			restartAnimation();
+		});
+		return restart;
 	}
 	
 	private Button makePlayPauseButton() {
@@ -201,6 +204,7 @@ public class Animation {
 		Button menu = new Button(RESOURCES.getString("menu"));
 		menu.setOnMouseClicked(e -> {
 			animation.stop();
+			resetDefault();
 			window.setScene(new Menu(window).initialize());
 		});
 		return menu;
@@ -231,6 +235,16 @@ public class Animation {
 			}
 		});
 		return side;
+	}
+	
+	private void restartAnimation() {
+		boolean wasPlaying = animation.getCurrentRate() != 0;
+		animation.stop();
+		grid.reset(check.isSelected());
+		setupAnimation(grid);
+		if(wasPlaying) {
+			animation.play();
+		}
 	}
 	
 	
@@ -437,15 +451,15 @@ public class Animation {
 
 		if(gridShape.getValue().equals(gridShape.getItems().get(0))){
 			grid = new SquareGridImager(setup, dimension, dimension);
-			setupAnimation(grid);
+			restartAnimation();
 		}
 		if(gridShape.getValue().equals(gridShape.getItems().get(1))){
 			grid = new TriangleGridImager(setup, dimension, dimension);
-			setupAnimation(grid);
+			restartAnimation();
 		}
 		if(gridShape.getValue().equals(gridShape.getItems().get(2))){
 			grid = new HexagonGridImager(setup, dimension, dimension);
-			setupAnimation(grid);
+			restartAnimation();
 		}
 	}
 	
