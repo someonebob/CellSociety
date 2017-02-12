@@ -13,6 +13,7 @@ public abstract class GridImager {
 	
 	private Group myGroup;
 	private Grid myGrid;
+	private File mySetup;
 	
 	/**
 	 * Sets up the Grid and Group for the simulation
@@ -20,11 +21,12 @@ public abstract class GridImager {
 	 * @param width the width of the grid representation on screen.
 	 * @param height the height of the grid representation on screen.
 	 */
-	public GridImager(File setupInfo, double width, double height) {
+	public GridImager(File setupInfo, double width, double height, String edgeType) {
 		myGroup = new Group();
-		myGrid = makeGrid(setupInfo);
-		updateGroup(myGroup, myGrid, false);
+		myGrid = makeGrid(setupInfo, edgeType);
+		mySetup = setupInfo;
 		setCellSize(myGrid, width, height);
+		updateGroup(myGroup, myGrid, false);
 	}
 		
 	/**
@@ -44,12 +46,18 @@ public abstract class GridImager {
 		updateGroup(myGroup, myGrid, outline);
 	}
 	
+	public void reset(boolean outline, String edgeType) {
+		myGrid = makeGrid(mySetup, edgeType);
+		updateGroup(myGroup, myGrid, outline);
+
+	}
+	
 	/**
 	 * Makes a specific grid based on the shape of the cell.
 	 * @param setupInfo File containing setup information.
 	 * @return the Grid.
 	 */
-	public abstract Grid makeGrid(File setupInfo);
+	public abstract Grid makeGrid(File setupInfo, String edgeType);
 		
 	/**
 	 * Updates the cell size in the grid display to fit the specified total grid dimensions.
@@ -65,4 +73,5 @@ public abstract class GridImager {
 	 * @param grid the Grid being used.
 	 */
 	public abstract void updateGroup(Group group, Grid grid, boolean outline);
+	
 }

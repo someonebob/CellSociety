@@ -7,6 +7,7 @@ import simulation.FireRules;
 import simulation.LifeRules;
 import simulation.SegregationRules;
 import simulation.WaTorRules;
+import simulation.ForagingAnts.ForagingAntRules;
 import xml.XMLException;
 import xml.XMLParser;
 
@@ -72,6 +73,9 @@ public class RulesLoader {
 		} catch (XMLException e) {}
 		try {
 			options.add(new SegregationRules(config));
+		} catch (XMLException e) {}
+		try {
+			options.add(new ForagingAntRules(config));
 		} catch (XMLException e) {}
 		return options;
 	}	

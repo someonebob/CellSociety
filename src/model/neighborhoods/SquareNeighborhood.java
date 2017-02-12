@@ -1,7 +1,10 @@
-package model;
+package model.neighborhoods;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import model.Coordinate;
+import model.Neighborhood;
 
 public class SquareNeighborhood extends Neighborhood {
 
