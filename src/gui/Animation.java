@@ -43,7 +43,7 @@ import xml.XMLParser;
 public class Animation {
 	
 	private static final double MIN_FPS = 0.1;
-	private static final double MAX_FPS = 20;
+	private static final double MAX_FPS = 10;
 	private static final double DEFAULT_FPS = 4;
     public static final ResourceBundle RESOURCES = 
     		ResourceBundle.getBundle("resourcefiles/Animation");
@@ -82,7 +82,7 @@ public class Animation {
 	 * @return the Scene with everything in it.
 	 */
 	public Scene initialize() {
-		dimension = screen.getHeight() - 60;
+		dimension = screen.getHeight() - 70;
 		grid = new SquareGridImager(setup, dimension, dimension);
 		setupControls();
 		setupSideMenu();
@@ -123,6 +123,7 @@ public class Animation {
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
+		imager.nextFrame(check.isSelected());
 	}
 	
 	
@@ -164,9 +165,13 @@ public class Animation {
 	private Button makeResetButton() {
 		Button reset = new Button(RESOURCES.getString("reset"));
 		reset.setOnMouseClicked(e -> {
+			boolean wasPlaying = animation.getCurrentRate() != 0;
 			animation.stop();
 			resetDefault();
-			runAnimation(grid);
+			setupAnimation(grid);
+			if(wasPlaying) {
+				animation.play();
+			}
 		});
 		return reset;
 	}
@@ -432,15 +437,15 @@ public class Animation {
 
 		if(gridShape.getValue().equals(gridShape.getItems().get(0))){
 			grid = new SquareGridImager(setup, dimension, dimension);
-			runAnimation(grid);
+			setupAnimation(grid);
 		}
 		if(gridShape.getValue().equals(gridShape.getItems().get(1))){
 			grid = new TriangleGridImager(setup, dimension, dimension);
-			runAnimation(grid);
+			setupAnimation(grid);
 		}
 		if(gridShape.getValue().equals(gridShape.getItems().get(2))){
 			grid = new HexagonGridImager(setup, dimension, dimension);
-			runAnimation(grid);
+			setupAnimation(grid);
 		}
 	}
 	
