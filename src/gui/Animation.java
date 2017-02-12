@@ -460,8 +460,10 @@ public class Animation {
 	private void resetDefault(){
 		size.setValue(dimension);
 		try {
-			parser.setColor(colorType.getItems().get(0));
-			colorType.setValue(colorType.getItems().get(0));
+			if(colorType.getItems().size() != 0){
+				parser.setColor(colorType.getItems().get(0));
+			}
+			colorType.getSelectionModel().selectFirst();
 		} catch (TransformerException e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Cannot write color specified to XML file");
