@@ -350,6 +350,7 @@ public class Animation {
 		GridPane.setConstraints(colorType, 1, 4, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		fillComboBox(colorType, "scheme");
+		colorType.setValue(colorType.getItems().get(0));
 		
 		colorType.setOnAction(event -> {
 			try {
