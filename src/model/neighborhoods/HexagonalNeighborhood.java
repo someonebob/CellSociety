@@ -1,7 +1,11 @@
-package model;
+package model.neighborhoods;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import model.Cell;
+import model.Coordinate;
+import model.Neighborhood;
 
 public class HexagonalNeighborhood extends Neighborhood {
 	private int columnwiseOffset;

@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import model.neighborhoods.NeighborhoodLoader;
 import xml.XMLParser;
 
 /**
@@ -19,8 +20,9 @@ public class Grid {
 	private int numRows, numCols;
 	private Coordinate min, max;
 	private int cyclesPerTick;
-	private String type;
+	private String neighborhoodType;
 	private Rules rules;
+	private Edge edgeType;
 
 	/**
 	 * Initializes the 2D Array of Cells.
@@ -28,11 +30,15 @@ public class Grid {
 	 * @param shape of grid
 	 * including grid size, rules, and starting states.
 	 */
-	public Grid(File setupInfo, String type) {
+	public Grid(File setupInfo, String neighborhoodType, String edgeType) {
 		XMLParser config = new XMLParser(setupInfo);
+		
+		this.cyclesPerTick = Integer.parseInt(config.getParameter("cyclesPerTick"));
 		this.rules = new RulesLoader(config).getRules();
-		cyclesPerTick = Integer.parseInt(config.getParameter("cyclesPerTick"));
-		this.type = type;
+
+		this.neighborhoodType = neighborhoodType;
+		this.edgeType = (new EdgeLoader()).getEdge(edgeType);
+		
 		initializeArray(config);
 		passNeighbors();
 	}
@@ -44,7 +50,7 @@ public class Grid {
 	 */
 	public void nextFrame() {
 		for(int i = 0; i < cyclesPerTick; i++) {
-//			this.connectNeighborsInfinite();
+			edgeType.onNextGridFrame(this, myCells, rules);
 			for(Cell c : myCells.values()) {
 				c.calculateFutureState();
 			}
@@ -106,11 +112,11 @@ public class Grid {
 	/**
 	 * Passes each Cell in the 2D array the cells directly next to it.
 	 */
-	private void passNeighbors() {
+	public void passNeighbors() {
 		NeighborhoodLoader gridTypeSelector = new NeighborhoodLoader();
 
 		for(Coordinate c : myCells.keySet()) {
-			Neighborhood neighborhood = gridTypeSelector.getNeighborhood(type);
+			Neighborhood neighborhood = gridTypeSelector.getNeighborhood(neighborhoodType);
 			
 			neighborhood.setCenter(myCells.get(c), c);
 			
@@ -120,11 +126,10 @@ public class Grid {
 			}	
 			myCells.get(c).setNeighborhood(neighborhood);
 		}
-		
-//		this.connectNeighborsToroidal();
+		edgeType.onPassGridNeighbors(this, myCells, rules);
 	}
 	
-	private void calculateGridSize(){
+	public void calculateGridSize(){
 		max = new Coordinate(0, 0);
 		min = new Coordinate(0, 0);
 		
@@ -139,52 +144,52 @@ public class Grid {
 		numRows = max.getRow() - min.getRow() + 1;
 	}
 	
-	public void connectNeighborsToroidal(){		
-		for(Coordinate globalCellPos: myCells.keySet()){
-			Cell current = myCells.get(globalCellPos);
-			for(Coordinate localNeighborPos: current.getNeighborhood().getLocalNeighborCoordinates()){
-				if(current.getNeighborhood().get(localNeighborPos) == null){	// This means that we must replace this with the toroidal neighbor
-					Coordinate toroidNeighborPos = globalCellPos.add(localNeighborPos);
-
-					int newRow = toroidNeighborPos.getRow(), newCol = toroidNeighborPos.getCol();
-					
-					if(toroidNeighborPos.getRow() >= this.getRows()) newRow = 0; // bottom -> top
-					else if(toroidNeighborPos.getRow() <= -1) newRow = getRows() - 1; // top -> bottom
-
-					if(toroidNeighborPos.getCol() >= this.getCols()) newCol = 0; // right -> left
-					else if(toroidNeighborPos.getCol() <= -1) newCol = this.getCols() - 1; // left -> right
-					
-					toroidNeighborPos = new Coordinate(newRow, newCol);
-					current.getNeighborhood().setLocally(myCells.get(toroidNeighborPos), localNeighborPos);
-				}
-			}
-		}
-	}
+//	public void connectNeighborsToroidal(){		
+//		for(Coordinate globalCellPos: myCells.keySet()){
+//			Cell current = myCells.get(globalCellPos);
+//			for(Coordinate localNeighborPos: current.getNeighborhood().getLocalNeighborCoordinates()){
+//				if(current.getNeighborhood().get(localNeighborPos) == null){	// This means that we must replace this with the toroidal neighbor
+//					Coordinate toroidNeighborPos = globalCellPos.add(localNeighborPos);
+//
+//					int newRow = toroidNeighborPos.getRow(), newCol = toroidNeighborPos.getCol();
+//					
+//					if(toroidNeighborPos.getRow() >= this.getRows()) newRow = 0; // bottom -> top
+//					else if(toroidNeighborPos.getRow() <= -1) newRow = getRows() - 1; // top -> bottom
+//
+//					if(toroidNeighborPos.getCol() >= this.getCols()) newCol = 0; // right -> left
+//					else if(toroidNeighborPos.getCol() <= -1) newCol = this.getCols() - 1; // left -> right
+//					
+//					toroidNeighborPos = new Coordinate(newRow, newCol);
+//					current.getNeighborhood().setLocally(myCells.get(toroidNeighborPos), localNeighborPos);
+//				}
+//			}
+//		}
+//	}
+//	
+//	public void connectNeighborsInfinite(){
+//		ArrayList<Coordinate> newCellPositions = new ArrayList<Coordinate>();
+//		for(Coordinate globalCellPos: myCells.keySet()){
+//			Cell current = myCells.get(globalCellPos);
+//			if(isOnEdge(globalCellPos) && !current.getCurrentState().equals(rules.getDefaultState())){ // Grid expansion is not affected by cells of default state
+//				for(Coordinate localNeighborPos : current.getNeighborhood().getLocalNeighborCoordinates()){
+//					if(current.getNeighborhood().get(localNeighborPos) == null){
+//						newCellPositions.add(globalCellPos.add(localNeighborPos));
+//					}
+//				}
+//			}
+//		}
+//		
+//		for(Coordinate newCellPos : newCellPositions){
+//			myCells.put(newCellPos, new Cell(rules, rules.getDefaultState()));
+//		}
+//		
+//		calculateGridSize();
+//		fillEmptyCells();
+//		passNeighbors();
+//	}
 	
-	public void connectNeighborsInfinite(){
-		ArrayList<Coordinate> newCellPositions = new ArrayList<Coordinate>();
-		for(Coordinate globalCellPos: myCells.keySet()){
-			Cell current = myCells.get(globalCellPos);
-			if(isOnEdge(globalCellPos) && !current.getCurrentState().equals(rules.getDefaultState())){ // Grid expansion is not affected by cells of default state
-				for(Coordinate localNeighborPos : current.getNeighborhood().getLocalNeighborCoordinates()){
-					if(current.getNeighborhood().get(localNeighborPos) == null){
-						newCellPositions.add(globalCellPos.add(localNeighborPos));
-					}
-				}
-			}
-		}
-		
-		for(Coordinate newCellPos : newCellPositions){
-			myCells.put(newCellPos, new Cell(rules, rules.getDefaultState()));
-		}
-		
-		calculateGridSize();
-		fillEmptyCells();
-		passNeighbors();
-	}
 	
-	
-	private void fillEmptyCells(){
+	public void fillEmptyCells(){
 		for(int r = min.getRow(); r <= max.getRow(); r++){
 			for(int c = min.getCol(); c <= max.getCol(); c++){
 				Coordinate cellPos = new Coordinate(r, c);

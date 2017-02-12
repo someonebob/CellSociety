@@ -17,8 +17,8 @@ public class SquareGridImager extends GridImager {
 	
 	private double sideLength;
 	
-	public SquareGridImager(File setupInfo, double width, double height) {
-		super(setupInfo, width, height);
+	public SquareGridImager(File setupInfo, double width, double height, String edgeType) {
+		super(setupInfo, width, height, edgeType);
 	}
 	
 	/**
@@ -26,8 +26,8 @@ public class SquareGridImager extends GridImager {
 	 * @param setupInfo setup file for grid
 	 */
 	@Override
-	public Grid makeGrid(File setupInfo) {
-		return new Grid(setupInfo, "square");
+	public Grid makeGrid(File setupInfo, String edgeType) {
+		return new Grid(setupInfo, "square", edgeType);
 	}
 	
 	@Override

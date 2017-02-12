@@ -20,9 +20,9 @@ public abstract class GridImager {
 	 * @param width the width of the grid representation on screen.
 	 * @param height the height of the grid representation on screen.
 	 */
-	public GridImager(File setupInfo, double width, double height) {
+	public GridImager(File setupInfo, double width, double height, String edgeType) {
 		myGroup = new Group();
-		myGrid = makeGrid(setupInfo);
+		myGrid = makeGrid(setupInfo, edgeType);
 		updateGroup(myGroup, myGrid, false);
 		setCellSize(myGrid, width, height);
 	}
@@ -49,7 +49,7 @@ public abstract class GridImager {
 	 * @param setupInfo File containing setup information.
 	 * @return the Grid.
 	 */
-	public abstract Grid makeGrid(File setupInfo);
+	public abstract Grid makeGrid(File setupInfo, String edgeType);
 		
 	/**
 	 * Updates the cell size in the grid display to fit the specified total grid dimensions.
