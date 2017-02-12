@@ -16,12 +16,15 @@ import xml.XMLParser;
 public class ForagingAntRules extends Rules {
 	public static final String HOME = "home";
 	public static final String FOOD = "food";
-	public static final String EMPTY_FOOD = "empy-food";
-	public static final String OTHER = "other";
+	public static final String EMPTY_FOOD = "empty-food";
+	public static final String EMPTY = "empty";
+	public static final String OBSTACLE = "obstacle";
+	public static final String ANT = "ant";
+
 	
 	private XMLParser configuration;
 	
-	public ForagingAntRules(XMLParser configuration, String stateText){
+	public ForagingAntRules(XMLParser configuration){
 		this.configuration = configuration;
 	}
 	
@@ -40,17 +43,16 @@ public class ForagingAntRules extends Rules {
 
 	@Override
 	public State getDefaultState() {
-		return getStartingState(OTHER);
+		return getStartingState(EMPTY);
 	}
 
 	@Override
 	public State getNewState(Neighborhood neighborhood) {
 		ForagingAntState currentState = (ForagingAntState)(neighborhood.getCenter().getCurrentState());
+		if(currentState.getValue().equals(FOOD) && !currentState.hasFood()) neighborhood.getCenter().setFutureState(getStartingState(EMPTY_FOOD)); // If empty, change color
 		for(Ant a: (currentState.getAnts())){
 			a.forage(neighborhood.getCenter());
-		}
-		if(currentState.getValue().equals(FOOD) && !currentState.hasFood()) neighborhood.getCenter().setFutureState(getStartingState(EMPTY_FOOD));
-		
-		return null; // All state changes are done within ant class and overrided.
+		}		
+		return currentState; // All state changes are done within ant class and overrided.
 	}
 }

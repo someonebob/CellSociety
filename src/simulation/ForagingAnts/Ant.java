@@ -22,6 +22,7 @@ public class Ant {
 	
 	private Coordinate orientation;	
 	private ForagingAntState futureState, currentState;
+	private Cell currentCell, futureCell;
 	private String location;
 	
 	public Ant(String location){
@@ -46,61 +47,70 @@ public class Ant {
 	}
 	
 	public void forage(Cell current){
+		currentCell = current;
+		currentState = new ForagingAntState(getState(currentCell));
+		System.out.println(currentState);
 		if(hasFood()){	// Ant-Return-To-Nest
-			this.find(current, ForagingAntRules.HOME);
-			this.dropPheramones(current, ForagingAntRules.FOOD);
-			if(this.getLocation().equals(HOME))
+			this.find(ForagingAntRules.HOME);
+			this.dropPheramones(ForagingAntRules.FOOD);
+			if(this.getLocation().equals(ForagingAntRules.HOME)){
+				this.setHasFood(false);
+				currentState.setHasFood(true);
+			}
 		}
 		else{	// Ant-Find-Food-Source
-			this.find(current, ForagingAntRules.FOOD);
-			this.dropPheramones(current, ForagingAntRules.HOME);
+			this.find(ForagingAntRules.FOOD);
+			this.dropPheramones(ForagingAntRules.HOME);
 		}
 		
-		current.setFutureState(currentState);
-		//ADD OTHER STATE TOO
+		currentCell.setFutureState(currentState);
+		if(futureCell != null) futureCell.setFutureState(futureState);
 		
 	}
 
-	private void find(Cell current, String lure) {
-		if(!getLocation().equals(lure) && getLocation().equals(ForagingAntRules.OTHER)){
-			orientation = this.getLocationWithMaxPheramones(current, lure);		
+	private void find(String lure) {
+		if(!getLocation().equals(lure) && getLocation().equals(ForagingAntRules.EMPTY)){
+			orientation = this.getLocationWithMaxPheramones(lure);		
 		}
-		Collection<Coordinate> newLocationChoices = this.getClosestLocations(orientation, current.getNeighborhood().getLocalNeighborCoordinates(), NUM_ORIENTATION_CHOICES);
-		Coordinate possible = this.selectLocation(current, newLocationChoices);
+		Collection<Coordinate> newLocationChoices = this.getClosestLocations(orientation, currentCell.getNeighborhood().getLocalNeighborCoordinates(), NUM_ORIENTATION_CHOICES);
+		Coordinate possible = this.selectLocation(newLocationChoices);
 		if(possible != null){
-			Collection<Coordinate> backupChoices = current.getNeighborhood().getLocalNeighborCoordinates();
-			possible = this.selectLocation(current, backupChoices);
+			Collection<Coordinate> backupChoices = currentCell.getNeighborhood().getLocalNeighborCoordinates();
+			possible = this.selectLocation(backupChoices);
 		}
 		
 		if(possible != null){
+			futureCell = currentCell.getNeighborhood().get(possible);
 			orientation = possible;
-			currentState = new ForagingAntState(getState(current));
-			futureState = new ForagingAntState(getState(current.getNeighborhood().get(possible)));
-			moveTo(current, possible);
+			futureState = new ForagingAntState(getState(currentCell.getNeighborhood().get(possible)));
+			moveTo(possible);
 		}
+		
+		possible = orientation;
+		moveTo(possible);
 	}
 
-	private void dropPheramones(Cell current, String type){
+	private void dropPheramones(String type){
 		if(this.location.equals(type)){
 			currentState.setPheramones(type, ForagingAntState.MAX_PHERAMONES);
 		}
 		else{
-			int d = ForagingAntState.MAX_PHERAMONES - 2 - getState(current).getPheramones(type);
+			int d = ForagingAntState.MAX_PHERAMONES - 2 - getState(currentCell).getPheramones(type);
 			if(d > 0) currentState.setPheramones(type, d);
 		}		
 	}
 	
-	private void moveTo(Cell current, Coordinate newPos){
+	private void moveTo(Coordinate newPos){
 		futureState.addAnt(this);
 		currentState.removeAnt(this);
 	}
 	
-	public Coordinate getLocationWithMaxPheramones(Cell currentLocation, String pheramoneType){
+	public Coordinate getLocationWithMaxPheramones(String pheramoneType){
 		int maxPheramones = 0;
 		Coordinate maxLoc = new Coordinate(0, 0);
 		
-		for(Coordinate neighborLoc : currentLocation.getNeighborhood().getLocalNeighborCoordinates()){
-			Cell neighbor = currentLocation.getNeighborhood().get(neighborLoc);
+		for(Coordinate neighborLoc : currentCell.getNeighborhood().getLocalNeighborCoordinates()){
+			Cell neighbor = currentCell.getNeighborhood().get(neighborLoc);
 			ForagingAntState neighborState = getState(neighbor);
 			
 			if(neighborState.getPheramones(pheramoneType) > maxPheramones){
@@ -112,9 +122,7 @@ public class Ant {
 	}
 	
 	public ForagingAntState getState(Cell neighbor){
-		if(neighbor.getCurrentState() instanceof ForagingAntState)
-			return (ForagingAntState)neighbor.getCurrentState();
-		return null;
+		return (ForagingAntState)neighbor.getCurrentState();
 	}
 	
 	public Collection<Coordinate> getClosestLocations(Coordinate currentLocation, Collection<Coordinate> neighbors, int newLength){
@@ -136,21 +144,25 @@ public class Ant {
 	}
 
 	
-	public Coordinate selectLocation(Cell current, Collection<Coordinate> locSet){
+	public Coordinate selectLocation(Collection<Coordinate> locSet){
 		long seed = System.nanoTime();
 		Map<Coordinate, Double> choicesWithWeights = new HashMap<Coordinate, Double>();
 		for(Coordinate c: locSet){
-			double pheremones = getState(current.getNeighborhood().get(c)).getPheramones(ForagingAntRules.FOOD);
+			if(currentCell.getNeighborhood().get(c).getCurrentState() == null) continue;
+			double pheremones = getState(currentCell.getNeighborhood().get(c)).getPheramones(ForagingAntRules.FOOD);
 			choicesWithWeights.put(c, Math.pow((K + pheremones), N));
 		}
 		while(choicesWithWeights.size() > 0){
 			Coordinate possible = this.getWeightedRandom(choicesWithWeights, new Random());
-			ForagingAntState possibleState = getState(current.getNeighborhood().get(possible));
+			ForagingAntState possibleState = getState(currentCell.getNeighborhood().get(possible));
 			if(!possibleState.isAnObstacle() && possibleState.getAnts().size() >= 1) 
 				return possible;
 			choicesWithWeights.remove(possible);		
 		}
-		return null;		
+		for(Coordinate loc: locSet){
+			if(!getState(currentCell.getNeighborhood().get(loc)).isAnObstacle()) return loc;
+		}
+		return null;
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package model.Neighborhoods;
+package model.neighborhoods;
 
 import java.util.ArrayList;
 import java.util.Collection;
