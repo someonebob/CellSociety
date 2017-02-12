@@ -55,17 +55,16 @@ public class Animation {
 	private Timeline animation;
 	private BorderPane root;
 	private ToolBar toolBar;
-	private boolean isPlaying;
 	private GridImager grid;
 	private VBox sideBox;
 	private XMLParser parser;
+	private ScrollPane scroll;
 	private GridPane gridPane;
 	private double dimension;
 	private ComboBox<String> gridShape;
-	private ScrollPane scroll;
 	private CheckBox check;
 	private Slider size;
-	ComboBox<String> colorType;
+	private ComboBox<String> colorType;
 	
 	/**
 	 * Initializes the Scene and Group for the animation.
@@ -87,7 +86,6 @@ public class Animation {
 		grid = new SquareGridImager(setup, dimension, dimension);
 		setupControls();
 		setupSideMenu();
-		scroll = new ScrollPane();
 		window.setOnCloseRequest(e -> {
 			resetDefault();
 		});
@@ -102,13 +100,12 @@ public class Animation {
 	public void runAnimation(GridImager imager) {	
 		setupAnimation(imager);
 		animation.play();
-		isPlaying = true;
 		window.setMaximized(true);
 	}
 	
 	private void setupAnimation(GridImager imager) {
 		Group g = imager.getGroup();
-		
+		scroll = new ScrollPane();
 		scroll.setContent(g);
 		scroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		scroll.setHbarPolicy(ScrollBarPolicy.ALWAYS);
@@ -117,7 +114,11 @@ public class Animation {
 		
 		
 		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/DEFAULT_FPS), e -> {
+			double scrollHVal = scroll.getHvalue();
+			double scrollVVal = scroll.getVvalue();
 			imager.nextFrame(check.isSelected());
+			scroll.setHvalue(scrollHVal);
+			scroll.setVvalue(scrollVVal);
 		});
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
@@ -126,6 +127,7 @@ public class Animation {
 	
 	
 	private void setupControls() {		
+		Button side = makeSideButton();
 		Button menu = makeMenuButton();
 		Button noo = makeNewButton();
 		Button step = makeStepButton();		
@@ -136,7 +138,7 @@ public class Animation {
 		toolBar = new ToolBar();
 		toolBar.setLayoutY(screen.getMinY());
 		toolBar.setPrefWidth(screen.getWidth());
-		toolBar.getItems().addAll(menu, noo, step, playPause, reset, slider);
+		toolBar.getItems().addAll(side, menu, noo, step, playPause, reset, slider);
 		root.setTop(toolBar);
 	}
 	
@@ -172,15 +174,13 @@ public class Animation {
 	private Button makePlayPauseButton() {
 		Button playPause = new Button(RESOURCES.getString("pause"));
 		playPause.setOnMouseClicked(e -> {
-			if(isPlaying) {
+			if(animation.getCurrentRate() != 0) {
 				animation.pause();
 				playPause.setText(RESOURCES.getString("play"));
-				isPlaying = false;
 			}
 			else {
 				animation.play();
 				playPause.setText(RESOURCES.getString("pause"));
-				isPlaying = true;
 			}
 		});
 		return playPause;
@@ -209,6 +209,23 @@ public class Animation {
 			stage.show();
 		});
 		return menu;
+	}
+	
+	private Button makeSideButton() {
+		Button side = new Button(RESOURCES.getString("sideIn"));
+		side.setOnMouseClicked(e -> {
+			if(sideBox.isVisible()) {
+				sideBox.setVisible(false);
+				root.setLeft(null);
+				side.setText(RESOURCES.getString("sideOut"));
+			}
+			else {
+				sideBox.setVisible(true);
+				root.setLeft(sideBox);
+				side.setText(RESOURCES.getString("sideIn"));
+			}
+		});
+		return side;
 	}
 	
 	
@@ -433,8 +450,9 @@ public class Animation {
 			parser.setColor(colorType.getItems().get(0));
 			colorType.setValue(colorType.getItems().get(0));
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Cannot write color specified to XML file");
+			alert.showAndWait();
 		}
 		check.setSelected(false);
 		grid = new SquareGridImager(setup, dimension, dimension);
