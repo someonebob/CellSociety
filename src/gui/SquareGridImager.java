@@ -39,13 +39,16 @@ public class SquareGridImager extends GridImager {
 	}
 	
 	@Override
-	public void updateGroup(Group group, Grid grid) {
+	public void updateGroup(Group group, Grid grid, boolean outline) {
 		group.getChildren().clear();
 		for(Coordinate c : grid.getCoordinates()) {
 			Rectangle r = new Rectangle(sideLength, sideLength);
 			r.setFill(Color.web(grid.getCell(c).getCurrentState().getColor()));
 			r.setX(c.getCol()*sideLength);
 			r.setY(c.getRow()*sideLength);
+			if(outline){
+				r.setStroke(Color.BLACK);
+			}
 			group.getChildren().add(r);
 		}
 	}

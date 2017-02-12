@@ -22,6 +22,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -61,6 +62,10 @@ public class Animation {
 	private GridPane gridPane;
 	private double dimension;
 	private ComboBox<String> gridShape;
+	private ScrollPane scroll;
+	private CheckBox check;
+	private Slider size;
+	ComboBox<String> colorType;
 	
 	/**
 	 * Initializes the Scene and Group for the animation.
@@ -82,6 +87,10 @@ public class Animation {
 		grid = new SquareGridImager(setup, dimension, dimension);
 		setupControls();
 		setupSideMenu();
+		scroll = new ScrollPane();
+		window.setOnCloseRequest(e -> {
+			resetDefault();
+		});
 		runAnimation(grid);
 		return simulation;
 	}
@@ -99,12 +108,16 @@ public class Animation {
 	
 	private void setupAnimation(GridImager imager) {
 		Group g = imager.getGroup();
-		ScrollPane scroll = new ScrollPane();
+		
 		scroll.setContent(g);
+		scroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		scroll.setHbarPolicy(ScrollBarPolicy.ALWAYS);
+		
 		root.setCenter(scroll);
 		
+		
 		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/DEFAULT_FPS), e -> {
-			imager.nextFrame();
+			imager.nextFrame(check.isSelected());
 		});
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
@@ -149,7 +162,9 @@ public class Animation {
 	private Button makeResetButton() {
 		Button reset = new Button(RESOURCES.getString("reset"));
 		reset.setOnMouseClicked(e -> {
-			chooseGrid(dimension);
+			animation.stop();
+			resetDefault();
+			runAnimation(grid);
 		});
 		return reset;
 	}
@@ -173,7 +188,7 @@ public class Animation {
 	
 	private Button makeStepButton() {
 		Button step = new Button(RESOURCES.getString("step"));
-		step.setOnMouseClicked(e -> grid.nextFrame());
+		step.setOnMouseClicked(e -> grid.nextFrame(check.isSelected()));
 		return step;
 	}
 	
@@ -245,15 +260,20 @@ public class Animation {
 	 * Changes the shape within the cell
 	 */
 	private void makeGridEdgeControl(){
-		Label gridEdge = new Label("Cell Type");
+		Label gridEdge = new Label("Grid Edge Type");
 		GridPane.setConstraints(gridEdge, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		
-		ComboBox<String> type = new ComboBox<>();
-		GridPane.setConstraints(type, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
+		ComboBox<String> edgeType = new ComboBox<>();
+		GridPane.setConstraints(edgeType, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
+		edgeType.getItems().addAll("Finite", "Toroidal", "Infinite");
+		edgeType.setPromptText(edgeType.getItems().get(0));
 		
+		edgeType.setOnAction(e -> {
+			
+		});
 
-		gridPane.getChildren().addAll(gridEdge, type);
+		gridPane.getChildren().addAll(gridEdge, edgeType);
 	}
 	/**
 	 * Allows user to choose square, triangular, or hexagonal grid
@@ -268,7 +288,7 @@ public class Animation {
 		GridPane.setConstraints(gridShape, 1, 1, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		gridShape.setOnAction(e -> {
-			chooseGrid(dimension);
+			chooseGrid(size.getValue());
 		});
 		
 		gridPane.getChildren().addAll(gridType, gridShape);
@@ -281,7 +301,7 @@ public class Animation {
 		Label cellSize = new Label("Cell Size");
 		GridPane.setConstraints(cellSize, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
 
-		Slider size = new Slider(dimension/10, dimension*4, dimension);
+		size = new Slider(dimension/10, dimension*4, dimension);
 		GridPane.setConstraints(size, 1, 2, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		size.setOnMouseReleased(e -> chooseGrid(size.getValue()));
@@ -296,8 +316,7 @@ public class Animation {
 		Label outlines = new Label("Outlines");
 		GridPane.setConstraints(outlines, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
 
-		CheckBox check = new CheckBox();
-		check.setSelected(true);
+		check = new CheckBox();
 		GridPane.setConstraints(check, 1, 3, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		gridPane.getChildren().addAll(outlines, check);
@@ -310,21 +329,21 @@ public class Animation {
 		Label color = new Label("Color Scheme");
 		GridPane.setConstraints(color, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
 		
-		ComboBox<String> type = new ComboBox<>();
-		GridPane.setConstraints(type, 1, 4, 2, 1, HPos.RIGHT, VPos.CENTER);
+		colorType = new ComboBox<>();
+		GridPane.setConstraints(colorType, 1, 4, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
-		fillComboBox(type, "scheme");
+		fillComboBox(colorType, "scheme");
 		
-		type.setOnAction(event -> {
+		colorType.setOnAction(event -> {
 			try {
-				parser.setColor(type.getValue());
+				parser.setColor(colorType.getValue());
 			} catch (TransformerException e) {
 				
 			}
-			chooseGrid(dimension);
+			chooseGrid(size.getValue());
 		});
 		
-		gridPane.getChildren().addAll(color, type);
+		gridPane.getChildren().addAll(color, colorType);
 	}
 	
 	/**
@@ -355,7 +374,7 @@ public class Animation {
 				int max = Integer.parseInt(parser.getParameterAttribute(type.getValue(), "maxconstraint"));
 				if(value >= min && value <= max){
 					parser.setParameter(type.getValue(), input.getText());
-					chooseGrid(dimension);
+					chooseGrid(size.getValue());
 				}else{
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setContentText("Input must be a number between "+min+" and "+max);
@@ -406,6 +425,20 @@ public class Animation {
 			grid = new HexagonGridImager(setup, dimension, dimension);
 			runAnimation(grid);
 		}
+	}
+	
+	private void resetDefault(){
+		size.setValue(dimension);
+		try {
+			parser.setColor(colorType.getItems().get(0));
+			colorType.setValue(colorType.getItems().get(0));
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		check.setSelected(false);
+		grid = new SquareGridImager(setup, dimension, dimension);
+		gridShape.setValue(gridShape.getItems().get(0));
 	}
 
 }
