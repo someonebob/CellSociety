@@ -76,32 +76,25 @@ public class Animation {
 		root = new BorderPane();
 		simulation = new Scene(root, screen.getWidth(), screen.getHeight());
 		this.window = window;
-		}
-	
-	/**
-	 * Initializes the animation pane, including control buttons.
-	 * @return the Scene with everything in it.
-	 */
-	public Scene initialize() {
-		dimension = screen.getHeight() - 70;
+		dimension = screen.getHeight() - 80;
 		grid = new SquareGridImager(setup, dimension, dimension, "default");
-		setupControls();
-		setupSideMenu();
-		window.setOnCloseRequest(e -> {
-			resetDefault();
-		});
-		runAnimation(grid);
-		return simulation;
-	}
+		}
 	
 	/**
 	 * Runs an animation with a newly selected simulation.
 	 * @param setupInfo the XML file with setup information for the grid.
 	 */
-	public void runAnimation(GridImager imager) {	
-		setupAnimation(imager);
+	public void startAnimation() {	
+		setupControls();
+		setupSideMenu();
+		setupAnimation(grid);
+		window.setOnCloseRequest(e -> resetDefault());
+		window.setScene(simulation);
+		window.setMinHeight(500);
+		window.setMinWidth(700);
+		window.setHeight(screen.getHeight() - 1);
+		window.setWidth(screen.getWidth());
 		animation.play();
-		window.setMaximized(true);
 	}
 	
 	private void setupAnimation(GridImager imager) {
@@ -370,6 +363,7 @@ public class Animation {
 		GridPane.setConstraints(colorType, 1, 4, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
 		fillComboBox(colorType, "scheme");
+		colorType.getSelectionModel().selectFirst();
 		
 		colorType.setOnAction(event -> {
 			try {
@@ -396,7 +390,8 @@ public class Animation {
 		TextField input = new TextField();
 		GridPane.setConstraints(input, 2, 5, 1, 1, HPos.RIGHT, VPos.CENTER);
 		
-		fillComboBox(type, "parameters");		
+		fillComboBox(type, "parameters");	
+		type.getSelectionModel().selectFirst();
 		if(type.isDisabled()){
 			input.setDisable(true);
 		}
@@ -448,8 +443,6 @@ public class Animation {
 	 * @param dimension
 	 */
 	private void chooseGrid(double dimension){
-		animation.stop();
-
 		if(gridShape.getValue().equals(gridShape.getItems().get(0))){
 			grid = new SquareGridImager(setup, dimension, dimension, edgeType.getValue());
 			restartAnimation();
@@ -476,6 +469,7 @@ public class Animation {
 		}
 		check.setSelected(false);
 		grid = new SquareGridImager(setup, dimension, dimension, "Finite");
+		edgeType.setValue(edgeType.getItems().get(0));
 		gridShape.setValue(gridShape.getItems().get(0));
 	}
 
