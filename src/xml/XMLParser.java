@@ -33,7 +33,6 @@ import model.Coordinate;
 public class XMLParser {
 	
 	public static final List<String> DATA_FIELDS = Arrays.asList(new String[] { "name", "dimension", "state", "parameter", "stateDef" });
->>>>>>> master
 	public static final ResourceBundle RESOURCES = ResourceBundle.getBundle("resourcefiles/XML");
 	public DocumentBuilder DOCUMENT_BUILDER;	
 
@@ -53,9 +52,6 @@ public class XMLParser {
 		info = setupInfo;
 	}
 
-<<<<<<< HEAD
-	public void setParameter(String tagName, String newParam) throws TransformerException {
-=======
 	/**
 	 * Returns the dimension for rows
 	 * 
@@ -84,30 +80,10 @@ public class XMLParser {
 		return gridColumns;
 	}
 
-	/**
-	 * Returns a NodeList of all the initial states of the simulation
-	 * 
-	 * @return list of states
-	 * @throws XMLException 
-	 * @throws DOMException 
-	 */
-	public Map<Coordinate, String> getInitialStates() throws DOMException, XMLException {
-		Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
-		String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
-		String[] linesRef = fullRef.trim().split("\n");
-
-		for (int row = 0; row < linesRef.length; row++) {
-			String[] stateRef = linesRef[row].trim().split("\\s+");
-			for (int col = 0; col < stateRef.length; col++) {
-				stateTextGrid.put(new Coordinate(row, col), getStateName(stateRef[col]));
-			}
-		}
-		return stateTextGrid;
-	}
 
 
 	public void setParameter(String tagName, String newParam) throws TransformerException, DOMException, XMLException {
->>>>>>> master
+
 		getRootElement().getElementsByTagName(tagName).item(0).setTextContent(newParam);
 		TransformerFactory transformerfactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerfactory.newTransformer();
@@ -165,12 +141,10 @@ public class XMLParser {
 		}
 	}
 
-<<<<<<< HEAD
-	public String getParameterAttribute(String tagName, String attribute) {
-=======
+
 	// Consider renaming
 	public String getParameterAttribute(String tagName, String attribute) throws XMLException {
->>>>>>> master
+
 		try {
 			Element element = (Element) getRootElement().getElementsByTagName(tagName).item(0);
 			return getAttribute(element, attribute);
@@ -202,8 +176,9 @@ public class XMLParser {
 	 * Returns a NodeList of all the initial states of the simulation
 	 * 
 	 * @return list of states
+	 * @throws XMLException 
 	 */
-	public Map<Coordinate, String> getInitialStates() {
+	public Map<Coordinate, String> getInitialStates() throws XMLException {
 		Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
 		boolean hasStates = false;
 		NodeList allChildren = getRootElement().getChildNodes();
@@ -245,11 +220,9 @@ public class XMLParser {
 	 *            tag
 	 * @throws XMLException 
 	 */
-<<<<<<< HEAD
-	private String getStateName(String stateRef) {
-=======
+
 	public String getStateName(String stateRef) throws XMLException {
->>>>>>> master
+
 		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
 		for (int i = 0; i < stateDefinitions.getLength(); i++) {
 			String currentStateName = stateDefinitions.item(i).getTextContent();
@@ -261,27 +234,6 @@ public class XMLParser {
 		throw new XMLException("State definition not found", stateRef);
 	}
 	
-	/**
-	 * Returns the dimension for rows
-	 * 
-	 * @return number of rows
-	 */
-	private int getGridRows() {
-		gridRows = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(0).getTextContent());
-
-		return gridRows;
-	}
-
-	/**
-	 * Returns the dimension for columns
-	 * 
-	 * @return number of columns
-	 */
-	private int getGridColumns() {
-		gridColumns = Integer
-				.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(1).getTextContent());
-		return gridColumns;
-	}
 
 	/**
 	 * Gets the attribute of the element
@@ -318,8 +270,5 @@ public class XMLParser {
 			throw new XMLException(e);
 		}
 	}
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 }
