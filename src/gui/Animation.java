@@ -15,8 +15,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -34,6 +32,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import xml.XMLException;
 import xml.XMLParser;
 /**
  * Runs the cells animation pane in the program.
@@ -55,7 +54,7 @@ public class Animation {
 	private Timeline animation;
 	private BorderPane root;
 	private ToolBar toolBar;
-	private GridImager grid;
+	private GridImager gridImg;
 	private VBox sideBox;
 	private XMLParser parser;
 	private ScrollPane scroll;
@@ -77,17 +76,27 @@ public class Animation {
 		simulation = new Scene(root, screen.getWidth(), screen.getHeight());
 		this.window = window;
 		dimension = screen.getHeight() - 80;
-		grid = new SquareGridImager(setup, dimension, dimension, "default");
+		try {
+			gridImg = new SquareGridImager(setup, dimension, dimension, "default");
 		}
+		catch (Exception e) {
+			new ExceptionHandler("Could not load File").startOver(window);
+		}
+	}
 	
 	/**
 	 * Runs an animation with a newly selected simulation.
 	 * @param setupInfo the XML file with setup information for the grid.
 	 */
 	public void startAnimation() {	
-		setupControls();
-		setupSideMenu();
-		setupAnimation(grid);
+		try {
+			setupControls();
+			setupSideMenu();
+			setupAnimation(gridImg);
+		}
+		catch (Exception e) {
+			new ExceptionHandler("Could not run animation").startOver(window);
+		}
 		window.setOnCloseRequest(e -> resetDefault());
 		window.setScene(simulation);
 		window.setMinHeight(500);
@@ -138,14 +147,19 @@ public class Animation {
 	}
 	
 	private void setupSideMenu(){
-		parser = new XMLParser(setup);
-		sideBox = new VBox(20);
-		setupHeading();
-		sideBox.setAlignment(Pos.TOP_CENTER);
-		
-		setupSideControls();
+		try {
+			parser = new XMLParser(setup);
+			sideBox = new VBox(20);
+			setupHeading();
+			sideBox.setAlignment(Pos.TOP_CENTER);
+			
+			setupSideControls();
 
-		root.setLeft(sideBox);
+			root.setLeft(sideBox);
+		} 
+		catch (XMLException e) {
+			new ExceptionHandler(e).startOver(window);
+		}
 	}
 	
 	private Slider makeFPSSlider() {
@@ -190,7 +204,9 @@ public class Animation {
 	
 	private Button makeStepButton() {
 		Button step = new Button(RESOURCES.getString("step"));
-		step.setOnMouseClicked(e -> grid.nextFrame(check.isSelected()));
+		step.setOnMouseClicked(e -> {
+			gridImg.nextFrame(check.isSelected());
+		});
 		return step;
 	}
 	
@@ -234,8 +250,8 @@ public class Animation {
 	private void restartAnimation() {
 		boolean wasPlaying = animation.getCurrentRate() != 0;
 		animation.stop();
-		grid.reset(check.isSelected(), edgeType.getValue());
-		setupAnimation(grid);
+		gridImg.reset(check.isSelected(), edgeType.getValue());
+		setupAnimation(gridImg);
 		if(wasPlaying) {
 			animation.play();
 		}
@@ -253,7 +269,7 @@ public class Animation {
 	/**
 	 * Sets up title of simulation and author
 	 */
-	private void setupHeading(){	
+	private void setupHeading() throws XMLException {	
 		Text title = new Text(parser.getParameter("title"));
 		title.setFont(new Font(50));
 		title.setWrappingWidth(500);
@@ -368,10 +384,11 @@ public class Animation {
 		colorType.setOnAction(event -> {
 			try {
 				parser.setColor(colorType.getValue());
-			} catch (TransformerException e) {
-				
+				chooseGrid(size.getValue());
+			} 
+			catch (Exception e) {
+				new ExceptionHandler("Could not change to specified color");
 			}
-			chooseGrid(size.getValue());
 		});
 		
 		gridPane.getChildren().addAll(color, colorType);
@@ -396,7 +413,11 @@ public class Animation {
 			input.setDisable(true);
 		}
 		type.setOnAction(e -> {
-			input.setPromptText(parser.getParameterAttribute(type.getValue(), "type"));
+			try {
+				input.setPromptText(parser.getParameterAttribute(type.getValue(), "type"));
+			} catch (XMLException e1) {
+				new ExceptionHandler(e1);
+			}
 		});
 		
 		input.setOnAction(event -> {
@@ -408,12 +429,10 @@ public class Animation {
 					parser.setParameter(type.getValue(), input.getText());
 					chooseGrid(size.getValue());
 				}else{
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText("Input must be a number between "+min+" and "+max);
-					alert.showAndWait();
+					new ExceptionHandler("Input must be a number between "+min+" and "+max);
 				}
 			} catch(Exception e){
-				System.out.println("Must choose a parameter");
+				new ExceptionHandler("Must choose a parameter");
 			}
 		});
 	
@@ -444,15 +463,15 @@ public class Animation {
 	 */
 	private void chooseGrid(double dimension){
 		if(gridShape.getValue().equals(gridShape.getItems().get(0))){
-			grid = new SquareGridImager(setup, dimension, dimension, edgeType.getValue());
+			gridImg = new SquareGridImager(setup, dimension, dimension, edgeType.getValue());
 			restartAnimation();
 		}
 		if(gridShape.getValue().equals(gridShape.getItems().get(1))){
-			grid = new TriangleGridImager(setup, dimension, dimension, edgeType.getValue());
+			gridImg = new TriangleGridImager(setup, dimension, dimension, edgeType.getValue());
 			restartAnimation();
 		}
 		if(gridShape.getValue().equals(gridShape.getItems().get(2))){
-			grid = new HexagonGridImager(setup, dimension, dimension, edgeType.getValue());
+			gridImg = new HexagonGridImager(setup, dimension, dimension, edgeType.getValue());
 			restartAnimation();
 		}
 	}
@@ -465,12 +484,12 @@ public class Animation {
 			}
 			colorType.getSelectionModel().selectFirst();
 		} catch (TransformerException e) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Cannot write color specified to XML file");
-			alert.showAndWait();
+			new ExceptionHandler("Cannot find XML file to reset to default color");
+		} catch (XMLException e) {
+			new ExceptionHandler(e);
 		}
 		check.setSelected(false);
-		grid = new SquareGridImager(setup, dimension, dimension, "Finite");
+		gridImg = new SquareGridImager(setup, dimension, dimension, "Finite");
 		edgeType.setValue(edgeType.getItems().get(0));
 		gridShape.setValue(gridShape.getItems().get(0));
 	}

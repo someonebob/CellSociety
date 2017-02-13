@@ -2,7 +2,6 @@ package gui;
 
 import java.io.File;
 
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.Coordinate;
@@ -18,7 +17,7 @@ public class SquareGridImager extends GridImager {
 	
 	private double sideLength;
 	
-	public SquareGridImager(File setupInfo, double width, double height, String edgeType) throws XMLException {
+	public SquareGridImager(File setupInfo, double width, double height, String edgeType)  {
 		super(setupInfo, width, height, edgeType);
 	}
 	
@@ -28,30 +27,39 @@ public class SquareGridImager extends GridImager {
 	 * @throws XMLException 
 	 */
 	@Override
-	public Grid makeGrid(File setupInfo, String edgeType) throws XMLException {
-		return new Grid(setupInfo, "square", edgeType);
-	}
-	
-	@Override
-	public void setCellSize(Grid grid, double gridWidth, double gridHeight) {
-		sideLength = gridHeight/grid.getRows();
-		if(sideLength > gridWidth/grid.getCols()) {
-			sideLength = gridWidth/grid.getCols();
+	public Grid makeGrid(File setupInfo, String edgeType) {
+		try {
+			return new Grid(setupInfo, "square", edgeType);
+		} catch (XMLException e) {
+			new ExceptionHandler(e).exit();
+			return null;
 		}
 	}
 	
 	@Override
-	public void updateGroup(Group group, Grid grid, boolean outline) throws XMLException {
-		group.getChildren().clear();
-		for(Coordinate c : grid.getCoordinates()) {
+	public void setCellSize(double gridWidth, double gridHeight) {
+		sideLength = gridHeight/getGrid().getRows();
+		if(sideLength > gridWidth/getGrid().getCols()) {
+			sideLength = gridWidth/getGrid().getCols();
+		}
+	}
+	
+	@Override
+	public void updateGroup(boolean outline) {
+		getGroup().getChildren().clear();
+		for(Coordinate c : getGrid().getCoordinates()) {
 			Rectangle r = new Rectangle(sideLength, sideLength);
-			r.setFill(Color.web(grid.getCell(c).getCurrentState().getColor()));
+			try {
+				r.setFill(Color.web(getGrid().getCell(c).getCurrentState().getColor()));
+			} catch (XMLException e) {
+				new ExceptionHandler(e);
+			}
 			r.setX(c.getCol()*sideLength);
 			r.setY(c.getRow()*sideLength);
 			if(outline){
 				r.setStroke(Color.BLACK);
 			}
-			group.getChildren().add(r);
+			getGroup().getChildren().add(r);
 		}
 	}
 
