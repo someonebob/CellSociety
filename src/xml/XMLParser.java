@@ -81,6 +81,30 @@ public class XMLParser {
 	}
 
 
+	/**
+	 * Returns a NodeList of all the initial states of the simulation
+	 * 
+	 * @return list of states
+	 * @throws XMLException 
+	 * @throws DOMException 
+	 */
+	public Map<Coordinate, String> getInitialStates() throws DOMException, XMLException {
+		try{
+			Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
+			String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
+			String[] linesRef = fullRef.trim().split("\n");
+	
+			for (int row = 0; row < linesRef.length; row++) {
+				String[] stateRef = linesRef[row].trim().split("\\s+");
+				for (int col = 0; col < stateRef.length; col++) {
+					stateTextGrid.put(new Coordinate(row, col), getStateName(stateRef[col]));
+				}
+			}
+			return stateTextGrid;
+		} catch(Exception e){
+			throw new XMLException("Initial state grid not defined");
+		}
+	}
 
 	public void setParameter(String tagName, String newParam) throws TransformerException, DOMException, XMLException {
 
@@ -129,7 +153,7 @@ public class XMLParser {
 		try {
 			return getRootElement().getElementsByTagName(tagName).item(0).getTextContent();
 		} catch (Exception e) {
-			throw new XMLException(e, "Invalid parameter requested: " + tagName);
+			throw new XMLException("Invalid parameter requested: " + tagName);
 		}
 	}
 
@@ -137,7 +161,7 @@ public class XMLParser {
 		try {
 			return getRootElement().getElementsByTagName(tagName).item(0).getChildNodes();
 		} catch (Exception e) {
-			throw new XMLException(e, "Invalid parameter requested: " + tagName);
+			throw new XMLException("Invalid parameter requested: " + tagName);
 		}
 	}
 
@@ -149,7 +173,7 @@ public class XMLParser {
 			Element element = (Element) getRootElement().getElementsByTagName(tagName).item(0);
 			return getAttribute(element, attribute);
 		} catch (Exception e) {
-			throw new XMLException(e, "Invalid parameter requested: " + tagName + ", " + attribute);
+			throw new XMLException("Invalid parameter requested: " + tagName + ", " + attribute);
 		}
 	}
 
@@ -169,7 +193,7 @@ public class XMLParser {
 			if (currentStateName.equals(stateName))
 				return color;
 		}
-		throw new XMLException("State definition not found", stateName);
+		throw new XMLException("State definition not found: " + stateName);
 	}
 	
 	/**
@@ -231,7 +255,7 @@ public class XMLParser {
 				return currentStateName;
 			}
 		}
-		throw new XMLException("State definition not found", stateRef);
+		throw new XMLException("State definition not found: " + stateRef);
 	}
 	
 
@@ -253,7 +277,7 @@ public class XMLParser {
 			Element root = xmlDocument.getDocumentElement();
 			return root;
 		} catch (SAXException | IOException e) {
-			throw new XMLException(e);
+			throw new XMLException("Root element not found in file");
 		}
 	}
 
