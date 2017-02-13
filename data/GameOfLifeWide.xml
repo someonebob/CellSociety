@@ -1,4 +1,4 @@
-<CA>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><CA>
 	<subclass>simulation.LifeRules</subclass>
 
 	<title>Conways's Game of Life</title>
@@ -6,13 +6,34 @@
 	
 	<cyclesPerTick>1</cyclesPerTick>
 
-	<stateDef ref="o" color="black">alive</stateDef>
-	<stateDef ref="x" color="white">dead</stateDef>
+	<stateDef color="black" ref="o">alive</stateDef>
+	<stateDef color="white" ref="x">dead</stateDef>
+	
+	<scheme>
+		<default>
+			<alive>black</alive>
+			<dead>white</dead>
+		</default>
+
+		<negative>
+			<alive>white</alive>
+			<dead>black</dead>
+		</negative>
+
+		<terminal>
+			<alive>lime</alive>
+			<dead>black</dead>
+		</terminal>
+		
+		<colorblind>
+			<alive>lightsalmon</alive>
+			<dead>coral</dead>
+		</colorblind>
+	</scheme>
 	
 	<state>
 	x o x x x o o x x x x x x x x x x x x o o x o x o x x x o x
 	o x o x x o o x x x x x x x x x x x o o x x o x o o x o x o
 	x o x x x x x o o x x x x x x x x o o x o x o x o x x x o x
-	
 	</state>
 </CA>

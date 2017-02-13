@@ -14,6 +14,32 @@
 	<stateDef ref="t" color="green">tree</stateDef>
 	<stateDef ref="b" color="red">burning</stateDef>
 
+	<scheme>
+		<default>
+			<empty>yellow</empty>
+			<tree>green</tree>
+			<burning>red</burning>
+		</default>
+
+		<space>
+			<empty>black</empty>
+			<tree>violet</tree>
+			<burning>orange</burning>
+		</space>
+
+		<invert>
+			<empty>green</empty>
+			<tree>red</tree>
+			<burning>yellow</burning>
+		</invert>
+		
+		<lightning>
+			<empty>slateblue</empty>
+			<tree>black</tree>
+			<burning>gold</burning>
+		</lightning>
+		
+	</scheme>
 	
 	<state>
 	t t t t t t t t t t t t t t t t t t t t t

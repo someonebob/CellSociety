@@ -3,12 +3,11 @@
 
 	<title>Segregation</title>
 	<author>Dhruv Patel</author>
-	<gridType>rectangular</gridType>
 	
 	<cyclesPerTick>1</cyclesPerTick>
 	
 	<parameters>
-		<percentThreshold>51</percentThreshold>
+		<percentThreshold maxconstraint="100" minconstraint="0" type="Percentage">55</percentThreshold>
 	</parameters>
 	
 	<scheme>
@@ -29,6 +28,12 @@
 			<agent2>saddlebrown</agent2>
 			<vacant>palegreen</vacant>
 		</farm>
+		
+		<toilet>
+			<agent1>ivory</agent1>
+			<agent2>turquoise</agent2>
+			<vacant>slategray</vacant>
+		</toilet>
 	</scheme>
 
 	<stateDef color="darkorange" ref="o">agent1</stateDef>

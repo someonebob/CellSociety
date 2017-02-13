@@ -1,4 +1,4 @@
-<CA>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><CA>
 	<subclass>simulation.WaTorRules</subclass>
 
 	<title>Wa-Tor World</title>
@@ -7,13 +7,34 @@
 	<cyclesPerTick>4</cyclesPerTick>
 	
 	<parameters>
-		<breedTime>10</breedTime>
-		<starveTime>10</starveTime>
+		<breedTime maxconstraint="10000" minconstraint="0" type="Ticks">4</breedTime>
+		<starveTime maxconstraint="10000" minconstraint="0" type="Ticks">4</starveTime>
 	</parameters>
 	
-	<stateDef ref="e" color="blue">empty</stateDef>
-	<stateDef ref="f" color="lime">fish</stateDef>
-	<stateDef ref="s" color="gray">shark</stateDef>
+		<scheme>
+		<default>
+			<empty>blue</empty>
+			<fish>lime</fish>
+			<shark>gray</shark>
+		</default>
+
+		<redfish>
+			<empty>white</empty>
+			<fish>red</fish>
+			<shark>black</shark>
+		</redfish>
+
+		<politics>
+			<empty>red</empty>
+			<fish>blue</fish>
+			<shark>green</shark>
+		</politics>
+		
+	</scheme>
+	
+	<stateDef color="blue" ref="e">empty</stateDef>
+	<stateDef color="lime" ref="f">fish</stateDef>
+	<stateDef color="gray" ref="s">shark</stateDef>
 	
 	<state>
 	e e e e e e
@@ -23,4 +44,4 @@
 	e e e e e e
 	e e e e e e
 	</state>
-</CA>  
+</CA>
