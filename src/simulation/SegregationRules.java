@@ -10,6 +10,7 @@ import model.State;
 import xml.XMLException;
 import xml.XMLParser;
 
+
 public class SegregationRules extends Rules{
 	public static final String VACANT = "vacant";
 	public static final String PERCENT_THRESHOLD_PARAMETER = "percentThreshold";
@@ -38,6 +39,10 @@ public class SegregationRules extends Rules{
 		return me.getCurrentState(); // Will be overridden if cells are swapped
 	}
 	
+	/**
+	 * Uses semi-random-breadth first search to find nearest empty home.
+	 * If no empty homes exists, returns inital home.
+	 */
 	private Cell getNearestEmptyHome(Neighborhood neighborhood){
 		ArrayList<Cell> possibleHomes = new ArrayList<Cell>(); // Semi-Random search (looks at neighbors first)
 		ArrayList<Cell> alreadySearched = new ArrayList<Cell>();
@@ -61,11 +66,20 @@ public class SegregationRules extends Rules{
 		return me; // Only gets to this if all other homes occupied
 	}
 	
+	/**
+	 * Swaps position of two cells
+	 * (future states of cells can only be manually set once)
+	 */
 	private void swap(Cell cell1, Cell cell2){
 		cell1.setFutureState(cell2.getCurrentState());
 		cell2.setFutureState(cell1.getCurrentState());
 	}
 	
+	/**
+	 * Iterates through a Cell's neighborhood
+	 * and returns the percent of non-null neighbors 
+	 * that are the same as center cell
+	 */
 	private double getPercentAlike(Neighborhood neighborhood){
 		double numNeighbors = 0;
 		double numAlike = 0;
@@ -80,10 +94,16 @@ public class SegregationRules extends Rules{
 		return numAlike / numNeighbors;
 	}
 	
+	/**
+	 * Compares the state value of two cells
+	 */
 	private boolean isAlike(Cell cell1, Cell cell2){
 		return cell1.getCurrentState().getValue().equals(cell2.getCurrentState().getValue());		
 	}
 	
+	/**
+	 * Checks if cell's state is vacant
+	 */
 	private boolean isVacant(Cell cell){
 		return cell.getCurrentState().getValue().equals(VACANT);
 	}

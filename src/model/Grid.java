@@ -180,4 +180,19 @@ public class Grid {
 		if(c.getCol() == min.getCol()) return true;		// Left
 		return false;	
 	}
+	
+	/**
+	 * Returns map of states and number of cells with states.
+	 * This method is currently only used for graphing states
+	 */
+	public Map<State, Integer> getStateQuantities(){
+		Map<State, Integer> stateQuantities = new TreeMap<State, Integer>();
+
+		for(Cell current: myCells.values()){
+			State currentState = current.getCurrentState();
+			if(!stateQuantities.containsKey(currentState)) stateQuantities.put(currentState, 1);
+			else stateQuantities.put(currentState, stateQuantities.get(currentState) + 1);
+		}
+		return stateQuantities;
+	}
 }
