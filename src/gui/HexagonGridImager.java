@@ -2,7 +2,6 @@ package gui;
 
 import java.io.File;
 
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import model.Coordinate;
@@ -18,7 +17,7 @@ public class HexagonGridImager extends GridImager {
 	
 	private double sideLength;
 
-	public HexagonGridImager(File setupInfo, double width, double height, String edgeType) throws XMLException {
+	public HexagonGridImager(File setupInfo, double width, double height, String edgeType) {
 		super(setupInfo, width, height, edgeType);
 	}
 	
@@ -28,31 +27,36 @@ public class HexagonGridImager extends GridImager {
 	 * @throws XMLException 
 	 */
 	@Override
-	public Grid makeGrid(File setupInfo, String edgeType) throws XMLException {
-		return new Grid(setupInfo, "hexagonal", edgeType);
-	}
+	public Grid makeGrid(File setupInfo, String edgeType) {
+		try {
+			return new Grid(setupInfo, "hexagonal", edgeType);
+		} catch (XMLException e) {
+			new ExceptionHandler(e).exit();
+			return null;
+		}	}
 
 	@Override
-	public void setCellSize(Grid grid, double gridHeight, double gridWidth) {
-		sideLength = gridHeight/(grid.getRows()*1.5 + 0.5);
-		if(sideLength > gridWidth/(grid.getCols()*2*Math.cos(Math.toRadians(30)) + 0.5)) {
-			sideLength = gridWidth/(grid.getCols()*2*Math.cos(Math.toRadians(30)) + 0.5);
+	public void setCellSize(double gridHeight, double gridWidth) {
+		sideLength = gridHeight/(getGrid().getRows()*1.5 + 0.5);
+		if(sideLength > gridWidth/(getGrid().getCols()*2*Math.cos(Math.toRadians(30)) + 0.5)) {
+			sideLength = gridWidth/(getGrid().getCols()*2*Math.cos(Math.toRadians(30)) + 0.5);
 		}
 	}
 
 	@Override
-	public void updateGroup(Group group, Grid grid, boolean outline) throws XMLException {
-		group.getChildren().clear();
-		for(Coordinate c : grid.getCoordinates()) {
+	public void updateGroup(boolean outline) {
+		getGroup().getChildren().clear();
+		for(Coordinate c : getGrid().getCoordinates()) {
 			Polygon p = makeHexagon(c.getRow(), c.getCol(), Math.abs(c.getRow()%2) == 1);
-			p.setFill(Color.web(grid.getCell(c).getCurrentState().getColor()));
-			p.setOnMouseClicked(e -> {
-				System.out.println(c);
-			});
+			try {
+				p.setFill(Color.web(getGrid().getCell(c).getCurrentState().getColor()));
+			} catch (XMLException e) {
+				new ExceptionHandler(e);
+			}
 			if(outline){
 				p.setStroke(Color.BLACK);
 			}
-			group.getChildren().add(p);
+			getGroup().getChildren().add(p);
 		}
 	}
 	
