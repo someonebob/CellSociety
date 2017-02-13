@@ -23,12 +23,12 @@ public abstract class GridImager {
 	 * @param height the height of the grid representation on screen.
 	 * @throws XMLException 
 	 */
-	public GridImager(File setupInfo, double width, double height, String edgeType) throws XMLException {
+	public GridImager(File setupInfo, double width, double height, String edgeType) {
 		myGroup = new Group();
 		myGrid = makeGrid(setupInfo, edgeType);
 		mySetup = setupInfo;
-		setCellSize(myGrid, width, height);
-		updateGroup(myGroup, myGrid, false);
+		setCellSize(width, height);
+		updateGroup(false);
 	}
 		
 	/**
@@ -41,17 +41,25 @@ public abstract class GridImager {
 	}
 	
 	/**
+	 * Accesses the Grid that this GridImager displays.
+	 * @return the Grid
+	 */
+	public Grid getGrid() {
+		return myGrid;
+	}
+	
+	/**
 	 * refreshes the state of the Grid, then updates the Group.
 	 * @throws XMLException 
 	 */
-	public void nextFrame(boolean outline) throws XMLException {
+	public void nextFrame(boolean outline) {
 		myGrid.nextFrame();
-		updateGroup(myGroup, myGrid, outline);
+		updateGroup(outline);
 	}
 	
-	public void reset(boolean outline, String edgeType) throws XMLException {
+	public void reset(boolean outline, String edgeType) {
 		myGrid = makeGrid(mySetup, edgeType);
-		updateGroup(myGroup, myGrid, outline);
+		updateGroup(outline);
 
 	}
 	
@@ -61,7 +69,7 @@ public abstract class GridImager {
 	 * @return the Grid.
 	 * @throws XMLException 
 	 */
-	public abstract Grid makeGrid(File setupInfo, String edgeType) throws XMLException;
+	public abstract Grid makeGrid(File setupInfo, String edgeType);
 		
 	/**
 	 * Updates the cell size in the grid display to fit the specified total grid dimensions.
@@ -69,7 +77,7 @@ public abstract class GridImager {
 	 * @param gridHeight the height of the display space for the grid.
 	 * @param gridWidth the width of the display space for the grid.
 	 */
-	public abstract void setCellSize(Grid grid, double gridHeight, double gridWidth);
+	public abstract void setCellSize(double gridHeight, double gridWidth);
 	
 	/**
 	 * Updates the Nodes held in the Group used for animation.
@@ -77,6 +85,6 @@ public abstract class GridImager {
 	 * @param grid the Grid being used.
 	 * @throws XMLException 
 	 */
-	public abstract void updateGroup(Group group, Grid grid, boolean outline) throws XMLException;
+	public abstract void updateGroup(boolean outline);
 	
 }

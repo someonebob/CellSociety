@@ -2,7 +2,6 @@ package gui;
 
 import java.io.File;
 
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import model.Coordinate;
@@ -18,7 +17,7 @@ public class TriangleGridImager extends GridImager {
 	
 	private double sideLength;
 
-	public TriangleGridImager(File setupInfo, double width, double height, String edgeType) throws XMLException {
+	public TriangleGridImager(File setupInfo, double width, double height, String edgeType) {
 		super(setupInfo, width, height, edgeType);
 	}
 	
@@ -28,31 +27,36 @@ public class TriangleGridImager extends GridImager {
 	 * @throws XMLException 
 	 */
 	@Override
-	public Grid makeGrid(File setupInfo, String edgeType) throws XMLException {
-		return new Grid(setupInfo, "triangular", edgeType);
-	}
+	public Grid makeGrid(File setupInfo, String edgeType) {
+		try {
+			return new Grid(setupInfo, "triangular", edgeType);
+		} catch (XMLException e) {
+			new ExceptionHandler(e).exit();
+			return null;
+		}	}
 
 	@Override
-	public void setCellSize(Grid grid, double gridHeight, double gridWidth) {
-		sideLength = gridHeight/grid.getRows()/Math.cos(Math.toRadians(30));
-		if(sideLength > gridWidth/((double)grid.getCols() + 0.5)) {
-			sideLength = gridWidth/((double)grid.getCols() + 0.5);
+	public void setCellSize(double gridHeight, double gridWidth) {
+		sideLength = gridHeight/getGrid().getRows()/Math.cos(Math.toRadians(30));
+		if(sideLength > gridWidth/((double)getGrid().getCols() + 0.5)) {
+			sideLength = gridWidth/((double)getGrid().getCols() + 0.5);
 		}
 	}
 
 	@Override
-	public void updateGroup(Group group, Grid grid, boolean outline) throws XMLException {
-		group.getChildren().clear();
-		for(Coordinate c : grid.getCoordinates()) {
+	public void updateGroup(boolean outline) {
+		getGroup().getChildren().clear();
+		for(Coordinate c : getGrid().getCoordinates()) {
 			Polygon p = makeTriangle(c.getRow(), c.getCol());
-			p.setFill(Color.web(grid.getCell(c).getCurrentState().getColor()));
-			p.setOnMouseClicked(e -> {
-				System.out.println(c);
-			});
+			try {
+				p.setFill(Color.web(getGrid().getCell(c).getCurrentState().getColor()));
+			} catch (XMLException e) {
+				new ExceptionHandler(e);
+			}
 			if(outline){
 				p.setStroke(Color.BLACK);
 			}
-			group.getChildren().add(p);
+			getGroup().getChildren().add(p);
 		}
 	}
 	
