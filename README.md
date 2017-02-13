@@ -7,13 +7,13 @@ January 28, 2017  - February 12, 2017
 Hours worked: ~30 each
 
 ## Roles
-Nathaniel:
+**Nathaniel**:
 Worked on the initial implementation of the `Grid` and `Animation` classes in backend and created the WaTor simulation.   In the second sprint, created the `GridImager`, `Graph` classes, and some additional animation controls.  Implemented error handling in the frontend.  
 
-Dhruv:
+**Dhruv**:
 Worked on mostly back end. Initially started by creating the `Cell`, `States`, and `Neighborhood` classes and created two simulations. In second sprint, refactored `Neighborhood` and `Grid` to encompass multiple grid shapes and  implemented different grid edge types, e.g. `toroidal` and `infinite`. 
 
-Jesse:
+**Jesse**:
 Worked on mostly front end and bridging the gap between frontend and backend. In initial sprint created the main class `Window`, `Menu`, and `FireRules`. Also did the majority of xml stuff, making the class `XMLParser` and formatting xml files. In the second sprint created the gui for controlling the extra features in `Animation` as well as adding functionality to the `XMLParser` to support new features.
 
 ## Resources
