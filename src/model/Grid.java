@@ -1,5 +1,6 @@
 package model;
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -186,7 +187,7 @@ public class Grid {
 	 * This method is currently only used for graphing states
 	 */
 	public Map<State, Integer> getStateQuantities(){
-		Map<State, Integer> stateQuantities = new TreeMap<State, Integer>();
+		Map<State, Integer> stateQuantities = new HashMap<State, Integer>();
 
 		for(Cell current: myCells.values()){
 			State currentState = current.getCurrentState();
