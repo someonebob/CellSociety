@@ -28,6 +28,13 @@
 			<tree>red</tree>
 			<burning>yellow</burning>
 		</invert>
+		
+		<lightning>
+			<empty>slateblue</empty>
+			<tree>black</tree>
+			<burning>gold</burning>
+		</lightning>
+		
 	</scheme>
 
 	<stateDef color="yellow" ref="e">empty</stateDef>

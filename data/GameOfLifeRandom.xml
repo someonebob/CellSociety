@@ -6,16 +6,27 @@
 	
 	<gridType>rectangular</gridType>	
 	<cyclesPerTick>1</cyclesPerTick>
+	
 	<scheme>
 		<default>
 			<alive>black</alive>
 			<dead>white</dead>
 		</default>
 
-		<invert>
+		<negative>
 			<alive>white</alive>
 			<dead>black</dead>
-		</invert>
+		</negative>
+
+		<terminal>
+			<alive>lime</alive>
+			<dead>black</dead>
+		</terminal>
+		
+		<colorblind>
+			<alive>lightsalmon</alive>
+			<dead>coral</dead>
+		</colorblind>
 	</scheme>
 	
 	<stateDef color="black" ref="o">alive</stateDef>
