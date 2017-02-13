@@ -7,6 +7,7 @@
  */
 
 package model;
+import xml.XMLException;
 import xml.XMLParser;
 public class State {	
 	
@@ -34,8 +35,9 @@ public class State {
 	/**
 	 * Returns color code associated with state 
 	 * @return string color of state found in configuration file
+	 * @throws XMLException 
 	 */
-	public String getColor(){
+	public String getColor() throws XMLException{
 		return configuration.getStateColor(value);
 	}
 	

@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.Coordinate;
 import model.Grid;
+import xml.XMLException;
 
 /**
  * GridImager subclass used to image Grids containing squares.
@@ -17,16 +18,17 @@ public class SquareGridImager extends GridImager {
 	
 	private double sideLength;
 	
-	public SquareGridImager(File setupInfo, double width, double height, String edgeType) {
+	public SquareGridImager(File setupInfo, double width, double height, String edgeType) throws XMLException {
 		super(setupInfo, width, height, edgeType);
 	}
 	
 	/**
 	 * Chooses correct grid type depending on Grid Imager type
 	 * @param setupInfo setup file for grid
+	 * @throws XMLException 
 	 */
 	@Override
-	public Grid makeGrid(File setupInfo, String edgeType) {
+	public Grid makeGrid(File setupInfo, String edgeType) throws XMLException {
 		return new Grid(setupInfo, "square", edgeType);
 	}
 	
@@ -39,7 +41,7 @@ public class SquareGridImager extends GridImager {
 	}
 	
 	@Override
-	public void updateGroup(Group group, Grid grid, boolean outline) {
+	public void updateGroup(Group group, Grid grid, boolean outline) throws XMLException {
 		group.getChildren().clear();
 		for(Coordinate c : grid.getCoordinates()) {
 			Rectangle r = new Rectangle(sideLength, sideLength);
