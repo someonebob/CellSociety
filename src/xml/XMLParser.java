@@ -93,11 +93,30 @@ public class XMLParser {
 			Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
 			String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
 			String[] linesRef = fullRef.trim().split("\n");
-	
-			for (int row = 0; row < linesRef.length; row++) {
-				String[] stateRef = linesRef[row].trim().split("\\s+");
-				for (int col = 0; col < stateRef.length; col++) {
-					stateTextGrid.put(new Coordinate(row, col), getStateName(stateRef[col]));
+			
+			boolean hasStates = false;
+			NodeList allChildren = getRootElement().getChildNodes();
+			for(int i = 0; i < allChildren.getLength(); i++){
+				if(allChildren.item(i).getNodeName().equals(DATA_FIELDS.get(2))){
+					hasStates = true;
+				}
+			}
+			if(hasStates){
+				for (int row = 0; row < linesRef.length; row++) {
+					String[] stateRef = linesRef[row].trim().split("\\s+");
+					for (int col = 0; col < stateRef.length; col++) {
+						stateTextGrid.put(new Coordinate(row, col), getStateName(stateRef[col]));
+					}
+				}
+			}		
+			else{
+				int rows = getGridRows();
+				int cols = getGridColumns();
+				Random rand = new Random();
+				for(int row = 0; row < rows; row++){
+					for(int col = 0; col < cols; cols++){					
+						stateTextGrid.put(new Coordinate(row, col), getRootElement().getElementsByTagName(DATA_FIELDS.get(4)).item(rand.nextInt(1)).getTextContent());
+					}
 				}
 			}
 			return stateTextGrid;
@@ -194,46 +213,6 @@ public class XMLParser {
 				return color;
 		}
 		throw new XMLException("State definition not found: " + stateName);
-	}
-	
-	/**
-	 * Returns a NodeList of all the initial states of the simulation
-	 * 
-	 * @return list of states
-	 * @throws XMLException 
-	 */
-	public Map<Coordinate, String> getInitialStates() throws XMLException {
-		Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
-		boolean hasStates = false;
-		NodeList allChildren = getRootElement().getChildNodes();
-		for(int i = 0; i < allChildren.getLength(); i++){
-			if(allChildren.item(i).getNodeName().equals(DATA_FIELDS.get(2))){
-				hasStates = true;
-			}
-		}
-		if(hasStates){
-			String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
-			String[] linesRef = fullRef.trim().split("\n");
-
-			for (int row = 0; row < linesRef.length; row++) {
-				String[] stateRef = linesRef[row].trim().split("\\s+");
-				for (int col = 0; col < stateRef.length; col++) {
-					stateTextGrid.put(new Coordinate(row, col), getStateName(stateRef[col]));
-				}
-			}
-		}
-		else{
-			int rows = getGridRows();
-			int cols = getGridColumns();
-			Random rand = new Random();
-			for(int row = 0; row < rows; row++){
-				for(int col = 0; col < cols; cols++){					
-					stateTextGrid.put(new Coordinate(row, col), getRootElement().getElementsByTagName(DATA_FIELDS.get(4)).item(rand.nextInt(1)).getTextContent());
-				}
-			}
-		}
-		
-		return stateTextGrid;
 	}
 
 	/**
