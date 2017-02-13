@@ -258,6 +258,7 @@ public class Animation {
 		boolean wasPlaying = animation.getCurrentRate() != 0;
 		animation.stop();
 		gridImg.reset(check.isSelected(), edgeType.getValue());
+		graph.reset();
 		setupAnimation(gridImg);
 		if(wasPlaying) {
 			animation.play();
