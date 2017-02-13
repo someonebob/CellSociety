@@ -101,6 +101,7 @@ public class XMLParser {
 					hasStates = true;
 				}
 			}
+			
 			if(hasStates){
 				for (int row = 0; row < linesRef.length; row++) {
 					String[] stateRef = linesRef[row].trim().split("\\s+");
@@ -113,9 +114,11 @@ public class XMLParser {
 				int rows = getGridRows();
 				int cols = getGridColumns();
 				Random rand = new Random();
+				
+				NodeList stateDefs = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
 				for(int row = 0; row < rows; row++){
 					for(int col = 0; col < cols; cols++){					
-						stateTextGrid.put(new Coordinate(row, col), getRootElement().getElementsByTagName(DATA_FIELDS.get(4)).item(rand.nextInt(1)).getTextContent());
+						stateTextGrid.put(new Coordinate(row, col), stateDefs.item(rand.nextInt(stateDefs.getLength())).getTextContent());
 					}
 				}
 			}
