@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><CA>
+	<subclass>simulation.FireRules</subclass>
+
+	<title>Spreading of Fire</title>
+	<author>Jesse Yue</author>
+
+	<cyclesPerTick>1</cyclesPerTick>
+
+	<parameters>
+		<probCatch maxconstraint="100" minconstraint="0" type="Percentage">100</probCatch>
+	</parameters>
+
+	<scheme>
+		<default>
+			<empty>yellow</empty>
+			<tree>green</tree>
+			<burning>red</burning>
+		</default>
+
+		<space>
+			<empty>black</empty>
+			<tree>violet</tree>
+			<burning>orange</burning>
+		</space>
+
+		<invert>
+			<empty>green</empty>
+			<tree>red</tree>
+			<burning>yellow</burning>
+		</invert>
+		
+		<lightning>
+			<empty>slateblue</empty>
+			<tree>black</tree>
+			<burning>gold</burning>
+		</lightning>
+		
+	</scheme>
+
+	<stateDef color="yellow" ref="e">empty</stateDef>
+	<stateDef color="green" ref="t">tree</stateDef>
+	<stateDef color="red" ref="b">burning</stateDef>
+
+	<dimension>50</dimension>
+	<dimension>50</dimension>
+</CA>
