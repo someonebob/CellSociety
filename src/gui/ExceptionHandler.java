@@ -32,6 +32,7 @@ public class ExceptionHandler {
 	 */
 	public void startOver(Stage window) {
 		window.setScene(new Menu(window).initialize());
+		Thread.currentThread().interrupt();
 	}
 	
 	/**

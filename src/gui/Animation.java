@@ -130,7 +130,7 @@ public class Animation {
 		double scrollHVal = scroll.getHvalue();
 		double scrollVVal = scroll.getVvalue();
 		imager.nextFrame(check.isSelected());
-//		graph.addData(imager.getGrid().getCellTypesList()); TODO add data to graph
+		graph.addData(imager.getGrid().getStateQuantities());
 		scroll.setHvalue(scrollHVal);
 		scroll.setVvalue(scrollVVal);
 	}
