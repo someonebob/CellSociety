@@ -4,6 +4,10 @@ import java.util.HashMap;
 
 import model.Neighborhood;
 
+/**
+ * Loads up neighborhood depending on keyword
+ * @author DhruvKPatel *
+ */
 public class NeighborhoodLoader {	
 	public Neighborhood getNeighborhood(String gridType){
 		HashMap<String, Neighborhood> neighborhoods = new HashMap<String, Neighborhood>();

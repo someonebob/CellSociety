@@ -3,6 +3,7 @@ package gui;
 import java.io.File;
 import javafx.scene.Group;
 import model.Grid;
+import xml.XMLException;
 
 /**
  * Creates a graphical representation of the Grid of cells for CellSociety.
@@ -20,8 +21,9 @@ public abstract class GridImager {
 	 * @param setupInfo the XML file containing setup information
 	 * @param width the width of the grid representation on screen.
 	 * @param height the height of the grid representation on screen.
+	 * @throws XMLException 
 	 */
-	public GridImager(File setupInfo, double width, double height, String edgeType) {
+	public GridImager(File setupInfo, double width, double height, String edgeType) throws XMLException {
 		myGroup = new Group();
 		myGrid = makeGrid(setupInfo, edgeType);
 		mySetup = setupInfo;
@@ -40,13 +42,14 @@ public abstract class GridImager {
 	
 	/**
 	 * refreshes the state of the Grid, then updates the Group.
+	 * @throws XMLException 
 	 */
-	public void nextFrame(boolean outline) {
+	public void nextFrame(boolean outline) throws XMLException {
 		myGrid.nextFrame();
 		updateGroup(myGroup, myGrid, outline);
 	}
 	
-	public void reset(boolean outline, String edgeType) {
+	public void reset(boolean outline, String edgeType) throws XMLException {
 		myGrid = makeGrid(mySetup, edgeType);
 		updateGroup(myGroup, myGrid, outline);
 
@@ -56,8 +59,9 @@ public abstract class GridImager {
 	 * Makes a specific grid based on the shape of the cell.
 	 * @param setupInfo File containing setup information.
 	 * @return the Grid.
+	 * @throws XMLException 
 	 */
-	public abstract Grid makeGrid(File setupInfo, String edgeType);
+	public abstract Grid makeGrid(File setupInfo, String edgeType) throws XMLException;
 		
 	/**
 	 * Updates the cell size in the grid display to fit the specified total grid dimensions.
@@ -71,7 +75,8 @@ public abstract class GridImager {
 	 * Updates the Nodes held in the Group used for animation.
 	 * @param group the GridImager's group.
 	 * @param grid the Grid being used.
+	 * @throws XMLException 
 	 */
-	public abstract void updateGroup(Group group, Grid grid, boolean outline);
+	public abstract void updateGroup(Group group, Grid grid, boolean outline) throws XMLException;
 	
 }

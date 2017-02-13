@@ -8,6 +8,7 @@ import model.Coordinate;
 import model.Neighborhood;
 import model.Rules;
 import model.State;
+import xml.XMLException;
 import xml.XMLParser;
 
 /**
@@ -26,8 +27,10 @@ public class FireRules extends Rules {
 	 * Sets up the specific parameters for the Spreading Fire simulation
 	 * 
 	 * @param setupInfo
+	 * @throws XMLException 
+	 * @throws NumberFormatException 
 	 */
-	public FireRules(XMLParser configuration) {
+	public FireRules(XMLParser configuration) throws NumberFormatException, XMLException {
 		this.configuration = configuration;
 		probFire = Integer.parseInt(this.configuration.getParameter(FIELD)) / 100.0;
 	}

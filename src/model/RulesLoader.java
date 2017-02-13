@@ -24,8 +24,9 @@ public class RulesLoader {
 	 * Creates a list of all known subclasses of Rules.
 	 * Finds the subclass specified in the configuration XML file.
 	 * @param config the XML file containing configuration information.
+	 * @throws XMLException 
 	 */
-	public RulesLoader(XMLParser config) {
+	public RulesLoader(XMLParser config) throws XMLException {
 		List<Rules> allRules = makeRulesList(config);	
 		findRulesUsed(config, allRules);
 	}
@@ -43,8 +44,9 @@ public class RulesLoader {
 	 * Returns the subclass specified in the configuration file.
 	 * @param config the configuration XML file.
 	 * @param options the list of all subclasses of Rules.
+	 * @throws XMLException 
 	 */
-	private void findRulesUsed(XMLParser config, List<Rules> options) {
+	private void findRulesUsed(XMLParser config, List<Rules> options) throws XMLException {
 		String rulesName = config.getParameter("subclass");
 		for(Rules r : options) {
 			if(r.getClass().getName().equals(rulesName)) {
@@ -65,18 +67,14 @@ public class RulesLoader {
 		try {
 			options.add(new FireRules(config));
 		} catch (XMLException e) {}
-		try {
-			options.add(new LifeRules(config));
-		} catch (XMLException e) {}
+		options.add(new LifeRules(config));
 		try {
 			options.add(new WaTorRules(config));
 		} catch (XMLException e) {}
 		try {
 			options.add(new SegregationRules(config));
 		} catch (XMLException e) {}
-		try {
-			options.add(new ForagingAntRules(config));
-		} catch (XMLException e) {}
+		options.add(new ForagingAntRules(config));
 		return options;
 	}	
 }

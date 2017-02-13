@@ -1,5 +1,6 @@
 /**
  * Rule class for Game of Life Simulation
+ * @author DhruvKPatel
  */
 package simulation;
 import model.Cell;
@@ -25,6 +26,10 @@ public class LifeRules extends Rules {
 		return new State(configuration, DEAD);
 	}
 	
+	/**
+	 * Checks neighbors around with constraints 
+	 * and returns life state depending on constraints.
+	 */
 	public State getNewState(Neighborhood neighborhood) { 
 		int neighborsAlive = getNumNeighborsAlive(neighborhood);
 		boolean isAlive = getAlive(neighborhood.getCenter());
@@ -46,18 +51,24 @@ public class LifeRules extends Rules {
 		}
 	}
 	
+	/**
+	 * Counts the number of neighbors alive
+	 * @param neighborhood
+	 * @return integer value of neighbors alive
+	 */
 	private int getNumNeighborsAlive(Neighborhood neighborhood){
 		int numAlive = 0;
 	
-		for(Cell neighbor : neighborhood.getNeighbors()){
-			if(neighbor != null){
-				if(neighbor.getCurrentState().getValue().equals(ALIVE))
-					numAlive++;
-			}
-		}
+		for(Cell neighbor : neighborhood.getNeighbors())
+			if(getAlive(neighbor)) numAlive++;
+		
 		return numAlive;
 	}
 	
+	/**
+	 * Checks if cell is alive
+	 * @param cell
+	 */
 	private boolean getAlive(Cell cell){
 		return (cell != null && cell.getCurrentState().getValue().equals(ALIVE));
 	}
