@@ -185,11 +185,11 @@ public class Grid {
 	 * Returns map of states and number of cells with states.
 	 * This method is currently only used for graphing states
 	 */
-	public Map<State, Integer> getStateQuantities(){
-		Map<State, Integer> stateQuantities = new TreeMap<State, Integer>();
+	public Map<String, Integer> getStateQuantities(){
+		Map<String, Integer> stateQuantities = new TreeMap<String, Integer>();
 
 		for(Cell current: myCells.values()){
-			State currentState = current.getCurrentState();
+			String currentState = current.getCurrentState().getValue();
 			if(!stateQuantities.containsKey(currentState)) stateQuantities.put(currentState, 1);
 			else stateQuantities.put(currentState, stateQuantities.get(currentState) + 1);
 		}
