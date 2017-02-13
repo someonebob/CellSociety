@@ -479,8 +479,10 @@ public class Animation {
 	private void resetDefault(){
 		size.setValue(dimension);
 		try {
-			parser.setColor(colorType.getItems().get(0));
-			colorType.setValue(colorType.getItems().get(0));
+			if(colorType.getItems().size() != 0){
+				parser.setColor(colorType.getItems().get(0));
+			}
+			colorType.getSelectionModel().selectFirst();
 		} catch (TransformerException e) {
 			new ExceptionHandler("Cannot find XML file to reset to default color");
 		} catch (XMLException e) {
