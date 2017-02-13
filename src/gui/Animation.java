@@ -55,6 +55,7 @@ public class Animation {
 	private BorderPane root;
 	private ToolBar toolBar;
 	private GridImager gridImg;
+	private Graph graph;
 	private VBox sideBox;
 	private XMLParser parser;
 	private ScrollPane scroll;
@@ -75,13 +76,15 @@ public class Animation {
 		root = new BorderPane();
 		simulation = new Scene(root, screen.getWidth(), screen.getHeight());
 		this.window = window;
-		dimension = screen.getHeight() - 80;
+		dimension = screen.getHeight() - 235;
 		try {
 			gridImg = new SquareGridImager(setup, dimension, dimension, "default");
 		}
 		catch (Exception e) {
 			new ExceptionHandler("Could not load File").startOver(window);
 		}
+		graph = new Graph();
+		root.setBottom(graph.getLineChart());
 	}
 	
 	/**
@@ -116,16 +119,20 @@ public class Animation {
 		root.setCenter(scroll);
 		
 		
-		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/DEFAULT_FPS), e -> {
-			double scrollHVal = scroll.getHvalue();
-			double scrollVVal = scroll.getVvalue();
-			imager.nextFrame(check.isSelected());
-			scroll.setHvalue(scrollHVal);
-			scroll.setVvalue(scrollVVal);
-		});
+		KeyFrame frame = new KeyFrame(Duration.millis(1000.0/DEFAULT_FPS), 
+				e -> animationStep(imager));
 		animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().add(frame);
+	}
+
+	private void animationStep(GridImager imager) {
+		double scrollHVal = scroll.getHvalue();
+		double scrollVVal = scroll.getVvalue();
+		imager.nextFrame(check.isSelected());
+//		graph.addData(imager.getGrid().getCellTypesList()); TODO add data to graph
+		scroll.setHvalue(scrollHVal);
+		scroll.setVvalue(scrollVVal);
 	}
 	
 	
