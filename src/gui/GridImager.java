@@ -21,7 +21,7 @@ public abstract class GridImager {
 	 * @param setupInfo the XML file containing setup information
 	 * @param width the width of the grid representation on screen.
 	 * @param height the height of the grid representation on screen.
-	 * @throws XMLException 
+	 * @param edgeType the edge style (finite, toroidal, infinite) of the simulation.
 	 */
 	public GridImager(File setupInfo, double width, double height, String edgeType) {
 		myGroup = new Group();
@@ -50,13 +50,17 @@ public abstract class GridImager {
 	
 	/**
 	 * refreshes the state of the Grid, then updates the Group.
-	 * @throws XMLException 
 	 */
 	public void nextFrame(boolean outline) {
 		myGrid.nextFrame();
 		updateGroup(outline);
 	}
 	
+	/**
+	 * Resets the grid to initial conditions.
+	 * @param outline true if the cells are outlined in black.
+	 * @param edgeType the edge style of the grid.
+	 */
 	public void reset(boolean outline, String edgeType) {
 		myGrid = makeGrid(mySetup, edgeType);
 		updateGroup(outline);
@@ -66,14 +70,13 @@ public abstract class GridImager {
 	/**
 	 * Makes a specific grid based on the shape of the cell.
 	 * @param setupInfo File containing setup information.
+	 * @param edgeType the edge style of the grid.
 	 * @return the Grid.
-	 * @throws XMLException 
 	 */
 	public abstract Grid makeGrid(File setupInfo, String edgeType);
 		
 	/**
 	 * Updates the cell size in the grid display to fit the specified total grid dimensions.
-	 * @param grid the Grid being used
 	 * @param gridHeight the height of the display space for the grid.
 	 * @param gridWidth the width of the display space for the grid.
 	 */
@@ -81,8 +84,7 @@ public abstract class GridImager {
 	
 	/**
 	 * Updates the Nodes held in the Group used for animation.
-	 * @param group the GridImager's group.
-	 * @param grid the Grid being used.
+	 * @param outline true if the cells are outlined in black.
 	 * @throws XMLException 
 	 */
 	public abstract void updateGroup(boolean outline);

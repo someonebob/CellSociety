@@ -1,4 +1,5 @@
 package gui;
+
 import java.io.File;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
@@ -15,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+
 /**
  * Creates the Title Screen
  * @author Jesse
