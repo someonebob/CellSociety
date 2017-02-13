@@ -1,9 +1,3 @@
-/**
- * Creates a 3x3 neighborhood of cells, with main cell in center 
- * and neighbors surrounding in all directions
- * 
- * @author DhruvKPatel
- */
 package model;
 
 import java.util.ArrayList;
@@ -11,6 +5,12 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Creates a neighborhood of cells, with main cell in center 
+ * and neighbors surrounding in all directions
+ * 
+ * @author DhruvKPatel
+ */
 public abstract class Neighborhood {
 	private Map<Coordinate, Cell> neighborhood;
 	private Coordinate offset;
@@ -26,9 +26,6 @@ public abstract class Neighborhood {
 	 * Sets input as "zero" cell. All neighbors will be 
 	 * automatically put into new coordinate system
 	 * centered at center cell
-	 * @param cell
-	 * @param row
-	 * @param col
 	 */
 	public void setCenter(Cell cell, Coordinate c){
 		offset = new Coordinate(c.getRow(), c.getCol());
@@ -39,8 +36,6 @@ public abstract class Neighborhood {
 	 * Sets cell at certain coordinate in neighborhood.
 	 * Input is in global coordinate; it will automatically
 	 * put cell in local coordinates relative to center cell
-	 * @param row
-	 * @param c 
 	 */
 	public void set(Cell cell, Coordinate c){
 		neighborhood.put(c.subtract(offset), cell);

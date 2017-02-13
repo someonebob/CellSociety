@@ -29,7 +29,7 @@ public class Grid {
 	private Edge edgeType;
 
 	/**
-	 * Initializes the 2D Array of Cells.
+	 * Initializes the grid cells
 	 * @param setupInfo the File containing setup information
 	 * @param shape of grid
 	 * including grid size, rules, and starting states.
@@ -117,7 +117,7 @@ public class Grid {
 	}
 	
 	/**
-	 * Passes each Cell in the 2D array the cells directly next to it.
+	 * Passes unique neighborhood to each cell.
 	 */
 	public void passNeighbors() {
 		NeighborhoodLoader gridTypeSelector = new NeighborhoodLoader();
