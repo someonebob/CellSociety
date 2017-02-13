@@ -21,11 +21,6 @@ public class SquareGridImager extends GridImager {
 		super(setupInfo, width, height, edgeType);
 	}
 	
-	/**
-	 * Chooses correct grid type depending on Grid Imager type
-	 * @param setupInfo setup file for grid
-	 * @throws XMLException 
-	 */
 	@Override
 	public Grid makeGrid(File setupInfo, String edgeType) {
 		try {
