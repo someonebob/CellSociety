@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 import javax.xml.parsers.DocumentBuilder;
@@ -32,7 +33,6 @@ public class XMLParser {
 	public static final List<String> DATA_FIELDS = Arrays
 			.asList(new String[] { "name", "dimension", "state", "parameter", "stateDef" });
 	public static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
-	public static final Transformer TRANSFORMER = getTransformer();
 	public static final ResourceBundle RESOURCES = ResourceBundle.getBundle("resourcefiles/XML");
 
 	private File info;
@@ -48,48 +48,6 @@ public class XMLParser {
 	public XMLParser(File setupInfo) {
 		info = setupInfo;
 	}
-
-	/**
-	 * Returns the dimension for rows
-	 * 
-	 * @return number of rows
-	 */
-	public int getGridRows() {
-		gridRows = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(0).getTextContent());
-
-		return gridRows;
-	}
-
-	/**
-	 * Returns the dimension for columns
-	 * 
-	 * @return number of columns
-	 */
-	public int getGridColumns() {
-		gridColumns = Integer
-				.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(1).getTextContent());
-		return gridColumns;
-	}
-
-	/**
-	 * Returns a NodeList of all the initial states of the simulation
-	 * 
-	 * @return list of states
-	 */
-	public Map<Coordinate, String> getInitialStates() {
-		Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
-		String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
-		String[] linesRef = fullRef.trim().split("\n");
-
-		for (int row = 0; row < linesRef.length; row++) {
-			String[] stateRef = linesRef[row].trim().split("\\s+");
-			for (int col = 0; col < stateRef.length; col++) {
-				stateTextGrid.put(new Coordinate(row, col), getStateName(stateRef[col]));
-			}
-		}
-		return stateTextGrid;
-	}
-
 
 	public void setParameter(String tagName, String newParam) throws TransformerException {
 		getRootElement().getElementsByTagName(tagName).item(0).setTextContent(newParam);
@@ -148,7 +106,6 @@ public class XMLParser {
 		}
 	}
 
-	// Consider renaming
 	public String getParameterAttribute(String tagName, String attribute) {
 		try {
 			Element element = (Element) getRootElement().getElementsByTagName(tagName).item(0);
@@ -176,6 +133,45 @@ public class XMLParser {
 		}
 		throw new XMLException("State definition not found", stateName);
 	}
+	
+	/**
+	 * Returns a NodeList of all the initial states of the simulation
+	 * 
+	 * @return list of states
+	 */
+	public Map<Coordinate, String> getInitialStates() {
+		Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
+		boolean hasStates = false;
+		NodeList allChildren = getRootElement().getChildNodes();
+		for(int i = 0; i < allChildren.getLength(); i++){
+			if(allChildren.item(i).getNodeName().equals(DATA_FIELDS.get(2))){
+				hasStates = true;
+			}
+		}
+		if(hasStates){
+			String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
+			String[] linesRef = fullRef.trim().split("\n");
+
+			for (int row = 0; row < linesRef.length; row++) {
+				String[] stateRef = linesRef[row].trim().split("\\s+");
+				for (int col = 0; col < stateRef.length; col++) {
+					stateTextGrid.put(new Coordinate(row, col), getStateName(stateRef[col]));
+				}
+			}
+		}
+		else{
+			int rows = getGridRows();
+			int cols = getGridColumns();
+			Random rand = new Random();
+			for(int row = 0; row < rows; row++){
+				for(int col = 0; col < cols; cols++){					
+					stateTextGrid.put(new Coordinate(row, col), getRootElement().getElementsByTagName(DATA_FIELDS.get(4)).item(rand.nextInt(1)).getTextContent());
+				}
+			}
+		}
+		
+		return stateTextGrid;
+	}
 
 	/**
 	 * Finds a state name given a state reference name
@@ -184,7 +180,7 @@ public class XMLParser {
 	 *            Shortcut state reference value defined in xml file "stateDef"
 	 *            tag
 	 */
-	public String getStateName(String stateRef) {
+	private String getStateName(String stateRef) {
 		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
 		for (int i = 0; i < stateDefinitions.getLength(); i++) {
 			String currentStateName = stateDefinitions.item(i).getTextContent();
@@ -194,6 +190,28 @@ public class XMLParser {
 			}
 		}
 		throw new XMLException("State definition not found", stateRef);
+	}
+	
+	/**
+	 * Returns the dimension for rows
+	 * 
+	 * @return number of rows
+	 */
+	private int getGridRows() {
+		gridRows = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(0).getTextContent());
+
+		return gridRows;
+	}
+
+	/**
+	 * Returns the dimension for columns
+	 * 
+	 * @return number of columns
+	 */
+	private int getGridColumns() {
+		gridColumns = Integer
+				.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(1).getTextContent());
+		return gridColumns;
 	}
 
 	/**
@@ -230,13 +248,5 @@ public class XMLParser {
 			throw new XMLException(e);
 		}
 	}
-		
-	private static Transformer getTransformer() {
-		try{
-			return TransformerFactory.newInstance().newTransformer();
 
-		} catch(TransformerException e){
-			throw new XMLException(e);
-		}
-	}
 }

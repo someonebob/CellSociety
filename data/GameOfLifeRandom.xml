@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CA>
+	<subclass>simulation.LifeRules</subclass>
+
+	<title>Conways's Game of Life</title>
+	<author>Jesse Yue</author>
+	
+	<gridType>rectangular</gridType>	
+	<cyclesPerTick>1</cyclesPerTick>
+	<scheme>
+		<default>
+			<alive>black</alive>
+			<dead>white</dead>
+		</default>
+
+		<invert>
+			<alive>white</alive>
+			<dead>black</dead>
+		</invert>
+	</scheme>
+	
+	<stateDef color="black" ref="o">alive</stateDef>
+	<stateDef color="white" ref="x">dead</stateDef>
+	
+	<dimension>20</dimension>
+	<dimension>20</dimension>
+</CA>

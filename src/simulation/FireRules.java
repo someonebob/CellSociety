@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import model.Cell;
-import model.Coordinate;
 import model.Neighborhood;
 import model.Rules;
 import model.State;
