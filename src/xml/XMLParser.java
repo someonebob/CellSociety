@@ -89,11 +89,11 @@ public class XMLParser {
 	 * @throws DOMException 
 	 */
 	public Map<Coordinate, String> getInitialStates() throws DOMException, XMLException {
+		//System.out.println("hi");
+
 		try{
 			Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
-			String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
-			String[] linesRef = fullRef.trim().split("\n");
-			
+	
 			boolean hasStates = false;
 			NodeList allChildren = getRootElement().getChildNodes();
 			for(int i = 0; i < allChildren.getLength(); i++){
@@ -101,8 +101,10 @@ public class XMLParser {
 					hasStates = true;
 				}
 			}
-			
 			if(hasStates){
+				String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
+
+				String[] linesRef = fullRef.trim().split("\n");
 				for (int row = 0; row < linesRef.length; row++) {
 					String[] stateRef = linesRef[row].trim().split("\\s+");
 					for (int col = 0; col < stateRef.length; col++) {
@@ -117,7 +119,7 @@ public class XMLParser {
 				
 				NodeList stateDefs = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
 				for(int row = 0; row < rows; row++){
-					for(int col = 0; col < cols; cols++){					
+					for(int col = 0; col < cols; col++){		
 						stateTextGrid.put(new Coordinate(row, col), stateDefs.item(rand.nextInt(stateDefs.getLength())).getTextContent());
 					}
 				}

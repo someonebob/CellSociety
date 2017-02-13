@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<CA>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><CA>
 	<subclass>simulation.LifeRules</subclass>
 
 	<title>Conways's Game of Life</title>
