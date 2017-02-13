@@ -32,9 +32,9 @@
 		
 	</scheme>
 	
-	<stateDef color="blue" ref="e">empty</stateDef>
-	<stateDef color="lime" ref="f">fish</stateDef>
-	<stateDef color="gray" ref="s">shark</stateDef>
+	<stateDef color="red" ref="e">empty</stateDef>
+	<stateDef color="blue" ref="f">fish</stateDef>
+	<stateDef color="green" ref="s">shark</stateDef>
 	
 	<dimension>20</dimension>
 	<dimension>25</dimension>
