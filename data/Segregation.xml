@@ -31,9 +31,9 @@
 		</farm>
 	</scheme>
 
-	<stateDef color="darkorange" ref="o">darkorange</stateDef>
-	<stateDef color="midnightblue" ref="x">midnightblue</stateDef>
-	<stateDef color="lightslategray" ref="-">lightslategray</stateDef>
+	<stateDef color="darkorange" ref="o">agent1</stateDef>
+	<stateDef color="midnightblue" ref="x">agent2</stateDef>
+	<stateDef color="lightslategray" ref="-">vacant</stateDef>
 	
 	<state>
 	x o o x - x x o x x o o o x x x
