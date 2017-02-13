@@ -6,6 +6,7 @@ import model.Cell;
 import model.Neighborhood;
 import model.Rules;
 import model.State;
+import xml.XMLException;
 import xml.XMLParser;
 
 public class WaTorRules extends Rules {
@@ -18,7 +19,7 @@ public class WaTorRules extends Rules {
 	private int breed;
 	private int starve;
 	
-	public WaTorRules(XMLParser configuration) {
+	public WaTorRules(XMLParser configuration) throws NumberFormatException, XMLException {
 		config = configuration;
 		breed = Integer.parseInt(config.getParameter("breedTime"));
 		starve = Integer.parseInt(config.getParameter("starveTime"));

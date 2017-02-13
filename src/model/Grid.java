@@ -6,13 +6,19 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.w3c.dom.DOMException;
+
 import model.neighborhoods.NeighborhoodLoader;
+import xml.XMLException;
 import xml.XMLParser;
 
 /**
  * Handles the grid of cells used in simulation.
  * @author Nathaniel Brooke
  * @version 2-01-2017
+ * 
+ * @author DhruvKPatel
+ * @version 2-12-2017
  */
 public class Grid {
 
@@ -29,8 +35,9 @@ public class Grid {
 	 * @param setupInfo the File containing setup information
 	 * @param shape of grid
 	 * including grid size, rules, and starting states.
+	 * @throws XMLException 
 	 */
-	public Grid(File setupInfo, String neighborhoodType, String edgeType) {
+	public Grid(File setupInfo, String neighborhoodType, String edgeType) throws XMLException {
 		XMLParser config = new XMLParser(setupInfo);
 		
 		this.cyclesPerTick = Integer.parseInt(config.getParameter("cyclesPerTick"));
@@ -97,8 +104,10 @@ public class Grid {
 	 * Initializes the Map of Coordinates and Cells.
 	 * Passes each Cell its rules and starting state.
 	 * @param setupInfo the File containing the size, rules, and starting states.
+	 * @throws XMLException 
+	 * @throws DOMException 
 	 */
-	private void initializeArray(XMLParser configuration) {
+	private void initializeArray(XMLParser configuration) throws DOMException, XMLException {
 		Map<Coordinate, String> stateReference = configuration.getInitialStates();
 		myCells = new TreeMap<Coordinate, Cell>();	
 		
@@ -129,6 +138,10 @@ public class Grid {
 		edgeType.onPassGridNeighbors(this, myCells, rules);
 	}
 	
+	/**
+	 * Resizes grid to encompass all cells in space.
+	 * Note: cells can have negative coordinate, so min value is not assumed 0.
+	 */
 	public void calculateGridSize(){
 		max = new Coordinate(0, 0);
 		min = new Coordinate(0, 0);
@@ -143,52 +156,12 @@ public class Grid {
 		numCols = max.getCol() - min.getCol() + 1;
 		numRows = max.getRow() - min.getRow() + 1;
 	}
-	
-//	public void connectNeighborsToroidal(){		
-//		for(Coordinate globalCellPos: myCells.keySet()){
-//			Cell current = myCells.get(globalCellPos);
-//			for(Coordinate localNeighborPos: current.getNeighborhood().getLocalNeighborCoordinates()){
-//				if(current.getNeighborhood().get(localNeighborPos) == null){	// This means that we must replace this with the toroidal neighbor
-//					Coordinate toroidNeighborPos = globalCellPos.add(localNeighborPos);
-//
-//					int newRow = toroidNeighborPos.getRow(), newCol = toroidNeighborPos.getCol();
-//					
-//					if(toroidNeighborPos.getRow() >= this.getRows()) newRow = 0; // bottom -> top
-//					else if(toroidNeighborPos.getRow() <= -1) newRow = getRows() - 1; // top -> bottom
-//
-//					if(toroidNeighborPos.getCol() >= this.getCols()) newCol = 0; // right -> left
-//					else if(toroidNeighborPos.getCol() <= -1) newCol = this.getCols() - 1; // left -> right
-//					
-//					toroidNeighborPos = new Coordinate(newRow, newCol);
-//					current.getNeighborhood().setLocally(myCells.get(toroidNeighborPos), localNeighborPos);
-//				}
-//			}
-//		}
-//	}
-//	
-//	public void connectNeighborsInfinite(){
-//		ArrayList<Coordinate> newCellPositions = new ArrayList<Coordinate>();
-//		for(Coordinate globalCellPos: myCells.keySet()){
-//			Cell current = myCells.get(globalCellPos);
-//			if(isOnEdge(globalCellPos) && !current.getCurrentState().equals(rules.getDefaultState())){ // Grid expansion is not affected by cells of default state
-//				for(Coordinate localNeighborPos : current.getNeighborhood().getLocalNeighborCoordinates()){
-//					if(current.getNeighborhood().get(localNeighborPos) == null){
-//						newCellPositions.add(globalCellPos.add(localNeighborPos));
-//					}
-//				}
-//			}
-//		}
-//		
-//		for(Coordinate newCellPos : newCellPositions){
-//			myCells.put(newCellPos, new Cell(rules, rules.getDefaultState()));
-//		}
-//		
-//		calculateGridSize();
-//		fillEmptyCells();
-//		passNeighbors();
-//	}
-	
-	
+
+	/**
+	 * Given grid's intrinsic size constraints, if a cell is not contained in every coordinate possible,
+	 * a cell with a default state will be added. This is helpful for infinite grids, but could be used
+	 * for anything similar.
+	 */
 	public void fillEmptyCells(){
 		for(int r = min.getRow(); r <= max.getRow(); r++){
 			for(int c = min.getCol(); c <= max.getCol(); c++){
@@ -198,6 +171,10 @@ public class Grid {
 		}
 	}
 	
+	/**
+	 * Checks size constraints of grid with coordinate
+	 * to see if coordinate is on edge of grid.
+	 */
 	public boolean isOnEdge(Coordinate c){
 		if(c.getRow() == max.getRow()) return true; 	// Bottom
 		if(c.getRow() == min.getRow()) return true;		// Top

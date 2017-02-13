@@ -1,15 +1,23 @@
 package model.edgetypes;
 
 import java.util.TreeMap;
-
 import model.Cell;
 import model.Coordinate;
 import model.Edge;
 import model.Grid;
 import model.Rules;
 
+/**
+ * This class allows for toroidal interaction between cells
+ * @author DhruvKPatel
+ */
 public class ToroidalEdge extends Edge {
 
+	/**
+	 * Call after neighbors are passed to cells in Grid.
+	 * If a cell's neighbor is not in the grid size constraints, it will connect the neighbor to
+	 * the corresponding toroidal cell on the other side.
+	 */
 	@Override
 	public void onPassGridNeighbors(Grid myGrid, TreeMap<Coordinate, Cell> myCells, Rules rules) {
 		for(Coordinate globalCellPos: myCells.keySet()){

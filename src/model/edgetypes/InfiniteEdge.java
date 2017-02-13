@@ -9,8 +9,19 @@ import model.Edge;
 import model.Grid;
 import model.Rules;
 
+/**
+ * This edgetype allows for infinite grid expansion
+ * @author DhruvKPatel
+ *
+ */
 public class InfiniteEdge extends Edge {
 
+	/**
+	 * If a cell on the grid edge does not have a default state, its neighbors will be added to grid
+	 * Then, the grid will resize to ensure that all rows and columns are even
+	 * 
+	 * Call in Grid before rest of grid frame is refreshed
+	 */
 	@Override
 	public void onNextGridFrame(Grid myGrid, TreeMap<Coordinate, Cell> myCells, Rules myRules) {
 		ArrayList<Coordinate> newCellPositions = new ArrayList<Coordinate>();

@@ -81,8 +81,4 @@ public class ForagingAntState extends State {
 	public void removeAnt(Ant a){
 		ants.remove(a);
 	}
-
-	
-	
-	
 }

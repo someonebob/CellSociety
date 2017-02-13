@@ -1,4 +1,4 @@
-<CA>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><CA>
 	<subclass>simulation.SegregationRules</subclass>
 
 	<title>Segregation</title>
@@ -10,10 +10,30 @@
 	<parameters>
 		<percentThreshold>51</percentThreshold>
 	</parameters>
+	
+	<scheme>
+		<default>
+			<agent1>darkorange</agent1>
+			<agent2>midnightblue</agent2>
+			<vacant>lightslategray</vacant>
+		</default>
 
-	<stateDef ref = "o" color="orange">agent1</stateDef>
-	<stateDef ref = "x" color="blue">agent2</stateDef>
-	<stateDef ref = "-" color="black">vacant</stateDef>
+		<othello>
+			<agent1>black</agent1>
+			<agent2>white</agent2>
+			<vacant>darkgreen</vacant>
+		</othello>
+
+		<farm>
+			<agent1>hotpink</agent1>
+			<agent2>saddlebrown</agent2>
+			<vacant>palegreen</vacant>
+		</farm>
+	</scheme>
+
+	<stateDef color="darkorange" ref="o">darkorange</stateDef>
+	<stateDef color="midnightblue" ref="x">midnightblue</stateDef>
+	<stateDef color="lightslategray" ref="-">lightslategray</stateDef>
 	
 	<state>
 	x o o x - x x o x x o o o x x x

@@ -7,6 +7,7 @@ import model.Cell;
 import model.Neighborhood;
 import model.Rules;
 import model.State;
+import xml.XMLException;
 import xml.XMLParser;
 
 public class SegregationRules extends Rules{
@@ -16,7 +17,7 @@ public class SegregationRules extends Rules{
 	private double percentThreshold;
 	private Cell me;
 	
-	public SegregationRules(XMLParser configuration){
+	public SegregationRules(XMLParser configuration) throws NumberFormatException, XMLException{
 		this.configuration = configuration;
 		this.percentThreshold = Double.parseDouble(configuration.getParameter(PERCENT_THRESHOLD_PARAMETER));
 	}

@@ -101,8 +101,8 @@ public class Ant {
 	}
 	
 	private void moveTo(Coordinate newPos){
-		futureState.addAnt(this);
 		currentState.removeAnt(this);
+		futureState.addAnt(this);
 	}
 	
 	public Coordinate getLocationWithMaxPheramones(String pheramoneType){
@@ -122,6 +122,7 @@ public class Ant {
 	}
 	
 	public ForagingAntState getState(Cell neighbor){
+		if(neighbor == null) return null;
 		return (ForagingAntState)neighbor.getCurrentState();
 	}
 	
@@ -145,9 +146,9 @@ public class Ant {
 
 	
 	public Coordinate selectLocation(Collection<Coordinate> locSet){
-		long seed = System.nanoTime();
 		Map<Coordinate, Double> choicesWithWeights = new HashMap<Coordinate, Double>();
 		for(Coordinate c: locSet){
+			if(currentCell.getNeighborhood().get(c) == null) continue;
 			if(currentCell.getNeighborhood().get(c).getCurrentState() == null) continue;
 			double pheremones = getState(currentCell.getNeighborhood().get(c)).getPheramones(ForagingAntRules.FOOD);
 			choicesWithWeights.put(c, Math.pow((K + pheremones), N));

@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import model.Coordinate;
 import model.Grid;
+import xml.XMLException;
 
 /**
  * GridImager subclass used to image Grids containing triangles.
@@ -17,16 +18,17 @@ public class TriangleGridImager extends GridImager {
 	
 	private double sideLength;
 
-	public TriangleGridImager(File setupInfo, double width, double height, String edgeType) {
+	public TriangleGridImager(File setupInfo, double width, double height, String edgeType) throws XMLException {
 		super(setupInfo, width, height, edgeType);
 	}
 	
 	/**
 	 * Chooses correct grid type depending on Grid Imager type
 	 * @param setupInfo setup file for grid
+	 * @throws XMLException 
 	 */
 	@Override
-	public Grid makeGrid(File setupInfo, String edgeType) {
+	public Grid makeGrid(File setupInfo, String edgeType) throws XMLException {
 		return new Grid(setupInfo, "triangular", edgeType);
 	}
 
@@ -39,7 +41,7 @@ public class TriangleGridImager extends GridImager {
 	}
 
 	@Override
-	public void updateGroup(Group group, Grid grid, boolean outline) {
+	public void updateGroup(Group group, Grid grid, boolean outline) throws XMLException {
 		group.getChildren().clear();
 		for(Coordinate c : grid.getCoordinates()) {
 			Polygon p = makeTriangle(c.getRow(), c.getCol());

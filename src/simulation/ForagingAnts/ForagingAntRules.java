@@ -32,10 +32,12 @@ public class ForagingAntRules extends Rules {
 	public State getStartingState(String stateText) {
 		ForagingAntState start  = new ForagingAntState(configuration, stateText, 0, 0);
 		if(stateText.equals(HOME)){
+			start.dropPheramones(HOME, ForagingAntState.MAX_PHERAMONES);
 			Random r = new Random();
 			if((r.nextDouble()) <= 0.3333) start.addAnt(new Ant(stateText));
 		}
 		else if(stateText.equals(FOOD)){
+			start.dropPheramones(FOOD, ForagingAntState.MAX_PHERAMONES);
 			start.setHasFood(true);
 		}
 		return start;
