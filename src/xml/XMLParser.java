@@ -28,7 +28,7 @@ import model.Coordinate;
  * Handles XML Parsing
  * 
  * @author Jesse
- *
+ * @author Dhruv
  */
 public class XMLParser {
 	
@@ -129,7 +129,14 @@ public class XMLParser {
 			throw new XMLException("Initial state grid not defined");
 		}
 	}
-
+	/**
+	 * Allows the user to change the parameter from the GUI, if one exists
+	 * @param tagName
+	 * @param newParam
+	 * @throws TransformerException
+	 * @throws DOMException
+	 * @throws XMLException
+	 */
 	public void setParameter(String tagName, String newParam) throws TransformerException, DOMException, XMLException {
 
 		getRootElement().getElementsByTagName(tagName).item(0).setTextContent(newParam);
@@ -139,7 +146,12 @@ public class XMLParser {
 		StreamResult result = new StreamResult(info);
 		transformer.transform(source, result);
 	}
-	
+	/**
+	 * Allows the user to change the color scheme from the GUI
+	 * @param newColor
+	 * @throws TransformerException
+	 * @throws XMLException
+	 */
 	public void setColor(String newColor) throws TransformerException, XMLException{
 		NodeList nodelist = getRootElement().getElementsByTagName("scheme").item(0).getChildNodes();
 		NodeList statelist = getRootElement().getElementsByTagName("stateDef");
@@ -180,8 +192,13 @@ public class XMLParser {
 			throw new XMLException("Invalid parameter requested: " + tagName);
 		}
 	}
-
-	public NodeList getParameters(String tagName) throws XMLException {
+	/**
+	 * Returns the children of a parameter
+	 * @param tagName
+	 * @return
+	 * @throws XMLException
+	 */
+	public NodeList getParameterChildren(String tagName) throws XMLException {
 		try {
 			return getRootElement().getElementsByTagName(tagName).item(0).getChildNodes();
 		} catch (Exception e) {
@@ -190,7 +207,13 @@ public class XMLParser {
 	}
 
 
-	// Consider renaming
+	/**
+	 * Returns the specified attribute of a parameter
+	 * @param tagName
+	 * @param attribute
+	 * @return
+	 * @throws XMLException
+	 */
 	public String getParameterAttribute(String tagName, String attribute) throws XMLException {
 
 		try {
