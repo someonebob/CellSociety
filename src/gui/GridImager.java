@@ -1,7 +1,14 @@
+// This entire file is part of my masterpiece.
+// Nathaniel Brooke
+
 package gui;
 
 import java.io.File;
+
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
+import model.Coordinate;
 import model.Grid;
 import xml.XMLException;
 
@@ -17,7 +24,7 @@ public abstract class GridImager {
 	private File mySetup;
 	
 	/**
-	 * Sets up the Grid and Group for the simulation
+	 * Sets up the Grid and Group for the simulation.
 	 * @param setupInfo the XML file containing setup information
 	 * @param width the width of the grid representation on screen.
 	 * @param height the height of the grid representation on screen.
@@ -57,7 +64,7 @@ public abstract class GridImager {
 	}
 	
 	/**
-	 * Resets the grid to initial conditions.
+	 * Resets the grid and its graphical representation to initial conditions.
 	 * @param outline true if the cells are outlined in black.
 	 * @param edgeType the edge style of the grid.
 	 */
@@ -65,6 +72,26 @@ public abstract class GridImager {
 		myGrid = makeGrid(mySetup, edgeType);
 		updateGroup(outline);
 
+	}
+	
+	/**
+	 * Updates the Nodes held in the Group used for animation.
+	 * @param outline true if the cells are outlined in black.
+	 */
+	private void updateGroup(boolean outline) {
+		myGroup.getChildren().clear();
+		for(Coordinate c : myGrid.getCoordinates()) {
+			Shape s = getShape(c.getRow(), c.getCol());
+			try {
+				s.setFill(Color.web(myGrid.getCell(c).getCurrentState().getColor()));
+			} catch (XMLException e) {
+				new ExceptionHandler(e);
+			}
+			if(outline){
+				s.setStroke(Color.BLACK);
+			}
+			getGroup().getChildren().add(s);
+		}
 	}
 	
 	/**
@@ -83,10 +110,12 @@ public abstract class GridImager {
 	public abstract void setCellSize(double gridHeight, double gridWidth);
 	
 	/**
-	 * Updates the Nodes held in the Group used for animation.
-	 * @param outline true if the cells are outlined in black.
-	 * @throws XMLException 
+	 * Creates a shape specified by the subclass of GridImager used that will fill the
+	 * specified row and column location in the view of the grid. 
+	 * @param row in the Grid of the cell that the shape represents.
+	 * @param col in the Grid of the cell that the shape represents.
+	 * @return a Shape correctly positioned to represent the cell at the given row and column.
 	 */
-	public abstract void updateGroup(boolean outline);
+	public abstract Shape getShape(int row, int col);
 	
 }

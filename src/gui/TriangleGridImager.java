@@ -1,10 +1,12 @@
+// This entire file is part of my masterpiece.
+// Nathaniel Brooke
+
 package gui;
 
 import java.io.File;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import model.Coordinate;
+import javafx.scene.shape.Shape;
 import model.Grid;
 import xml.XMLException;
 
@@ -37,24 +39,19 @@ public class TriangleGridImager extends GridImager {
 			sideLength = gridWidth/((double)getGrid().getCols() + 0.5);
 		}
 	}
-
-	@Override
-	public void updateGroup(boolean outline) {
-		getGroup().getChildren().clear();
-		for(Coordinate c : getGrid().getCoordinates()) {
-			Polygon p = makeTriangle(c.getRow(), c.getCol());
-			try {
-				p.setFill(Color.web(getGrid().getCell(c).getCurrentState().getColor()));
-			} catch (XMLException e) {
-				new ExceptionHandler(e);
-			}
-			if(outline){
-				p.setStroke(Color.BLACK);
-			}
-			getGroup().getChildren().add(p);
-		}
-	}
 	
+	@Override
+	public Shape getShape(int row, int col) {
+		return makeTriangle(row, col);
+	}
+
+	/**
+	 * Generates a triangle at the specified row and column, flipping
+	 * every other triangle position to allow the triangles to properly mesh.
+	 * @param row the row position of the triangle in the grid.
+	 * @param col the column position of the triangle in the grid.
+	 * @return a Polygon in the position and shape of the specified triangle.
+	 */
 	private Polygon makeTriangle(int row, int col) {
 		double mainX = col*sideLength/2;
 		double mainY = row*sideLength*Math.cos(Math.toRadians(30));

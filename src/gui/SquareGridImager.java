@@ -1,10 +1,12 @@
+// This entire file is part of my masterpiece.
+// Nathaniel Brooke
+
 package gui;
 
 import java.io.File;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import model.Coordinate;
+import javafx.scene.shape.Shape;
 import model.Grid;
 import xml.XMLException;
 
@@ -38,24 +40,14 @@ public class SquareGridImager extends GridImager {
 			sideLength = gridWidth/getGrid().getCols();
 		}
 	}
-	
+
 	@Override
-	public void updateGroup(boolean outline) {
-		getGroup().getChildren().clear();
-		for(Coordinate c : getGrid().getCoordinates()) {
-			Rectangle r = new Rectangle(sideLength, sideLength);
-			try {
-				r.setFill(Color.web(getGrid().getCell(c).getCurrentState().getColor()));
-			} catch (XMLException e) {
-				new ExceptionHandler(e);
-			}
-			r.setX(c.getCol()*sideLength);
-			r.setY(c.getRow()*sideLength);
-			if(outline){
-				r.setStroke(Color.BLACK);
-			}
-			getGroup().getChildren().add(r);
-		}
+	public Shape getShape(int row, int col) {
+		Rectangle r = new Rectangle(sideLength, sideLength);
+		r.setX(col*sideLength);
+		r.setY(row*sideLength);
+		return r;
 	}
+	
 
 }

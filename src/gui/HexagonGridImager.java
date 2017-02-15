@@ -1,10 +1,12 @@
+// This entire file is part of my masterpiece.
+// Nathaniel Brooke
+
 package gui;
 
 import java.io.File;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import model.Coordinate;
+import javafx.scene.shape.Shape;
 import model.Grid;
 import xml.XMLException;
 
@@ -17,6 +19,9 @@ public class HexagonGridImager extends GridImager {
 	
 	private double sideLength;
 
+	/**
+	 * Initializes GridImager superclass.
+	 */
 	public HexagonGridImager(File setupInfo, double width, double height, String edgeType) {
 		super(setupInfo, width, height, edgeType);
 	}
@@ -28,7 +33,8 @@ public class HexagonGridImager extends GridImager {
 		} catch (XMLException e) {
 			new ExceptionHandler(e).exit();
 			return null;
-		}	}
+		}
+	}
 
 	@Override
 	public void setCellSize(double gridHeight, double gridWidth) {
@@ -37,27 +43,23 @@ public class HexagonGridImager extends GridImager {
 			sideLength = gridWidth/(getGrid().getCols()*2*Math.cos(Math.toRadians(30)) + 0.5);
 		}
 	}
-
+	
 	@Override
-	public void updateGroup(boolean outline) {
-		getGroup().getChildren().clear();
-		for(Coordinate c : getGrid().getCoordinates()) {
-			Polygon p = makeHexagon(c.getRow(), c.getCol(), Math.abs(c.getRow()%2) == 1);
-			try {
-				p.setFill(Color.web(getGrid().getCell(c).getCurrentState().getColor()));
-			} catch (XMLException e) {
-				new ExceptionHandler(e);
-			}
-			if(outline){
-				p.setStroke(Color.BLACK);
-			}
-			getGroup().getChildren().add(p);
-		}
+	public Shape getShape(int row, int col) {
+		return makeHexagon(row, col, Math.abs(row%2) == 1);
 	}
 	
-	private Polygon makeHexagon(int row, int col, boolean leftShift) {
+	/**
+	 * Generates a hexagon at the specified row and column, optionally
+	 * right shifted to mesh with other hexagons in different rows.
+	 * @param row the row position of the hexagon in the grid.
+	 * @param col the column position of the hexagon in the grid.
+	 * @param rightShift true if this hexagon needs to be shifted right to fit in the grid.
+	 * @return a Polygon in the position and shape of the specified hexagon.
+	 */
+	private Polygon makeHexagon(int row, int col, boolean rightShift) {
 		double hexagonWidth = sideLength*2*Math.cos(Math.toRadians(30));
-		double mainX = col*hexagonWidth + ((leftShift)? hexagonWidth/2 : 0);
+		double mainX = col*hexagonWidth + ((rightShift)? hexagonWidth/2 : 0);
 		double mainY = row*sideLength*1.5;
 		return new Polygon(
 				mainX + hexagonWidth/2, mainY,
@@ -68,4 +70,5 @@ public class HexagonGridImager extends GridImager {
 				mainX + hexagonWidth, mainY + sideLength*0.5
 				);
 	}
+
 }
