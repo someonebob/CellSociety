@@ -37,6 +37,7 @@ import xml.XMLParser;
 /**
  * Runs the cells animation pane in the program.
  * @author Nathaniel Brooke
+ * @author Jesse
  * @version 02-01-2016
  */
 public class Animation {
@@ -454,7 +455,7 @@ public class Animation {
 	 */
 	private void fillComboBox(ComboBox<String> type, String parameter){
 		try{
-			NodeList parameters = parser.getParameters(parameter);
+			NodeList parameters = parser.getParameterChildren(parameter);
 			for(int i = 0; i < parameters.getLength(); i++){
 				if(!parameters.item(i).getNodeName().equals(RESOURCES.getString("extraText"))){
 					type.getItems().add(parameters.item(i).getNodeName());
