@@ -79,10 +79,10 @@ public class Animation {
 		this.window = window;
 		dimension = screen.getHeight() - 235;
 		try {
-			gridImg = new SquareGridImager(setup, dimension, dimension, "default");
+			gridImg = new SquareGridImager(setup, dimension, dimension, RESOURCES.getString("default"));
 		}
 		catch (Exception e) {
-			new ExceptionHandler("Could not load File").startOver(window);
+			new ExceptionHandler(RESOURCES.getString("loadException")).startOver(window);
 		}
 		graph = new Graph();
 		root.setBottom(graph.getLineChart());
@@ -99,7 +99,7 @@ public class Animation {
 			setupAnimation(gridImg);
 		}
 		catch (Exception e) {
-			new ExceptionHandler("Could not run animation").startOver(window);
+			new ExceptionHandler(RESOURCES.getString("runException")).startOver(window);
 		}
 		window.setOnCloseRequest(e -> resetDefault());
 		window.setScene(simulation);
@@ -279,11 +279,11 @@ public class Animation {
 	 * Sets up title of simulation and author
 	 */
 	private void setupHeading() throws XMLException {	
-		Text title = new Text(parser.getParameter("title"));
+		Text title = new Text(parser.getParameter(RESOURCES.getString("title")));
 		title.setFont(new Font(50));
 		title.setWrappingWidth(500);
 		
-		Text author = new Text(parser.getParameter("author"));
+		Text author = new Text(parser.getParameter(RESOURCES.getString("author")));
 		author.setFont(new Font(40));
 
 		VBox heading = new VBox(10);
@@ -315,13 +315,13 @@ public class Animation {
 	 * Changes the shape within the cell
 	 */
 	private void makeGridEdgeControl(){
-		Label gridEdge = new Label("Grid Edge Type");
+		Label gridEdge = new Label(RESOURCES.getString("gridEdge"));
 		GridPane.setConstraints(gridEdge, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		
 		edgeType = new ComboBox<>();
 		GridPane.setConstraints(edgeType, 1, 0, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
-		edgeType.getItems().addAll("Finite", "Toroidal", "Infinite");
+		edgeType.getItems().addAll(RESOURCES.getString("finite"), RESOURCES.getString("toroid"), RESOURCES.getString("infinite"));
 		edgeType.setPromptText(edgeType.getItems().get(0));
 		
 		edgeType.setOnAction(e -> {
@@ -334,11 +334,11 @@ public class Animation {
 	 * Allows user to choose square, triangular, or hexagonal grid
 	 */
 	private void makeGridTypeControl(){
-		Label gridType = new Label("Grid Type");
+		Label gridType = new Label(RESOURCES.getString("gridType"));
 		GridPane.setConstraints(gridType, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
 		
 		gridShape = new ComboBox<>();
-		gridShape.getItems().addAll("Square", "Triangular", "Hexagonal");
+		gridShape.getItems().addAll(RESOURCES.getString("square"), RESOURCES.getString("triangle"), RESOURCES.getString("hexagon"));
 		gridShape.setValue(gridShape.getItems().get(0));
 		GridPane.setConstraints(gridShape, 1, 1, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
@@ -353,7 +353,7 @@ public class Animation {
 	 * Allows user to adjust the cell size
 	 */
 	private void makeCellSizeControl(){
-		Label cellSize = new Label("Cell Size");
+		Label cellSize = new Label(RESOURCES.getString("cellSize"));
 		GridPane.setConstraints(cellSize, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
 
 		size = new Slider(dimension/10, dimension*4, dimension);
@@ -368,7 +368,7 @@ public class Animation {
 	 * Allows user to choose if they want outlines or not
 	 */
 	private void makeOutlinesControl(){
-		Label outlines = new Label("Outlines");
+		Label outlines = new Label(RESOURCES.getString("outlines"));
 		GridPane.setConstraints(outlines, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
 
 		check = new CheckBox();
@@ -381,13 +381,13 @@ public class Animation {
 	 * Allows user to change the color scheme
 	 */
 	private void makeColorControl(){
-		Label color = new Label("Color Scheme");
+		Label color = new Label(RESOURCES.getString("color"));
 		GridPane.setConstraints(color, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
 		
 		colorType = new ComboBox<>();
 		GridPane.setConstraints(colorType, 1, 4, 2, 1, HPos.RIGHT, VPos.CENTER);
 		
-		fillComboBox(colorType, "scheme");
+		fillComboBox(colorType, RESOURCES.getString("scheme"));
 		colorType.getSelectionModel().selectFirst();
 		
 		colorType.setOnAction(event -> {
@@ -396,7 +396,7 @@ public class Animation {
 				chooseGrid(size.getValue());
 			} 
 			catch (Exception e) {
-				new ExceptionHandler("Could not change to specified color");
+				new ExceptionHandler(RESOURCES.getString("colorException"));
 			}
 		});
 		
@@ -407,7 +407,7 @@ public class Animation {
 	 * Allows user to change the parameters of the simulation 
 	 */
 	private void makeParameterControl(){
-		Label parameter = new Label("Parameter");
+		Label parameter = new Label(RESOURCES.getString("parameter"));
 		GridPane.setConstraints(parameter, 0, 5, 1, 1, HPos.LEFT, VPos.CENTER);
 		
 		ComboBox<String> type = new ComboBox<>();
@@ -416,14 +416,14 @@ public class Animation {
 		TextField input = new TextField();
 		GridPane.setConstraints(input, 2, 5, 1, 1, HPos.RIGHT, VPos.CENTER);
 		
-		fillComboBox(type, "parameters");	
+		fillComboBox(type, RESOURCES.getString("parameters"));	
 		type.getSelectionModel().selectFirst();
 		if(type.isDisabled()){
 			input.setDisable(true);
 		}
 		type.setOnAction(e -> {
 			try {
-				input.setPromptText(parser.getParameterAttribute(type.getValue(), "type"));
+				input.setPromptText(parser.getParameterAttribute(type.getValue(), RESOURCES.getString("type")));
 			} catch (XMLException e1) {
 				new ExceptionHandler(e1);
 			}
@@ -441,7 +441,7 @@ public class Animation {
 					new ExceptionHandler("Input must be a number between "+min+" and "+max);
 				}
 			} catch(Exception e){
-				new ExceptionHandler("Must choose a parameter");
+				new ExceptionHandler(RESOURCES.getString("paramException"));
 			}
 		});
 	
@@ -457,7 +457,7 @@ public class Animation {
 		try{
 			NodeList parameters = parser.getParameterChildren(parameter);
 			for(int i = 0; i < parameters.getLength(); i++){
-				if(!parameters.item(i).getNodeName().equals("#text")){
+				if(!parameters.item(i).getNodeName().equals(RESOURCES.getString("extraText"))){
 					type.getItems().add(parameters.item(i).getNodeName());
 				}
 			}
@@ -493,12 +493,12 @@ public class Animation {
 			}
 			colorType.getSelectionModel().selectFirst();
 		} catch (TransformerException e) {
-			new ExceptionHandler("Cannot find XML file to reset to default color");
+			new ExceptionHandler(RESOURCES.getString("noXMLException"));
 		} catch (XMLException e) {
 			new ExceptionHandler(e);
 		}
 		check.setSelected(false);
-		gridImg = new SquareGridImager(setup, dimension, dimension, "Finite");
+		gridImg = new SquareGridImager(setup, dimension, dimension, RESOURCES.getString("finite"));
 		edgeType.setValue(edgeType.getItems().get(0));
 		gridShape.setValue(gridShape.getItems().get(0));
 	}
