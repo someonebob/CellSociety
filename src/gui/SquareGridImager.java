@@ -12,6 +12,16 @@ import xml.XMLException;
 
 /**
  * GridImager subclass used to image Grids containing squares.
+ * 
+ * This code is part of my masterpiece because it clearly shows
+ * the reason I created multiple subclasses of GridImager to handle
+ * different styles of grid. 
+ * 
+ * I moved the updateGroup method from this class to grid because it 
+ * was largely identical to the implementation of the same method in 
+ * all other subclasses of Grid.  See the comment in GridImager for 
+ * the link to the commit. 
+ * 
  * @author Nathaniel Brooke
  * @version 02-10-2017
  */

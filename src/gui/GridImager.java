@@ -14,6 +14,29 @@ import xml.XMLException;
 
 /**
  * Creates a graphical representation of the Grid of cells for CellSociety.
+ * 
+ * This class is part of my masterpiece because it exemplifies how I used
+ * polymorphism to tackle adding new features to the project.  By creating an
+ * abstract GridImager class, I consolidated code that would otherwise have been
+ * duplicated when adding the ability to render hexagonal and triangular grids.  
+ * 
+ * In my first commit, found at 
+ * https://coursework.cs.duke.edu/CompSci308_2017Spring/cellsociety_team02/commit/ba3cd6e6959be60c3e2d12bf03ba743f558283bd
+ * my main change was to remove the abstract method updateGroup from the subclasses
+ * of GridImager, and instead make it a private method in GridImager itself.  I then
+ * created a new abstract method getShape which is called from updateGroup and creates
+ * either a triangle, square, or hexagon depending on the subclass you use.  I did this
+ * because the code for the updateGroup method in each subclass was nearly identical.  
+ * The only difference between the subclasses was the shape that was generated within
+ * the loop in UpdateGrid.  Now, all the duplicated code has been consolidated into one
+ * method and only the pieces of code critically different between the subclasses of
+ * GridImager are separated out, implemented in the definitions of abstract methods
+ * defined in the concrete subclasses.  
+ * 
+ * My second commit was just a merge with master to get the branch properly set up, and
+ * my final commit will be to commit this comment to the branch before I submit my
+ * masterpiece as a merge request.  
+ * 
  * @author Nathaniel Brooke
  * @version 02-10-2017
  */

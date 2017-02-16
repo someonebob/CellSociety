@@ -12,6 +12,16 @@ import xml.XMLException;
 
 /**
  * GridImager subclass used to image Grids containing triangles.
+ * 
+ * I think this code is well designed because it exemplifies how I
+ * tried to use polymorphism to add the ability to view different
+ * styles of grid. 
+ * 
+ * I moved the updateGroup method from this class to grid because it 
+ * was largely identical to the implementation of the same method in 
+ * all other subclasses of Grid.  See the comment in GridImager for 
+ * the link to the commit. 
+ * 
  * @author Nathaniel Brooke
  * @version 02-10-2017
  */
