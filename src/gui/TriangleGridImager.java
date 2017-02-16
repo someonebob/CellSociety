@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import model.Coordinate;
 import model.Grid;
+import model.GridLoader;
 import xml.XMLException;
 
 /**
@@ -24,7 +25,7 @@ public class TriangleGridImager extends GridImager {
 	@Override
 	public Grid makeGrid(File setupInfo, String edgeType) {
 		try {
-			return new Grid(setupInfo, "triangular", edgeType);
+			return new GridLoader().getGrid(setupInfo, "triangular", edgeType);
 		} catch (XMLException e) {
 			new ExceptionHandler(e).exit();
 			return null;

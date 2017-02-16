@@ -26,7 +26,6 @@ public class Grid {
 	private int cyclesPerTick;
 	private String neighborhoodType;
 	private Rules rules;
-	private Edge edgeType;
 
 	/**
 	 * Initializes the grid cells
@@ -35,14 +34,13 @@ public class Grid {
 	 * including grid size, rules, and starting states.
 	 * @throws XMLException 
 	 */
-	public Grid(File setupInfo, String neighborhoodType, String edgeType) throws XMLException {
+	public Grid(File setupInfo, String neighborhoodType) throws XMLException {
 		XMLParser config = new XMLParser(setupInfo);
 		
 		this.cyclesPerTick = Integer.parseInt(config.getParameter("cyclesPerTick"));
 		this.rules = new RulesLoader(config).getRules();
 
 		this.neighborhoodType = neighborhoodType;
-		this.edgeType = (new EdgeLoader()).getEdge(edgeType);
 		
 		initializeArray(config);
 		passNeighbors();
@@ -55,7 +53,7 @@ public class Grid {
 	 */
 	public void nextFrame() {
 		for(int i = 0; i < cyclesPerTick; i++) {
-			edgeType.onNextGridFrame(this, myCells, rules);
+			this.onNextFrame(rules);
 			for(Cell c : myCells.values()) {
 				c.calculateFutureState();
 			}
@@ -72,6 +70,13 @@ public class Grid {
 	 */
 	public Cell getCell(Coordinate coord) {
 		return myCells.get(coord);
+	}
+	
+	/**
+	 * Adds specific cell to grid
+	 */
+	public void putCell(Coordinate coord, Cell cell){
+		myCells.put(coord, cell);
 	}
 	
 	/**
@@ -133,7 +138,7 @@ public class Grid {
 			}	
 			myCells.get(c).setNeighborhood(neighborhood);
 		}
-		edgeType.onPassGridNeighbors(this, myCells, rules);
+		this.onPassNeighbors(rules);
 	}
 	
 	/**
@@ -195,4 +200,7 @@ public class Grid {
 		}
 		return stateQuantities;
 	}
+	
+	public void onNextFrame(Rules myRules){};		// This must be a TreeMap, because comparables used to distinguish coordinates (no hashcode implemented)
+	public void onPassNeighbors(Rules myRules){};
 }
