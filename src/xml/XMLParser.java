@@ -1,3 +1,7 @@
+// This entire file is part of my masterpiece.
+// Jesse Yue
+// I believe this class is well designed because the API has powerful features that allow the user to do a lot of things but it also encapsulates the generation of the Document Builder so the user doesn't have the ability to go crazy and create a bunch of documents
+
 package xml;
 
 import java.io.File;
@@ -32,12 +36,11 @@ import model.Coordinate;
  */
 public class XMLParser {
 	
-	public static final List<String> DATA_FIELDS = Arrays.asList(new String[] { "name", "dimension", "state", "parameter", "stateDef" });
+	public static final List<String> DATA_FIELDS = Arrays.asList(new String[] { "name", "dimension", "state", "parameter", "stateDef", "scheme", "color", "ref" });
 	public static final ResourceBundle RESOURCES = ResourceBundle.getBundle("resourcefiles/XML");
 	public DocumentBuilder DOCUMENT_BUILDER;	
 
 	private File info;
-	private int gridRows, gridColumns;
 	private Document xmlDocument;
 
 	/**
@@ -53,35 +56,6 @@ public class XMLParser {
 	}
 
 	/**
-	 * Returns the dimension for rows
-	 * 
-	 * @return number of rows
-	 * @throws XMLException 
-	 * @throws DOMException 
-	 * @throws NumberFormatException 
-	 */
-	public int getGridRows() throws NumberFormatException, DOMException, XMLException {
-		gridRows = Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(0).getTextContent());
-
-		return gridRows;
-	}
-
-	/**
-	 * Returns the dimension for columns
-	 * 
-	 * @return number of columns
-	 * @throws XMLException 
-	 * @throws DOMException 
-	 * @throws NumberFormatException 
-	 */
-	public int getGridColumns() throws NumberFormatException, DOMException, XMLException {
-		gridColumns = Integer
-				.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(1).getTextContent());
-		return gridColumns;
-	}
-
-
-	/**
 	 * Returns a NodeList of all the initial states of the simulation
 	 * 
 	 * @return list of states
@@ -89,8 +63,6 @@ public class XMLParser {
 	 * @throws DOMException 
 	 */
 	public Map<Coordinate, String> getInitialStates() throws DOMException, XMLException {
-		//System.out.println("hi");
-
 		try{
 			Map<Coordinate, String> stateTextGrid = new TreeMap<Coordinate, String>();
 	
@@ -103,7 +75,6 @@ public class XMLParser {
 			}
 			if(hasStates){
 				String fullRef = getRootElement().getElementsByTagName(DATA_FIELDS.get(2)).item(0).getTextContent();
-
 				String[] linesRef = fullRef.trim().split("\n");
 				for (int row = 0; row < linesRef.length; row++) {
 					String[] stateRef = linesRef[row].trim().split("\\s+");
@@ -138,13 +109,8 @@ public class XMLParser {
 	 * @throws XMLException
 	 */
 	public void setParameter(String tagName, String newParam) throws TransformerException, DOMException, XMLException {
-
 		getRootElement().getElementsByTagName(tagName).item(0).setTextContent(newParam);
-		TransformerFactory transformerfactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerfactory.newTransformer();
-		DOMSource source = new DOMSource(xmlDocument);
-		StreamResult result = new StreamResult(info);
-		transformer.transform(source, result);
+		transform();
 	}
 	/**
 	 * Allows the user to change the color scheme from the GUI
@@ -153,8 +119,8 @@ public class XMLParser {
 	 * @throws XMLException
 	 */
 	public void setColor(String newColor) throws TransformerException, XMLException{
-		NodeList nodelist = getRootElement().getElementsByTagName("scheme").item(0).getChildNodes();
-		NodeList statelist = getRootElement().getElementsByTagName("stateDef");
+		NodeList nodelist = getRootElement().getElementsByTagName(DATA_FIELDS.get(5)).item(0).getChildNodes();
+		NodeList statelist = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
 		NodeList colorlist = null;
 		
 		for(int i = 0; i < nodelist.getLength(); i++){
@@ -166,18 +132,13 @@ public class XMLParser {
 		for(int j = 0; j < statelist.getLength(); j++){
 			for(int k = 0; k < colorlist.getLength(); k++){
 				if(statelist.item(j).getTextContent().equals(colorlist.item(k).getNodeName())){
-					statelist.item(j).getAttributes().getNamedItem("color").setTextContent(colorlist.item(k).getTextContent());
+					statelist.item(j).getAttributes().getNamedItem(DATA_FIELDS.get(6)).setTextContent(colorlist.item(k).getTextContent());
 				}
 			}
 		}
+		transform();
 		
-		TransformerFactory transformerfactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerfactory.newTransformer();
-		DOMSource source = new DOMSource(xmlDocument);
-		StreamResult result = new StreamResult(info);
-		transformer.transform(source, result);
 	}
-
 	/**
 	 * Returns a String corresponding to the input parameter
 	 * 
@@ -205,8 +166,6 @@ public class XMLParser {
 			throw new XMLException("Invalid parameter requested: " + tagName);
 		}
 	}
-
-
 	/**
 	 * Returns the specified attribute of a parameter
 	 * @param tagName
@@ -215,7 +174,6 @@ public class XMLParser {
 	 * @throws XMLException
 	 */
 	public String getParameterAttribute(String tagName, String attribute) throws XMLException {
-
 		try {
 			Element element = (Element) getRootElement().getElementsByTagName(tagName).item(0);
 			return getAttribute(element, attribute);
@@ -223,7 +181,6 @@ public class XMLParser {
 			throw new XMLException("Invalid parameter requested: " + tagName + ", " + attribute);
 		}
 	}
-
 	/**
 	 * Finds a color given a state name
 	 * 
@@ -236,13 +193,12 @@ public class XMLParser {
 		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
 		for (int i = 0; i < stateDefinitions.getLength(); i++) {
 			String currentStateName = stateDefinitions.item(i).getTextContent();
-			String color = getAttribute((Element) stateDefinitions.item(i), "color");
+			String color = getAttribute((Element) stateDefinitions.item(i), DATA_FIELDS.get(6));
 			if (currentStateName.equals(stateName))
 				return color;
 		}
 		throw new XMLException("State definition not found: " + stateName);
 	}
-
 	/**
 	 * Finds a state name given a state reference name
 	 * 
@@ -251,21 +207,18 @@ public class XMLParser {
 	 *            tag
 	 * @throws XMLException 
 	 */
-
 	public String getStateName(String stateRef) throws XMLException {
 
 		NodeList stateDefinitions = getRootElement().getElementsByTagName(DATA_FIELDS.get(4));
 		for (int i = 0; i < stateDefinitions.getLength(); i++) {
 			String currentStateName = stateDefinitions.item(i).getTextContent();
-			String ref = getAttribute((Element) stateDefinitions.item(i), "ref");
+			String ref = getAttribute((Element) stateDefinitions.item(i), DATA_FIELDS.get(7));
 			if (ref.equals(stateRef)) {
 				return currentStateName;
 			}
 		}
 		throw new XMLException("State definition not found: " + stateRef);
 	}
-	
-
 	/**
 	 * Gets the attribute of the element
 	 * 
@@ -273,10 +226,9 @@ public class XMLParser {
 	 * @param attributeName
 	 * @return
 	 */
-	public String getAttribute(Element element, String attributeName) {
+	private String getAttribute(Element element, String attributeName) {
 		return element.getAttribute(attributeName);
 	}
-
 	private Element getRootElement() throws XMLException {
 		try {
 			DOCUMENT_BUILDER.reset();
@@ -287,19 +239,25 @@ public class XMLParser {
 			throw new XMLException("Root element not found in file");
 		}
 	}
-
-	/**
-	 * Creates document builder with the necessary exceptions
-	 * 
-	 * @return
-	 * @throws XMLException 
-	 */
+	private int getGridRows() throws NumberFormatException, DOMException, XMLException {
+		return Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(0).getTextContent());
+	}
+	private int getGridColumns() throws NumberFormatException, DOMException, XMLException {
+		return Integer.parseInt(getRootElement().getElementsByTagName(DATA_FIELDS.get(1)).item(1).getTextContent());
+	}
 	private DocumentBuilder getDocumentBuilder() throws XMLException {
 		try {
 			return DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
 			throw new XMLException(e);
 		}
+	}
+	private void transform() throws TransformerException{
+		TransformerFactory transformerfactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerfactory.newTransformer();
+		DOMSource source = new DOMSource(xmlDocument);
+		StreamResult result = new StreamResult(info);
+		transformer.transform(source, result);
 	}
 
 }

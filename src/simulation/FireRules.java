@@ -1,3 +1,7 @@
+// This entire file is part of my masterpiece.
+// Jesse Yue
+// I believe this class is well designed because it uses well named helper methods to make the logic clear and keeps that functionality encapsulated.
+// The public methods are only what need to be public as directed by the super class.
 package simulation;
 
 import java.util.ArrayList;
@@ -46,11 +50,15 @@ public class FireRules extends Rules {
 	
 	@Override
 	public State getDefaultState(){
-		return new State(configuration, "tree");
+		return new State(configuration, TREE);
 	}
 
 	@Override
 	public State getNewState(Neighborhood hood) {
+		return calculateState(hood);
+	}
+	
+	private State calculateState(Neighborhood hood){
 		Random rand = new Random();
 
 		if (isTree(hood)) {
@@ -92,7 +100,7 @@ public class FireRules extends Rules {
 	private ArrayList<State> getStatesAround(Neighborhood hood) {
 		ArrayList<State> states = new ArrayList<State>();
 		for(Cell neighbor : hood.getAdjacent()){
-			if(neighbor != null) states.add((State) neighbor.getCurrentState());
+			if(neighbor != null) states.add(neighbor.getCurrentState());
 
 		}
 		return states;
