@@ -9,6 +9,10 @@ import model.Grid;
 import model.Rules;
 import xml.XMLException;
 
+/*
+ * This class reimplements a method in the grid class,
+ * making it so that the grid is infinite
+ */
 public class InfiniteGrid extends Grid {
 	
 	public InfiniteGrid(File setupInfo, String neighborhoodType) throws XMLException {
